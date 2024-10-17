@@ -7,6 +7,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/k-job-server/pom.xml" />
         <option value="$PROJECT_DIR$/k-job-worker/pom.xml" />
+        <option value="$PROJECT_DIR$/k-job-worker-boot-starter/pom.xml" />
+        <option value="$PROJECT_DIR$/k-job-common/pom.xml" />
       </list>
     </option>
   </component>

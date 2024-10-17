@@ -28,27 +28,79 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <grpc.version>1.6.1</grpc.version>
+        <protobuf.version>3.3.0</protobuf.version>
     </properties>
     <dependencies>
+        <!--        引入gRPC客户端依赖-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>2.14.0.RELEASE</version>
         </dependency>
 
+        <!--         common-->
+        <dependency>
+            <groupId>org.kjob.common</groupId>
+            <artifactId>k-job-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--        spring-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.5.0.Final</version>
+            </extension>
+        </extensions>
         <plugins>
+            <!--           引入一些插件来帮助我们将.proto文件编译为java的类 -->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.5.1</version>
+                <configuration>
+                    <!--                    使用的protoc版本，os.detected.classifier表示检测到的操作系统，这里检测到的是windows-x86_64-->
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                    <!--proto文件所在文件夹的位置-->
+                    <protoSourceRoot>src/main/proto</protoSourceRoot>
+                    <!--生成的文件的存放位置 -->
+                    <outputDirectory>src/main/java</outputDirectory>
+                    <!--                    在调用插件去生成java类时，是否清空输出文件夹，这个要设置为false，否则运行compile-custom时会把compile的结果给删了-->
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                </configuration>
+                <!--                做的一个扩展，在执行maven的compile的时候，顺便也执行protobuf-maven-plugin插件的compile和compile-custom-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

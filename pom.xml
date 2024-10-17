@@ -23,6 +23,8 @@
     <modules>
         <module>k-job-server</module>
         <module>k-job-worker</module>
+        <module>k-job-common</module>
+        <module>k-job-worker-boot-starter</module>
     </modules>
 
     <build>
