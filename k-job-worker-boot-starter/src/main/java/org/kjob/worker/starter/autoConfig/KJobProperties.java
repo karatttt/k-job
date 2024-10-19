@@ -1,10 +1,9 @@
-package org.kjob.worker.autoConfig;
+package org.kjob.worker.starter.autoConfig;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
-import org.kjob.common.constant.RemoteConstant;
 
 @ConfigurationProperties(prefix = "kjob")
 public class KJobProperties {
@@ -25,14 +24,14 @@ public class KJobProperties {
         getWorker().setAppName(appName);
     }
 
-    @Deprecated
+
     @DeprecatedConfigurationProperty(replacement = "kjob.worker.grpc-port")
-    public int getgrpcPort() {
+    public int getGrpcPort() {
         return getWorker().getPort();
     }
 
-    @Deprecated
-    public void setgrpcPort(int grpcPort) {
+
+    public void setGrpcPort(int grpcPort) {
         getWorker().setPort(grpcPort);
     }
 

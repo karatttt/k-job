@@ -17,9 +17,6 @@ public interface ServerDiscoverService {
      */
     String getCurrentServerAddress();
 
-    /**
-     * 定时检查
-     * @param timingPool timingPool
-     */
-    void timingCheck(ScheduledExecutorService timingPool);
+
+    void heartbeatCheck(ScheduledExecutorService heartbeatCheckExecutor);
 }

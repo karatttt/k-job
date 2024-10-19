@@ -45,7 +45,7 @@ public class PingPongUtils {
         } catch (IOException e) {
             log.warn("[SocketConnectivityUtils] IOException: {}:{}, msg: {}", targetIp, targetPort, ExceptionUtils.getMessage(e));
         } catch (Exception e) {
-            log.error("[SocketConnectivityUtils] unknown exception for check ip: {}:{}", targetIp, targetPort, e);
+            log.error("[SocketConnectivityUtils] unknown KJobException for check ip: {}:{}", targetIp, targetPort, e);
         }
 
         return false;

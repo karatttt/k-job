@@ -1,7 +1,7 @@
 //package org.kjob.common.utils;
 //
 //import okhttp3.*;
-//import tech.powerjob.common.exception.PowerJobException;
+//import tech.powerjob.common.KJobException.PowerJobException;
 //
 //import java.io.IOException;
 //import java.util.concurrent.TimeUnit;

@@ -1,16 +1,20 @@
 package org.kjob.worker.common.grpc.strategies;
 
 
-public interface GrpcStrategy<T> {
+import io.grpc.ManagedChannel;
+import org.kjob.worker.common.constant.TransportTypeEnum;
 
-    void init();
+public interface GrpcStrategy<T> {
 
     /**
      * called  by StrategyCaller
      * @param params
      * @return
      */
-    String execute(Object params);
+    void init();
+    Object execute(Object params);
+
+    TransportTypeEnum getTypeEnumFromStrategyClass();
 
 
 }

@@ -1,10 +1,10 @@
-package org.kjob.worker.autoConfig;
+package org.kjob.worker.starter.autoConfig;
 
-import org.kjob.common.utils.CommonUtils;
 //import org.kjob.common.utils.NetUtils;
 import org.kjob.worker.KJobSpringWorker;
 import org.kjob.worker.common.KJobWorkerConfig;
-import org.kjob.worker.common.grpc.RpcStub;
+import org.kjob.worker.common.grpc.RpcInitializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,9 +19,11 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "kjob.worker", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class KJobAutoConfiguration {
 
+    @Autowired
+    KJobProperties properties;
     @Bean
     @ConditionalOnMissingBean
-    public KJobSpringWorker initKJob(KJobProperties properties) {
+    public KJobSpringWorker initKJob() {
 
         KJobProperties.Worker worker = properties.getWorker();
 
@@ -60,7 +62,7 @@ public class KJobAutoConfiguration {
         /*
          * For non-Map/MapReduce tasks, {@code memory} is recommended for speeding up calculation.
          * Map/MapReduce tasks may produce batches of subtasks, which could lead to OutOfMemory
-         * exception or error, {@code disk} should be applied.
+         * KJobException or error, {@code disk} should be applied.
          */
 
 
@@ -79,12 +81,6 @@ public class KJobAutoConfiguration {
         return new KJobSpringWorker(config);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public RpcStub initRpcStub() {
-
-        return new RpcStub();
-
-    }
+//
 
 }

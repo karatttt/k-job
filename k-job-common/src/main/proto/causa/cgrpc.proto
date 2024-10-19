@@ -12,5 +12,9 @@ option java_outer_classname = "CausaGrpcClientGen";
 //定义一个类
 service ServerDiscover {
 
-  rpc assertApp(AppName) returns(WorkInfo) {};
+  rpc assertApp(AppName) returns(Response) {};
+
+  rpc heartbeatCheck(HeartbeatCheck) returns(Response) {};
+
+  rpc pingServer(Ping) returns(Response) {};
 }

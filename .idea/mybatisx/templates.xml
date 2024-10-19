@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TemplatesSettings">
+    <option name="templateConfigs">
+      <TemplateContext>
+        <option name="generateConfig">
+          <GenerateConfig>
+            <option name="annotationType" value="MYBATIS_PLUS3" />
+            <option name="basePackage" value="persistnece" />
+            <option name="basePath" value="src/main/java/org/kjob/server" />
+            <option name="classNameStrategy" value="camel" />
+            <option name="encoding" value="UTF-8" />
+            <option name="extraClassSuffix" value="" />
+            <option name="ignoreFieldPrefix" value="" />
+            <option name="ignoreFieldSuffix" value="" />
+            <option name="ignoreTablePrefix" value="" />
+            <option name="ignoreTableSuffix" value="" />
+            <option name="moduleName" value="k-job-server" />
+            <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
+            <option name="moduleUIInfoList">
+              <list>
+                <ModuleInfoGo>
+                  <option name="basePath" value="${domain.basePath}" />
+                  <option name="configFileName" value="mapperInterface.ftl" />
+                  <option name="configName" value="mapperInterface" />
+                  <option name="encoding" value="${domain.encoding}" />
+                  <option name="fileName" value="${domain.fileName}Mapper" />
+                  <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.java" />
+                  <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
+                  <option name="packageName" value="${domain.basePackage}.mapper" />
+                </ModuleInfoGo>
+              </list>
+            </option>
+            <option name="needToStringHashcodeEquals" value="true" />
+            <option name="needsComment" value="true" />
+            <option name="needsModel" value="true" />
+            <option name="relativePackage" value="domain" />
+            <option name="superClass" value="" />
+            <option name="tableUIInfoList">
+              <list>
+                <TableUIInfo>
+                  <option name="className" value="DistributedLock" />
+                  <option name="tableName" value="distributed_lock" />
+                </TableUIInfo>
+              </list>
+            </option>
+            <option name="templatesName" value="mybatis-plus3" />
+          </GenerateConfig>
+        </option>
+        <option name="moduleName" value="k-job-server" />
+        <option name="projectPath" value="$PROJECT_DIR$" />
+        <option name="templateName" value="mybatis-plus3" />
+      </TemplateContext>
+    </option>
+  </component>
+</project>
