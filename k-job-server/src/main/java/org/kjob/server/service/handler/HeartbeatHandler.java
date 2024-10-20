@@ -40,7 +40,9 @@ public class HeartbeatHandler implements RpcHandler{
         // if is local ,return now
         if (checkLocalServer(request.getCurrentServer())) {
             parseResponse(request.getCurrentServer(), responseObserver);
+            return;
         }
+        log.info("no local, req ip is {}", request.getCurrentServer());
 
         // origin server
 
@@ -61,6 +63,7 @@ public class HeartbeatHandler implements RpcHandler{
             String activeAddress = activeAddress(originServer, downServerCache);
             if (StringUtils.isNotEmpty(activeAddress)) {
                 parseResponse(activeAddress, responseObserver);
+                return;
             }
 
             // the server in db is no available, so elect new server
@@ -82,6 +85,7 @@ public class HeartbeatHandler implements RpcHandler{
                 String address = activeAddress(appInfo.getCurrentServer(), downServerCache);
                 if (StringUtils.isNotEmpty(address)) {
                     parseResponse(address, responseObserver);
+                    return;
                 }
 
                 // this machine be the server of the appid
@@ -90,6 +94,7 @@ public class HeartbeatHandler implements RpcHandler{
                 appInfoMapper.updateById(appInfo);
                 log.info("[ServerElection] this server({}) become the new server for app(appId={}).", appInfo.getCurrentServer(), appId);
                 parseResponse(ownerIp, responseObserver);
+                return;
 
             } catch (Exception e) {
                 log.error("[ServerElection] write new server to db failed for app {}.", appName, e);
@@ -130,6 +135,7 @@ public class HeartbeatHandler implements RpcHandler{
                 ).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+
     }
 
     private boolean checkLocalServer(String currentServer) {

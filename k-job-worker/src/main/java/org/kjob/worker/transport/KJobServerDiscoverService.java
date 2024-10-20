@@ -58,6 +58,7 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
 
     @Override
     public void heartbeatCheck(ScheduledExecutorService heartbeatCheckExecutor) {
+        // each discovery connect no more than MAX_FAILED_COUNT
         this.currentIpAddress = discovery();
         if (StringUtils.isEmpty(this.currentIpAddress)) {
             throw new KJobException("can't find any available server, this worker has been quarantined.");
@@ -66,11 +67,12 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
         heartbeatCheckExecutor.scheduleAtFixedRate(() -> {
                     try {
                         this.currentIpAddress = discovery();
+                        log.info("[KJObServerDiscovery] jump ip :{}", currentIpAddress);
                     } catch (Exception e) {
                         log.error("[KJObServerDiscovery] fail to discovery server!", e);
                     }
                 }
-                , 10, 10, TimeUnit.SECONDS);
+                , 5, 5, TimeUnit.SECONDS);
     }
 
     private String discovery() {

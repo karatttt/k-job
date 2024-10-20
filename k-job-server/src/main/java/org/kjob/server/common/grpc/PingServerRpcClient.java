@@ -18,7 +18,6 @@ public class PingServerRpcClient implements RpcServiceCaller{
         try {
             // 发送异步请求并等待响应，超时设置为5秒
             ServerDiscoverCausa.Response response = serverDiscoverFutureStub.pingServer(ping).get(5, TimeUnit.SECONDS);
-            System.out.println("Response: " + response.getMessage() );
             return response;
         } catch (
                 ExecutionException e) {

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kjob.common.constant.RemoteConstant;
@@ -25,7 +26,7 @@ public class KJobWorkerConfig {
      * Address of powerjob-server node(s)
      * Do not mistake for ActorSystem port. Do not add any prefix, i.e. http://.
      */
-    private List<String> serverAddress = Lists.newArrayList();
+    private List<String> serverAddress = new ArrayList<>();
 
     /**
      * Max length of response result. Result that is longer than the value will be truncated.

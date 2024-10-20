@@ -6,12 +6,15 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.kjob.remote.api.ServerDiscoverGrpc;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.strategies.GrpcStrategy;
 import org.kjob.worker.common.grpc.strategies.StrategyManager;
 import org.kjob.worker.common.grpc.strategies.strategy.AssertAppRpcService;
 import org.reflections.Reflections;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,19 +22,28 @@ import java.util.Set;
 @Slf4j
 public class RpcInitializer {
     private final int port;
-    private final List<String> serverList;
+    private List<String> serverList;
 
 
     @Getter
     private static final HashMap<String, ManagedChannel> ip2ChannelsMap = new HashMap<>();
     public RpcInitializer(int port, List<String> serverList){
         this.port = port;
-        this.serverList = serverList;
-
+        this.serverList = new ArrayList<>(serverList);
     }
 
     @SuppressWarnings("rawtypes")
-    public void initRpcStrategies(){
+    public void initRpcStrategies() {
+        // register local available ip for channel(here set for local test)
+        InetAddress inetAddress = null;
+        try {
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        String hostAddress = inetAddress.getHostAddress();
+        serverList.add(hostAddress);
+
         // register channels for stub
 
         for (String server : serverList) {
@@ -40,7 +52,6 @@ public class RpcInitializer {
                     .build();
             ip2ChannelsMap.put(server,channel);
         }
-
 
         Reflections reflections = new Reflections("org.kjob.worker.common.grpc.strategies.strategy");
         Set<Class<? extends GrpcStrategy>> strategyClasses = reflections.getSubTypesOf(GrpcStrategy.class);
@@ -55,6 +66,7 @@ public class RpcInitializer {
                log.warn("creating strategy error");
             }
         }
+
     }
 
 }
