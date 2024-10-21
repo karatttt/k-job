@@ -25,10 +25,22 @@
         <guava.version>31.1-jre</guava.version>
         <protobuf.version>3.3.0</protobuf.version>
         <grpc.version>1.6.1</grpc.version>
+        <jackson.version>2.14.0-rc1</jackson.version>
 
     </properties>
 
+
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
         <!--        引入gRPC客户端依赖-->
         <dependency>
             <groupId>net.devh</groupId>

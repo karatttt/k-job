@@ -8,13 +8,13 @@ import java.util.concurrent.*;
 public class ExecutorManager
 {
 
-    private final ScheduledExecutorService heartbeatCheckExecutor;
+    private final ScheduledExecutorService heartbeatExecutor;
     public ExecutorManager(KJobWorkerConfig workerConfig){
 
 
 
         ThreadFactory coreThreadFactory = new ThreadFactoryBuilder().setNameFormat("kjob-worker-core-%d").build();
-        heartbeatCheckExecutor =  new ScheduledThreadPoolExecutor(3, coreThreadFactory);
+        heartbeatExecutor =  new ScheduledThreadPoolExecutor(3, coreThreadFactory);
 
 
 
@@ -25,11 +25,11 @@ public class ExecutorManager
 
     }
 
-    public ScheduledExecutorService getHeartbeatCheckExecutor(){
-        return heartbeatCheckExecutor;
+    public ScheduledExecutorService getHeartbeatExecutor(){
+        return heartbeatExecutor;
     }
     public void shutdown(){
-        heartbeatCheckExecutor.shutdownNow();
+        heartbeatExecutor.shutdownNow();
     }
 
 

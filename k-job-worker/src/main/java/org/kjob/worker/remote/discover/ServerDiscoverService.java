@@ -1,4 +1,4 @@
-package org.kjob.worker.transport;
+package org.kjob.worker.remote.discover;
 
 import org.kjob.common.domain.WorkerAppInfo;
 
@@ -16,7 +16,7 @@ public interface ServerDiscoverService {
      * @return server 地址
      */
     String getCurrentServerAddress();
-
+    Long getCurrentAppId();
 
     void heartbeatCheck(ScheduledExecutorService heartbeatCheckExecutor);
 }

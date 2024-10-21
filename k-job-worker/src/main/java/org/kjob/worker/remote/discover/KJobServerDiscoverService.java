@@ -1,19 +1,16 @@
-package org.kjob.worker.transport;
+package org.kjob.worker.remote.discover;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kjob.common.domain.WorkerAppInfo;
 
 import org.kjob.common.exception.KJobException;
-import org.kjob.common.utils.CommonUtils;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.worker.common.KJobWorkerConfig;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.strategies.StrategyCaller;
-import org.kjob.worker.common.grpc.strategies.StrategyManager;
 import org.springframework.beans.BeanUtils;
 
-import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -53,7 +50,12 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
 
     @Override
     public String getCurrentServerAddress() {
-        return null;
+        return currentIpAddress;
+    }
+
+    @Override
+    public Long getCurrentAppId() {
+        return appId;
     }
 
     @Override

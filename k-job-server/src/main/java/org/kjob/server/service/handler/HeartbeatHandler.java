@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.exception.KJobException;
+import org.kjob.common.utils.net.MyNetUtils;
 import org.kjob.remote.protos.ServerDiscoverCausa;
+import org.kjob.server.common.config.KJobServerConfig;
 import org.kjob.server.common.grpc.PingServerRpcClient;
 import org.kjob.server.extension.lock.LockService;
 import org.kjob.server.persistence.domain.AppInfo;
@@ -33,6 +35,8 @@ public class HeartbeatHandler implements RpcHandler{
     AppInfoMapper appInfoMapper;
     @Autowired
     PingServerRpcClient pingServerRpcService;
+    @Autowired
+    KJobServerConfig kJobServerConfig;
 
     @Override
     public void handle(Object req,StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
@@ -139,16 +143,8 @@ public class HeartbeatHandler implements RpcHandler{
     }
 
     private boolean checkLocalServer(String currentServer) {
-
-        try {
-            // 获取本机的InetAddress对象
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            ownerIp = inetAddress.getHostAddress();
-            // 返回IP地址字符串形式
-            return Objects.equals(ownerIp, currentServer);
-        } catch (UnknownHostException e) {
-            // 如果发生异常，返回错误信息或默认值
-            throw new KJobException("get local host error"); // 默认的localhost地址
-        }
+        // 获取本机的InetAddress对象
+        ownerIp = kJobServerConfig.getAddress();
+        return Objects.equals(ownerIp, currentServer);
     }
 }

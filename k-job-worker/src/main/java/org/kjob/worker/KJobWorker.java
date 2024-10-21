@@ -2,15 +2,13 @@ package org.kjob.worker;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.common.domain.WorkerAppInfo;
-import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.worker.common.KJobWorkerConfig;
 import org.kjob.worker.common.grpc.RpcInitializer;
 import org.kjob.worker.core.executor.ExecutorManager;
-import org.kjob.worker.transport.KJobServerDiscoverService;
-import org.kjob.worker.transport.ServerDiscoverService;
+import org.kjob.worker.remote.discover.KJobServerDiscoverService;
+import org.kjob.worker.remote.schedule.WorkerHealthReporter;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class KJobWorker {
@@ -41,7 +39,11 @@ public class KJobWorker {
             final ExecutorManager executorManager = new ExecutorManager(config);
 
             // connect server
-            kJobServerDiscoverService.heartbeatCheck(executorManager.getHeartbeatCheckExecutor());
+            kJobServerDiscoverService.heartbeatCheck(executorManager.getHeartbeatExecutor());
+
+            // init health reporter
+            executorManager.getHeartbeatExecutor().scheduleAtFixedRate(new WorkerHealthReporter(kJobServerDiscoverService, config), 0, config.getHealthReportInterval(), TimeUnit.SECONDS);
+
 
 
 
