@@ -3,7 +3,7 @@ package org.kjob.server.remote.worker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.kjob.server.common.module.WorkerHeartbeat;
+import org.kjob.common.domain.WorkerHeartbeat;
 
 import java.util.List;
 import java.util.Map;

@@ -7,6 +7,7 @@ import org.kjob.common.domain.WorkerAppInfo;
 import org.kjob.common.exception.KJobException;
 import org.kjob.common.utils.CommonUtils;
 import org.kjob.remote.api.ServerDiscoverGrpc;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.RpcInitializer;
@@ -36,7 +37,7 @@ public class AssertAppRpcService implements GrpcStrategy<TransportTypeEnum> {
     public Object execute(Object params) {
         for (ServerDiscoverGrpc.ServerDiscoverBlockingStub serverDiscoverStub : serverDiscoverStubs) {
             try {
-                ServerDiscoverCausa.Response response = CommonUtils.executeWithRetry0(() -> serverDiscoverStub.assertApp((ServerDiscoverCausa.AppName) params));
+                CommonCausa.Response response = CommonUtils.executeWithRetry0(() -> serverDiscoverStub.assertApp((ServerDiscoverCausa.AppName) params));
                 if(response.getCode() == RemoteConstant.SUCCESS){
                     return response.getWorkInfo();
                 } else {

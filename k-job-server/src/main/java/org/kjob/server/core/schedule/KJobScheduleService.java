@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 public class KJobScheduleService {
     private static final int MAX_APP_NUM = 10;
-    public static final long SCHEDULE_RATE = 15000;
+    public static final long SCHEDULE_RATE = 10000;
     @Autowired
     AppInfoMapper appInfoMapper;
     @Autowired
@@ -75,11 +75,12 @@ public class KJobScheduleService {
             try {
 
                 // 查询条件：任务开启 + 使用CRON表达调度时间 + 指定appId + 即将需要调度执行
+//                List<JobInfo> jobInfos1 = jobInfoMapper.selectList(null);
                 List<JobInfo> jobInfos = jobInfoMapper.selectList(new QueryWrapper<JobInfo>()
                         .lambda()
                         .in(JobInfo::getAppId, appIds)
-                        .eq(JobInfo::getStatus, SwitchableStatus.ENABLE)
-                        .eq(JobInfo::getTimeExpression, timeExpressionType.getV())
+                        .eq(JobInfo::getStatus, SwitchableStatus.ENABLE.getV())
+                        .eq(JobInfo::getTimeExpressionType, timeExpressionType.getV())
                         .le(JobInfo::getNextTriggerTime, timeThreshold));
                 if (CollectionUtils.isEmpty(jobInfos)) {
                     return;

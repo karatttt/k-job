@@ -3,7 +3,6 @@ package org.kjob.server.core.schedule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.common.enums.TimeExpressionType;
-import org.kjob.common.utils.CommonUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class CoreScheduleTaskManager implements InitializingBean, DisposableBean
     public void afterPropertiesSet() {
         // 定时调度
         coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleCronJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.CRON)), "Thread-ScheduleCronJob"));
-        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleDailyTimeIntervalJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.DAILY_TIME_INTERVAL)), "Thread-ScheduleDailyTimeIntervalJob"));
+//        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleDailyTimeIntervalJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.DAILY_TIME_INTERVAL)), "Thread-ScheduleDailyTimeIntervalJob"));
 //        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleCronWorkflow", KJobScheduleService.SCHEDULE_RATE, kJobScheduleService::scheduleCronWorkflow), "Thread-ScheduleCronWorkflow"));
 //        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleFrequentJob", KJobScheduleService.SCHEDULE_RATE, kJobScheduleService::scheduleFrequentJob), "Thread-ScheduleFrequentJob"));
 //        // 数据清理

@@ -1,4 +1,4 @@
-package org.kjob.worker.remote.discover;
+package org.kjob.worker.core.discover;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -32,39 +32,39 @@ public final class ServerDiscoverGrpc {
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
   public static final io.grpc.MethodDescriptor<org.kjob.remote.protos.ServerDiscoverCausa.AppName,
-      org.kjob.remote.protos.ServerDiscoverCausa.Response> METHOD_ASSERT_APP =
-      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.AppName, org.kjob.remote.protos.ServerDiscoverCausa.Response>newBuilder()
+      org.kjob.remote.protos.CommonCausa.Response> METHOD_ASSERT_APP =
+      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.AppName, org.kjob.remote.protos.CommonCausa.Response>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "ServerDiscover", "assertApp"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
               org.kjob.remote.protos.ServerDiscoverCausa.AppName.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              org.kjob.remote.protos.ServerDiscoverCausa.Response.getDefaultInstance()))
+              org.kjob.remote.protos.CommonCausa.Response.getDefaultInstance()))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
   public static final io.grpc.MethodDescriptor<org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck,
-      org.kjob.remote.protos.ServerDiscoverCausa.Response> METHOD_HEARTBEAT_CHECK =
-      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck, org.kjob.remote.protos.ServerDiscoverCausa.Response>newBuilder()
+      org.kjob.remote.protos.CommonCausa.Response> METHOD_HEARTBEAT_CHECK =
+      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck, org.kjob.remote.protos.CommonCausa.Response>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "ServerDiscover", "heartbeatCheck"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
               org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              org.kjob.remote.protos.ServerDiscoverCausa.Response.getDefaultInstance()))
+              org.kjob.remote.protos.CommonCausa.Response.getDefaultInstance()))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
   public static final io.grpc.MethodDescriptor<org.kjob.remote.protos.ServerDiscoverCausa.Ping,
-      org.kjob.remote.protos.ServerDiscoverCausa.Response> METHOD_PING_SERVER =
-      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.Ping, org.kjob.remote.protos.ServerDiscoverCausa.Response>newBuilder()
+      org.kjob.remote.protos.CommonCausa.Response> METHOD_PING_SERVER =
+      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.Ping, org.kjob.remote.protos.CommonCausa.Response>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "ServerDiscover", "pingServer"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
               org.kjob.remote.protos.ServerDiscoverCausa.Ping.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              org.kjob.remote.protos.ServerDiscoverCausa.Response.getDefaultInstance()))
+              org.kjob.remote.protos.CommonCausa.Response.getDefaultInstance()))
           .build();
 
   /**
@@ -100,21 +100,21 @@ public final class ServerDiscoverGrpc {
     /**
      */
     public void assertApp(org.kjob.remote.protos.ServerDiscoverCausa.AppName request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_ASSERT_APP, responseObserver);
     }
 
     /**
      */
     public void heartbeatCheck(org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_HEARTBEAT_CHECK, responseObserver);
     }
 
     /**
      */
     public void pingServer(org.kjob.remote.protos.ServerDiscoverCausa.Ping request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_PING_SERVER, responseObserver);
     }
 
@@ -125,21 +125,21 @@ public final class ServerDiscoverGrpc {
             asyncUnaryCall(
               new MethodHandlers<
                 org.kjob.remote.protos.ServerDiscoverCausa.AppName,
-                org.kjob.remote.protos.ServerDiscoverCausa.Response>(
+                org.kjob.remote.protos.CommonCausa.Response>(
                   this, METHODID_ASSERT_APP)))
           .addMethod(
             METHOD_HEARTBEAT_CHECK,
             asyncUnaryCall(
               new MethodHandlers<
                 org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck,
-                org.kjob.remote.protos.ServerDiscoverCausa.Response>(
+                org.kjob.remote.protos.CommonCausa.Response>(
                   this, METHODID_HEARTBEAT_CHECK)))
           .addMethod(
             METHOD_PING_SERVER,
             asyncUnaryCall(
               new MethodHandlers<
                 org.kjob.remote.protos.ServerDiscoverCausa.Ping,
-                org.kjob.remote.protos.ServerDiscoverCausa.Response>(
+                org.kjob.remote.protos.CommonCausa.Response>(
                   this, METHODID_PING_SERVER)))
           .build();
     }
@@ -169,7 +169,7 @@ public final class ServerDiscoverGrpc {
     /**
      */
     public void assertApp(org.kjob.remote.protos.ServerDiscoverCausa.AppName request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_ASSERT_APP, getCallOptions()), request, responseObserver);
     }
@@ -177,7 +177,7 @@ public final class ServerDiscoverGrpc {
     /**
      */
     public void heartbeatCheck(org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_HEARTBEAT_CHECK, getCallOptions()), request, responseObserver);
     }
@@ -185,7 +185,7 @@ public final class ServerDiscoverGrpc {
     /**
      */
     public void pingServer(org.kjob.remote.protos.ServerDiscoverCausa.Ping request,
-        io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response> responseObserver) {
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_PING_SERVER, getCallOptions()), request, responseObserver);
     }
@@ -214,21 +214,21 @@ public final class ServerDiscoverGrpc {
 
     /**
      */
-    public org.kjob.remote.protos.ServerDiscoverCausa.Response assertApp(org.kjob.remote.protos.ServerDiscoverCausa.AppName request) {
+    public org.kjob.remote.protos.CommonCausa.Response assertApp(org.kjob.remote.protos.ServerDiscoverCausa.AppName request) {
       return blockingUnaryCall(
           getChannel(), METHOD_ASSERT_APP, getCallOptions(), request);
     }
 
     /**
      */
-    public org.kjob.remote.protos.ServerDiscoverCausa.Response heartbeatCheck(org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck request) {
+    public org.kjob.remote.protos.CommonCausa.Response heartbeatCheck(org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck request) {
       return blockingUnaryCall(
           getChannel(), METHOD_HEARTBEAT_CHECK, getCallOptions(), request);
     }
 
     /**
      */
-    public org.kjob.remote.protos.ServerDiscoverCausa.Response pingServer(org.kjob.remote.protos.ServerDiscoverCausa.Ping request) {
+    public org.kjob.remote.protos.CommonCausa.Response pingServer(org.kjob.remote.protos.ServerDiscoverCausa.Ping request) {
       return blockingUnaryCall(
           getChannel(), METHOD_PING_SERVER, getCallOptions(), request);
     }
@@ -257,7 +257,7 @@ public final class ServerDiscoverGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.ServerDiscoverCausa.Response> assertApp(
+    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.CommonCausa.Response> assertApp(
         org.kjob.remote.protos.ServerDiscoverCausa.AppName request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_ASSERT_APP, getCallOptions()), request);
@@ -265,7 +265,7 @@ public final class ServerDiscoverGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.ServerDiscoverCausa.Response> heartbeatCheck(
+    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.CommonCausa.Response> heartbeatCheck(
         org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_HEARTBEAT_CHECK, getCallOptions()), request);
@@ -273,7 +273,7 @@ public final class ServerDiscoverGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.ServerDiscoverCausa.Response> pingServer(
+    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.CommonCausa.Response> pingServer(
         org.kjob.remote.protos.ServerDiscoverCausa.Ping request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_PING_SERVER, getCallOptions()), request);
@@ -303,15 +303,15 @@ public final class ServerDiscoverGrpc {
       switch (methodId) {
         case METHODID_ASSERT_APP:
           serviceImpl.assertApp((org.kjob.remote.protos.ServerDiscoverCausa.AppName) request,
-              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response>) responseObserver);
+              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response>) responseObserver);
           break;
         case METHODID_HEARTBEAT_CHECK:
           serviceImpl.heartbeatCheck((org.kjob.remote.protos.ServerDiscoverCausa.HeartbeatCheck) request,
-              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response>) responseObserver);
+              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response>) responseObserver);
           break;
         case METHODID_PING_SERVER:
           serviceImpl.pingServer((org.kjob.remote.protos.ServerDiscoverCausa.Ping) request,
-              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.ServerDiscoverCausa.Response>) responseObserver);
+              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response>) responseObserver);
           break;
         default:
           throw new AssertionError();

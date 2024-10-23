@@ -2,6 +2,7 @@ package org.kjob.server.common.module;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.kjob.common.domain.WorkerHeartbeat;
 import org.kjob.common.module.SystemMetrics;
 
 

@@ -1,10 +1,8 @@
 package org.kjob.server.extension.singletonPool;
 
-import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.kjob.common.constant.RemoteConstant;
-import org.kjob.remote.api.ServerDiscoverGrpc;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -18,8 +16,8 @@ public class GrpcStubSingletonPool {
 
     @SuppressWarnings("unchecked")
     // 获取单例对象，若不存在则创建并添加
-    public static <T> T getStubSingleton(String serverAddress, Class<?> grpcClientClass, Class<T> stubClass) {
-        ManagedChannel channel = getChannelSingleton(serverAddress);
+    public static <T> T getStubSingleton(String serverAddress, Class<?> grpcClientClass, Class<T> stubClass, String type) {
+        ManagedChannel channel = getChannelSingleton(serverAddress, type);
 //        new ServerDiscoverGrpc.ServerDiscoverFutureStub(channel);
 
         Method[] methods = grpcClientClass.getDeclaredMethods();
@@ -32,7 +30,7 @@ public class GrpcStubSingletonPool {
         // 通过 computeIfAbsent 来确保线程安全地创建和存储单例对象
 
         Method finalTargetMethod = targetMethod;
-        return (T) stubSingletons.computeIfAbsent(serverAddress + stubClass.getTypeName(), key -> {
+        return (T) stubSingletons.computeIfAbsent(serverAddress + stubClass.getTypeName() + type, key -> {
             try {
                 // 通过反射创建指定的 Stub 实例
                 return finalTargetMethod.invoke(grpcClientClass,channel);
@@ -43,11 +41,12 @@ public class GrpcStubSingletonPool {
         });
     }
 
-    private static ManagedChannel getChannelSingleton(String serverAddress) {
+    private static ManagedChannel getChannelSingleton(String serverAddress, String type) {
+        int port = type.equals(RemoteConstant.SERVER) ? RemoteConstant.DEFAULT_SERVER_GRPC_PORT : RemoteConstant.DEFAULT_WORKER_GRPC_PORT;
         // 通过 computeIfAbsent 来确保线程安全地创建和存储单例对象
-        return channelSingletons.computeIfAbsent(serverAddress, key -> {
+        return channelSingletons.computeIfAbsent(serverAddress + type, key -> {
             try {
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress, RemoteConstant.DEFAULT_SERVER_GRPC_PORT)
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress, port)
                         .usePlaintext()
                         .build();
                 // 通过反射创建指定的 Stub 实例

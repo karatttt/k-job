@@ -1,8 +1,7 @@
 package org.kjob.server.common.config;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.kjob.common.utils.net.MyNetUtils;
+import org.kjob.common.utils.net.MyNetUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
@@ -10,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "kjob.server")
 public class KJobServerConfig {
 
-    private String address = MyNetUtils.address;
+    private String address = MyNetUtil.address;
 
     public void setAddress(String address) {
         this.address = address;

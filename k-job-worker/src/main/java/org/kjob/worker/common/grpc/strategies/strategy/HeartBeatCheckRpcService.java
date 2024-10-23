@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.exception.KJobException;
 import org.kjob.remote.api.ServerDiscoverGrpc;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.RpcInitializer;
@@ -31,7 +32,7 @@ public class HeartBeatCheckRpcService implements GrpcStrategy<TransportTypeEnum>
         ServerDiscoverGrpc.ServerDiscoverBlockingStub stub= ip2serverDiscoverStubs.get(heartbeatCheck.getCurrentServer());
 
         try {
-            ServerDiscoverCausa.Response response = stub.heartbeatCheck(heartbeatCheck);
+            CommonCausa.Response response = stub.heartbeatCheck(heartbeatCheck);
             if(response.getCode() == RemoteConstant.SUCCESS){
                 return response.getAvailableServer();
             } else {

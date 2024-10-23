@@ -11,7 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.kjob.common.SystemInstanceResult;
 import org.kjob.common.enums.TimeExpressionType;
+import org.kjob.remote.protos.ScheduleCausa;
 import org.kjob.server.common.Holder;
+import org.kjob.server.common.grpc.ServerScheduleJobRpcClient;
 import org.kjob.server.common.module.WorkerInfo;
 import org.kjob.server.persistence.domain.InstanceInfo;
 import org.kjob.server.persistence.domain.JobInfo;
@@ -53,6 +55,7 @@ public class DispatchService {
     private final InstanceInfoMapper instanceInfoMapper;
 
     private final TaskTrackerSelectorService taskTrackerSelectorService;
+    private final ServerScheduleJobRpcClient serverScheduleJobRpcClient;
 
 
     /**
@@ -76,7 +79,8 @@ public class DispatchService {
         // 允许从外部传入实例信息，减少 io 次数
         // 检查当前任务是否被取消
         System.out.println("ds");
-        InstanceInfo instanceInfo = instanceInfoMapper.selectById(instanceId);
+        InstanceInfo instanceInfo = instanceInfoMapper.selectOne(new QueryWrapper<InstanceInfo>()
+                .lambda().eq(InstanceInfo::getInstanceId, instanceId));
         Long jobId = instanceInfo.getJobId();
         if (CANCELED.getV() == instanceInfo.getStatus()) {
             log.info("[Dispatcher-{}|{}] cancel dispatch due to instance has been canceled", jobId, instanceId);
@@ -151,6 +155,9 @@ public class DispatchService {
         WorkerInfo taskTracker = taskTrackerSelectorService.select(jobInfo, instanceInfo, suitableWorkers);
         String taskTrackerAddress = taskTracker.getAddress();
 
+
+        sendScheduleInfo(jobInfo, instanceInfo, taskTrackerAddress);
+
 //        URL workerUrl = ServerURLFactory.dispatchJob2Worker(taskTrackerAddress);
 //        transportService.tell(taskTracker.getProtocol(), workerUrl, req);
         log.info("[Dispatcher-{}|{}] send schedule request to TaskTracker[protocol:{},address:{}] successfully.", jobId, instanceId, taskTracker.getProtocol(), taskTrackerAddress);
@@ -160,6 +167,22 @@ public class DispatchService {
         instanceInfoMapper.updateById(build);
         // 装载缓存 todo 没看
 //        instanceMetadataService.loadJobInfo(instanceId, jobInfo);
+    }
+
+    private void sendScheduleInfo(JobInfo jobInfo, InstanceInfo instanceInfo, String taskTrackerAddress) {
+
+        ScheduleCausa.ServerScheduleJobReq build = ScheduleCausa.ServerScheduleJobReq.newBuilder()
+                .setInstanceId(instanceInfo.getInstanceId())
+                .setJobId(jobInfo.getId())
+                .setJobParams(jobInfo.getJobParams())
+                .setProcessorInfo(jobInfo.getProcessorInfo())
+                .setWorkerAddress(taskTrackerAddress)
+                .setTimeExpression(jobInfo.getTimeExpression())
+                .setTimeExpressionType(TimeExpressionType.of(jobInfo.getTimeExpressionType()).name())
+                .build();
+
+        serverScheduleJobRpcClient.call(build);
+
     }
 
     private List<WorkerInfo> filterOverloadWorker(List<WorkerInfo> suitableWorkers) {

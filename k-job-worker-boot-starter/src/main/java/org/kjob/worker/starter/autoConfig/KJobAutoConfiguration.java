@@ -44,13 +44,14 @@ public class KJobAutoConfiguration {
          */
         if (worker.getPort() != null) {
             config.setPort(worker.getPort());
-        } else {
-            int port = worker.getPort();
-            if (port <= 0) {
-//                port = NetUtils.getRandomPort();
-            }
-            config.setPort(port);
         }
+//        } else {
+//            int port = worker.getPort();
+//            if (port <= 0) {
+////                port = NetUtils.getRandomPort();
+//            }
+//            config.setPort(port);
+//        }
         /*
          * appName, name of the application. Applications should be registered in advance to prevent
          * error. This property should be the same with what you entered for appName when getting

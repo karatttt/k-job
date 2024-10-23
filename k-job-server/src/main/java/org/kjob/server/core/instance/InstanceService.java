@@ -2,6 +2,7 @@ package org.kjob.server.core.instance;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kjob.common.enums.InstanceStatus;
 import org.kjob.server.core.uid.IdGenerateService;
 import org.kjob.server.persistence.domain.InstanceInfo;
 import org.kjob.server.persistence.mapper.InstanceInfoMapper;
@@ -19,7 +20,6 @@ public class InstanceService {
 
         Long instanceId = idGenerateService.allocate();
         Date now = new Date();
-
         InstanceInfo newInstanceInfo = new InstanceInfo();
         newInstanceInfo.setJobId(jobId);
         newInstanceInfo.setAppId(appId);
@@ -28,6 +28,7 @@ public class InstanceService {
         newInstanceInfo.setInstanceParams(instanceParams);
         newInstanceInfo.setWfInstanceId(wfInstanceId);
 
+        newInstanceInfo.setStatus(InstanceStatus.WAITING_DISPATCH.getV());
         newInstanceInfo.setRunningTimes(0L);
         newInstanceInfo.setExpectedTriggerTime(expectTriggerTime);
         newInstanceInfo.setLastReportTime(-1L);

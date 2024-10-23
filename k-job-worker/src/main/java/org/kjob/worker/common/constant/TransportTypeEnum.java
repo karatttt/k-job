@@ -1,11 +1,12 @@
 package org.kjob.worker.common.constant;
 
 public enum TransportTypeEnum {
-
+    /** serverDiscover **/
     ASSERT_APP,
     HEARTBEAT_CHECK,
     PING_SERVER,
-    /** top comment **/
+    /** schedule **/
+
     HEARTBEAT_HEALTH_REPORT
 
 }

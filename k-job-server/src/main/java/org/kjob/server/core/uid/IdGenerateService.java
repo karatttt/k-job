@@ -21,10 +21,8 @@ public class IdGenerateService {
 
     private static final int DATA_CENTER_ID = 0;
 
-    @Autowired
-    KJobServerConfig kJobServerConfig;
 
-    public IdGenerateService() {
+    public IdGenerateService(KJobServerConfig kJobServerConfig){
         String ip = kJobServerConfig.getAddress();
         snowFlakeIdGenerator = new SnowFlakeIdGenerator(DATA_CENTER_ID, ip);
         log.info("[IdGenerateService] initialize IdGenerateService successfully, IP:{}", ip);

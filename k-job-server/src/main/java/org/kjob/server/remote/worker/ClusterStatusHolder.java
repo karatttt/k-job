@@ -3,12 +3,10 @@ package org.kjob.server.remote.worker;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.kjob.server.common.module.WorkerHeartbeat;
+import org.kjob.common.domain.WorkerHeartbeat;
 import org.kjob.server.common.module.WorkerInfo;
-import org.springframework.util.CollectionUtils;
 
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

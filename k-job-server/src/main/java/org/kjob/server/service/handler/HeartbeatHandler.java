@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.exception.KJobException;
-import org.kjob.common.utils.net.MyNetUtils;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.server.common.config.KJobServerConfig;
 import org.kjob.server.common.grpc.PingServerRpcClient;
@@ -17,8 +17,6 @@ import org.kjob.server.persistence.mapper.AppInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,7 +37,7 @@ public class HeartbeatHandler implements RpcHandler{
     KJobServerConfig kJobServerConfig;
 
     @Override
-    public void handle(Object req,StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
+    public void handle(Object req,StreamObserver<CommonCausa.Response> responseObserver) {
         ServerDiscoverCausa.HeartbeatCheck request = (ServerDiscoverCausa.HeartbeatCheck) req;
         // if is local ,return now
         if (checkLocalServer(request.getCurrentServer())) {
@@ -121,7 +119,7 @@ public class HeartbeatHandler implements RpcHandler{
         ServerDiscoverCausa.Ping ping = ServerDiscoverCausa.Ping.newBuilder().setTargetServer(serverAddress).build();
 
         // ping the targetServer
-        ServerDiscoverCausa.Response response = (ServerDiscoverCausa.Response) pingServerRpcService.call(ping);
+        CommonCausa.Response response = (CommonCausa.Response) pingServerRpcService.call(ping);
         if (response.getCode() == RemoteConstant.SUCCESS) {
             return serverAddress;
         }
@@ -131,8 +129,8 @@ public class HeartbeatHandler implements RpcHandler{
 
     }
 
-    private void parseResponse(String currentServer, StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
-        ServerDiscoverCausa.Response response = ServerDiscoverCausa.Response.newBuilder()
+    private void parseResponse(String currentServer, StreamObserver<CommonCausa.Response> responseObserver) {
+        CommonCausa.Response response = CommonCausa.Response.newBuilder()
                 .setCode(RemoteConstant.SUCCESS)
                 .setAvailableServer(
                         ServerDiscoverCausa.AvailableServer.newBuilder().setAvailableServer(currentServer).build()

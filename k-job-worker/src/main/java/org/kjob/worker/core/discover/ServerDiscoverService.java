@@ -1,4 +1,4 @@
-package org.kjob.worker.remote.discover;
+package org.kjob.worker.core.discover;
 
 import org.kjob.common.domain.WorkerAppInfo;
 

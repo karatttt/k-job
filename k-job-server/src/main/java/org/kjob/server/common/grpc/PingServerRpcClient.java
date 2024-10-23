@@ -1,6 +1,8 @@
 package org.kjob.server.common.grpc;
 
+import org.kjob.common.constant.RemoteConstant;
 import org.kjob.remote.api.ServerDiscoverGrpc;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.server.extension.singletonPool.GrpcStubSingletonPool;
 import org.springframework.stereotype.Component;
@@ -14,10 +16,10 @@ public class PingServerRpcClient implements RpcServiceCaller{
     @Override
     public Object call(Object params) {
         ServerDiscoverCausa.Ping ping = (ServerDiscoverCausa.Ping)params;
-        ServerDiscoverGrpc.ServerDiscoverFutureStub serverDiscoverFutureStub = GrpcStubSingletonPool.getStubSingleton(ping.getTargetServer(), ServerDiscoverGrpc.class, ServerDiscoverGrpc.ServerDiscoverFutureStub.class);
+        ServerDiscoverGrpc.ServerDiscoverFutureStub serverDiscoverFutureStub = GrpcStubSingletonPool.getStubSingleton(ping.getTargetServer(), ServerDiscoverGrpc.class, ServerDiscoverGrpc.ServerDiscoverFutureStub.class, RemoteConstant.SERVER);
         try {
             // 发送异步请求并等待响应，超时设置为5秒
-            ServerDiscoverCausa.Response response = serverDiscoverFutureStub.pingServer(ping).get(5, TimeUnit.SECONDS);
+            CommonCausa.Response response = serverDiscoverFutureStub.pingServer(ping).get(5, TimeUnit.SECONDS);
             return response;
         } catch (
                 ExecutionException e) {

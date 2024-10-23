@@ -1,9 +1,6 @@
 package org.kjob.common.domain;
 
 import org.kjob.common.module.SystemMetrics;
-import tech.powerjob.common.PowerSerializable;
-import tech.powerjob.common.model.DeployedContainerInfo;
-import tech.powerjob.common.model.SystemMetrics;
 import lombok.Data;
 
 import java.util.List;
@@ -22,6 +19,10 @@ public class WorkerHeartbeat   {
      * 本机地址 -> IP:port
      */
     private String workerAddress;
+    /**
+     * server地址 -> IP
+     */
+    private String serverIpAddress;
     /**
      * 当前 appName
      */
@@ -51,10 +52,7 @@ public class WorkerHeartbeat   {
      * 客户端名称
      */
     private String client;
-    /**
-     * 扩展字段
-     */
-    private String extra;
+
     /**
      * 是否已经超载，超载的情况下 Server 一段时间内不会再向其派发任务
      */

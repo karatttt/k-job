@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.exception.KJobException;
 import org.kjob.remote.api.ServerDiscoverGrpc;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.server.common.grpc.PingServerRpcClient;
 import org.kjob.server.persistence.domain.AppInfo;
@@ -35,13 +36,13 @@ public class ServerDiscoverGrpcService extends ServerDiscoverGrpc.ServerDiscover
     @Autowired
     PongHandler pongHandler;
 
-    public void heartbeatCheck(ServerDiscoverCausa.HeartbeatCheck request, StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
+    public void heartbeatCheck(ServerDiscoverCausa.HeartbeatCheck request, StreamObserver<CommonCausa.Response> responseObserver) {
         heartbeatHandler.handle(request, responseObserver);
     }
-    public void assertApp(ServerDiscoverCausa.AppName request, StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
+    public void assertApp(ServerDiscoverCausa.AppName request, StreamObserver<CommonCausa.Response> responseObserver) {
         appInfoHandler.handle(request, responseObserver);
     }
-    public void pingServer(ServerDiscoverCausa.Ping request, StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
+    public void pingServer(ServerDiscoverCausa.Ping request, StreamObserver<CommonCausa.Response> responseObserver) {
         pongHandler.handle(request, responseObserver);
     }
 }

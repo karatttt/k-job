@@ -3,6 +3,7 @@ package org.kjob.server.service.handler;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.grpc.stub.StreamObserver;
 import org.kjob.common.constant.RemoteConstant;
+import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.server.persistence.domain.AppInfo;
 import org.kjob.server.persistence.mapper.AppInfoMapper;
@@ -16,20 +17,20 @@ public class AppInfoHandler implements RpcHandler {
     AppInfoMapper appInfoMapper;
 
     @Override
-    public void handle(Object req, StreamObserver<ServerDiscoverCausa.Response> responseObserver) {
+    public void handle(Object req, StreamObserver<CommonCausa.Response> responseObserver) {
         ServerDiscoverCausa.AppName request = (ServerDiscoverCausa.AppName) req;
         System.out.println(("请求中的参数为msg:{},code:{}" + request.getAppName()));
         AppInfo appInfo = appInfoMapper.selectOne(new QueryWrapper<AppInfo>().lambda()
                 .eq(AppInfo::getAppName, request.getAppName()));
-        ServerDiscoverCausa.Response response;
+        CommonCausa.Response response;
         if (appInfo != null) {
-            response = ServerDiscoverCausa.Response.newBuilder()
+            response = CommonCausa.Response.newBuilder()
                     .setCode(RemoteConstant.SUCCESS)
                     .setWorkInfo(
                             ServerDiscoverCausa.WorkInfo.newBuilder().setAppId(appInfo.getId()).build()
                     ).build();
         } else {
-            response = ServerDiscoverCausa.Response.newBuilder()
+            response = CommonCausa.Response.newBuilder()
                     .setCode(RemoteConstant.FAULT)
                     .build();
         }

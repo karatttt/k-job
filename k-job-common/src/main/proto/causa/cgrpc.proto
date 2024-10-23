@@ -2,6 +2,9 @@
 syntax = "proto3";
 
 import "causa/server_discover_causa.proto";
+import "causa/schedule_causa.proto";
+import "causa/common_causa.proto";
+import "google/protobuf/empty.proto";
 
 //生成多个java文件
 //option java_multiple_files = true;
@@ -17,4 +20,9 @@ service ServerDiscover {
   rpc heartbeatCheck(HeartbeatCheck) returns(Response) {};
 
   rpc pingServer(Ping) returns(Response) {};
+}
+
+service Schedule {
+  rpc reportWorkerHeartbeat(WorkerHeartbeat) returns(Response) {};
+  rpc serverScheduleJob(ServerScheduleJobReq) returns(Response) {};
 }

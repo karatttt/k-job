@@ -1,18 +1,19 @@
 package org.kjob.worker.common.grpc;
 
 
-import io.grpc.Channel;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.remote.api.ServerDiscoverGrpc;
+import org.kjob.worker.common.KJobWorkerConfig;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.strategies.GrpcStrategy;
 import org.kjob.worker.common.grpc.strategies.StrategyManager;
 import org.kjob.worker.common.grpc.strategies.strategy.AssertAppRpcService;
+import org.kjob.worker.service.WorkerScheduleGrpcService;
 import org.reflections.Reflections;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -21,14 +22,16 @@ import java.util.List;
 import java.util.Set;
 @Slf4j
 public class RpcInitializer {
-    private final int port;
+    private final int serverPort;
+    private final int workerPort;
     private List<String> serverList;
 
 
     @Getter
     private static final HashMap<String, ManagedChannel> ip2ChannelsMap = new HashMap<>();
-    public RpcInitializer(int port, List<String> serverList){
-        this.port = port;
+    public RpcInitializer(int serverPort,int workerPort, List<String> serverList){
+        this.serverPort = serverPort;
+        this.workerPort = workerPort;
         this.serverList = new ArrayList<>(serverList);
     }
 
@@ -45,9 +48,8 @@ public class RpcInitializer {
         serverList.add(hostAddress);
 
         // register channels for stub
-
         for (String server : serverList) {
-            ManagedChannel channel = ManagedChannelBuilder.forAddress(server, port)
+            ManagedChannel channel = ManagedChannelBuilder.forAddress(server, serverPort)
                     .usePlaintext()
                     .build();
             ip2ChannelsMap.put(server,channel);
@@ -69,4 +71,29 @@ public class RpcInitializer {
 
     }
 
+    public void initRpcServer(KJobWorkerConfig config) {
+        new Thread(() -> {
+            try {
+                WorkerScheduleGrpcService myService = new WorkerScheduleGrpcService(config);
+
+                Server server = ServerBuilder.forPort(workerPort)
+                        .addService(myService)
+                        .build()
+                        .start();
+
+                log.info("GrpcServer started, listening on " + workerPort);
+
+                // 等待服务器关闭
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    server.shutdown();
+                    System.out.println("Server stopped");
+                }));
+
+                server.awaitTermination();
+            } catch (IOException | InterruptedException e) {
+                log.error("GrpcServer started error");
+
+            }
+        }).start();
+    }
 }
