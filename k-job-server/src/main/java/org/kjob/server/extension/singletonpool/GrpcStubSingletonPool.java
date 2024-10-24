@@ -1,4 +1,4 @@
-package org.kjob.server.extension.singletonPool;
+package org.kjob.server.extension.singletonpool;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

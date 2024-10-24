@@ -4,7 +4,7 @@ import org.kjob.common.constant.RemoteConstant;
 import org.kjob.remote.api.ScheduleGrpc;
 import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ScheduleCausa;
-import org.kjob.server.extension.singletonPool.GrpcStubSingletonPool;
+import org.kjob.server.extension.singletonpool.GrpcStubSingletonPool;
 import org.springframework.stereotype.Component;
 
 @Component

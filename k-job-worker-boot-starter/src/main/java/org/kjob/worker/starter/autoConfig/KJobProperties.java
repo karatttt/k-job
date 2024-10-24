@@ -46,21 +46,6 @@ public class KJobProperties {
         getWorker().setServerAddress(serverAddress);
     }
 
-
-
-//    @Deprecated
-//    @DeprecatedConfigurationProperty(replacement = "kjob.worker.max-result-length")
-//    public int getMaxResultLength() {
-//        return getWorker().maxResultLength;
-//    }
-//
-//    @Deprecated
-//    public void setMaxResultLength(int maxResultLength) {
-//        getWorker().setMaxResultLength(maxResultLength);
-//    }
-
-
-
     /**
      * kjob worker configuration properties.
      */
@@ -79,38 +64,14 @@ public class KJobProperties {
          * property should be assigned with the same value as what you entered for the appName.
          */
         private String appName;
-
         /**
          * port
          */
         private Integer port;
         /**
-         * Address(es) of kjob-server node(s). Ip:port or domain.
-         * Example of single kjob-server node:
-         * <p>
-         * 127.0.0.1:7700
-         * </p>
-         * Example of kjob-server cluster:
-         * <p>
-         * 192.168.0.10:7700,192.168.0.11:7700,192.168.0.12:7700
-         * </p>
+         only ip address
          */
         private String serverAddress;
-
-
-//        /**
-//         * Max length of response result. Result that is longer than the value will be truncated.
-//         * {@link ProcessResult} max length for #msg
-//         */
-//        private int maxResultLength = 8192;
-//
-//        /**
-//         * Max length of appended workflow context value length. Appended workflow context value that is longer than the value will be ignored.
-//         * {@link WorkflowContext} max length for #appendedContextData
-//         */
-//        private int maxAppendedWfContextLength = 8192;
-
-        private String tag;
         /**
          * Max numbers of LightTaskTacker
          */

@@ -92,23 +92,11 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
                 break;
             }
         }
-
         if (StringUtils.isEmpty(result)) {
             log.warn("[KJObServerDiscovery] can't find any available server, this worker has been quarantined.");
 
-            // 在 Server 高可用的前提下，连续失败多次，说明该节点与外界失联，Server已经将秒级任务转移到其他Worker，需要杀死本地的任务
             if (FAILED_COUNT++ > MAX_FAILED_COUNT) {
-
-                log.warn("[KJObServerDiscovery] can't find any available server for 3 consecutive times, It's time to kill all frequent job in this worker.");
-//                List<Long> frequentInstanceIds = HeavyTaskTrackerManager.getAllFrequentTaskTrackerKeys();
-//                if (!CollectionUtils.isEmpty(frequentInstanceIds)) {
-//                    frequentInstanceIds.forEach(instanceId -> {
-//                        HeavyTaskTracker taskTracker = HeavyTaskTrackerManager.removeTaskTracker(instanceId);
-//                        taskTracker.destroy();
-//                        log.warn("[KJObServerDiscovery] kill frequent instance(instanceId={}) due to can't find any available server.", instanceId);
-//                    });
-//                }
-
+                // todo frequent job
                 FAILED_COUNT = 0;
             }
             return null;

@@ -26,10 +26,7 @@ public class KJobWorker {
     public KJobWorker(KJobWorkerConfig config) {
         this.config = config;
     }
-
     public void init() {
-
-
         log.info("[KJob] starting ...");
 
         // init rpc
@@ -41,8 +38,7 @@ public class KJobWorker {
 
         try{
             // get appId
-            WorkerAppInfo workerAppInfo = kJobServerDiscoverService.assertApp();
-            System.out.println(workerAppInfo.getAppId());
+            kJobServerDiscoverService.assertApp();
 
             // init ThreadPool
             ExecutorManager.initExecutorManager();
@@ -55,11 +51,7 @@ public class KJobWorker {
             kJobServerDiscoverService.heartbeatCheck(ExecutorManager.getHeartbeatExecutor());
 
             // init health reporter
-            ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(3);
-            scheduledThreadPoolExecutor.scheduleAtFixedRate(new WorkerHealthReporter(kJobServerDiscoverService, config), 0, config.getHealthReportInterval(), TimeUnit.SECONDS);
-
-
-
+            ExecutorManager.getHealthReportExecutor().scheduleAtFixedRate(new WorkerHealthReporter(kJobServerDiscoverService, config), 0, config.getHealthReportInterval(), TimeUnit.SECONDS);
 
         } catch (Exception e){
             log.error("[kJob] start error");

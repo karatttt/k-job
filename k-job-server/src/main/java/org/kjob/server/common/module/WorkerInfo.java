@@ -22,15 +22,12 @@ public class WorkerInfo {
 
     private long lastActiveTime;
 
-    private String protocol;
 
     private String client;
 
-    private String tag;
 
     private int lightTaskTrackerNum;
 
-    private int heavyTaskTrackerNum;
 
     private long lastOverloadTime;
 
@@ -44,13 +41,10 @@ public class WorkerInfo {
     public void refresh(WorkerHeartbeat workerHeartbeat) {
         address = workerHeartbeat.getWorkerAddress();
         lastActiveTime = workerHeartbeat.getHeartbeatTime();
-        protocol = workerHeartbeat.getProtocol();
         client = workerHeartbeat.getClient();
-        tag = workerHeartbeat.getTag();
         systemMetrics = workerHeartbeat.getSystemMetrics();
 
         lightTaskTrackerNum = workerHeartbeat.getLightTaskTrackerNum();
-        heavyTaskTrackerNum = workerHeartbeat.getHeavyTaskTrackerNum();
 
         if (workerHeartbeat.isOverload()) {
             overloading = true;

@@ -33,33 +33,6 @@ public class TimingStrategyService {
         }
     }
 
-    /**
-     * 计算接下来几次的调度时间
-     *
-     * @param timeExpressionType 定时表达式类型
-     * @param timeExpression     表达式
-     * @param startTime          起始时间(include)
-     * @param endTime            结束时间(include)
-     * @return 调度时间列表
-     */
-//    public List<String> calculateNextTriggerTimes(TimeExpressionType timeExpressionType, String timeExpression, Long startTime, Long endTime) {
-//
-//        TimingStrategyHandler timingStrategyHandler = getHandler(timeExpressionType);
-//        List<Long> triggerTimeList = new ArrayList<>(NEXT_N_TIMES);
-//        Long nextTriggerTime = System.currentTimeMillis();
-//        do {
-//            nextTriggerTime = timingStrategyHandler.calculateNextTriggerTime(nextTriggerTime, timeExpression, startTime, endTime);
-//            if (nextTriggerTime == null) {
-//                break;
-//            }
-//            triggerTimeList.add(nextTriggerTime);
-//        } while (triggerTimeList.size() < NEXT_N_TIMES);
-//
-//        if (triggerTimeList.isEmpty()) {
-//            return TIPS;
-//        }
-//        return triggerTimeList.stream().map(t -> DateFormatUtils.format(t, OmsConstant.TIME_PATTERN)).collect(Collectors.toList());
-//    }
 
     /**
      * 计算下次的调度时间
@@ -78,36 +51,6 @@ public class TimingStrategyService {
         return getHandler(timeExpressionType).calculateNextTriggerTime(preTriggerTime, timeExpression, startTime, endTime);
     }
 
-
-    /**
-//     * 计算下次的调度时间并检查校验规则
-//     *
-//     * @param timeExpressionType 定时表达式类型
-//     * @param timeExpression     表达式
-//     * @param startTime          起始时间(include)
-//     * @param endTime            结束时间(include)
-//     * @return 下次的调度时间
-//     */
-//    public Long calculateNextTriggerTimeWithInspection( TimeExpressionType timeExpressionType, String timeExpression, Long startTime, Long endTime) {
-//        Long nextTriggerTime = calculateNextTriggerTime(null, timeExpressionType, timeExpression, startTime, endTime);
-//        if (TimeExpressionType.INSPECT_TYPES.contains(timeExpressionType.getV()) && nextTriggerTime == null) {
-//            throw new PowerJobException("time expression is out of date: " + timeExpression);
-//        }
-//        return nextTriggerTime;
-//    }
-
-
-//    public void validate(TimeExpressionType timeExpressionType, String timeExpression, Long startTime, Long endTime) {
-//        if (endTime != null) {
-//            if (endTime <= System.currentTimeMillis()) {
-//                throw new PowerJobException("lifecycle is out of date!");
-//            }
-//            if (startTime != null && startTime > endTime) {
-//                throw new PowerJobException("lifecycle is invalid! start time must earlier then end time.");
-//            }
-//        }
-//        getHandler(timeExpressionType).validate(timeExpression);
-//    }
 
 
     private TimingStrategyHandler getHandler(TimeExpressionType timeExpressionType) {

@@ -62,7 +62,6 @@ public abstract class TaskTracker {
         instanceInfo.setProcessorType(req.getProcessorType());
         instanceInfo.setProcessorInfo(req.getProcessorInfo());
         instanceInfo.setJobParams(req.getJobParams());
-        instanceInfo.setInstanceParams(req.getInstanceParams());
 
 
         this.finished = new AtomicBoolean(false);

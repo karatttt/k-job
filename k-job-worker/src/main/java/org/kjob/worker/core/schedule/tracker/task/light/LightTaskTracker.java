@@ -166,21 +166,6 @@ public class LightTaskTracker extends TaskTracker {
         }
     }
 
-//    @Override
-//    public InstanceDetail fetchRunningStatus(ServerQueryInstanceStatusReq req) {
-//        InstanceDetail detail = new InstanceDetail();
-//        // 填充基础信息
-//        detail.setActualTriggerTime(createTime);
-//        detail.setStatus(InstanceStatus.RUNNING.getV());
-//        detail.setTaskTrackerAddress(workerRuntime.getWorkerAddress());
-//        // 填充详细信息
-//        InstanceDetail.TaskDetail taskDetail = new InstanceDetail.TaskDetail();
-//        taskDetail.setSucceedTaskNum(0);
-//        taskDetail.setFailedTaskNum(0);
-//        taskDetail.setTotalTaskNum(1);
-//        detail.setTaskDetail(taskDetail);
-//        return detail;
-//    }
 
     private ProcessResult processTask() {
         executeThread.set(Thread.currentThread());
@@ -222,6 +207,9 @@ public class LightTaskTracker extends TaskTracker {
         finished.set(true);
         result = res;
         status = result.isSuccess() ? TaskStatus.WORKER_PROCESS_SUCCESS : TaskStatus.WORKER_PROCESS_FAILED;
+        if(result.isSuccess()){
+            destroy();
+        }
 //        // 取消超时检查任务
 //        if (timeoutCheckScheduledFuture != null) {
 //            timeoutCheckScheduledFuture.cancel(true);
@@ -343,7 +331,6 @@ public class LightTaskTracker extends TaskTracker {
         context.setJobId(req.getJobId());
         context.setJobParams(req.getJobParams());
         context.setInstanceId(req.getInstanceId());
-        context.setInstanceParams(req.getInstanceParams());
         context.setTaskName(TaskConstant.ROOT_TASK_NAME);
         context.setMaxRetryTimes(req.getTaskRetryNum());
         context.setCurrentRetryTimes(0);

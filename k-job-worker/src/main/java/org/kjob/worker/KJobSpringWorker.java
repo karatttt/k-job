@@ -18,7 +18,7 @@ import java.util.Optional;
 public class KJobSpringWorker implements InitializingBean, DisposableBean, ApplicationContextAware{
 
     /**
-     * 组合优于继承，持有 kJobWorker，内部重新设置 ProcessorFactory 更优雅
+     * 组合优于继承，持有 kJobWorker，设置ProcessFactoryList，这里可以自定义工厂
      */
     private KJobWorker kJobWorker;
     private final KJobWorkerConfig config;
@@ -37,10 +37,9 @@ public class KJobSpringWorker implements InitializingBean, DisposableBean, Appli
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         BuiltInSpringProcessorFactory springProcessorFactory = new BuiltInSpringProcessorFactory(applicationContext);
-
         BuildInSpringMethodProcessorFactory springMethodProcessorFactory = new BuildInSpringMethodProcessorFactory(applicationContext);
-        // append BuiltInSpringProcessorFactory
 
+        // append BuiltInSpringProcessorFactory
         List<ProcessorFactory> processorFactories = Lists.newArrayList(
                 Optional.ofNullable(config.getProcessorFactoryList())
                         .orElse(Collections.emptyList()));

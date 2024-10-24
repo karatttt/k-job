@@ -13,12 +13,9 @@ import org.kjob.server.core.timewheel.holder.InstanceTimeWheelService;
 import org.kjob.server.persistence.domain.AppInfo;
 import org.kjob.server.persistence.domain.JobInfo;
 import org.kjob.server.persistence.mapper.AppInfoMapper;
-import org.kjob.server.persistence.mapper.InstanceInfoMapper;
 import org.kjob.server.persistence.mapper.JobInfoMapper;
-import org.kjob.server.persistence.service.InstanceInfoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

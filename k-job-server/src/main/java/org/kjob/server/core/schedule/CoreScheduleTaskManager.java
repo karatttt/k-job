@@ -23,17 +23,7 @@ public class CoreScheduleTaskManager implements InitializingBean, DisposableBean
     public void afterPropertiesSet() {
         // 定时调度
         coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleCronJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.CRON)), "Thread-ScheduleCronJob"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleDailyTimeIntervalJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.DAILY_TIME_INTERVAL)), "Thread-ScheduleDailyTimeIntervalJob"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleCronWorkflow", KJobScheduleService.SCHEDULE_RATE, kJobScheduleService::scheduleCronWorkflow), "Thread-ScheduleCronWorkflow"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleFrequentJob", KJobScheduleService.SCHEDULE_RATE, kJobScheduleService::scheduleFrequentJob), "Thread-ScheduleFrequentJob"));
-//        // 数据清理
-//        coreThreadContainer.add(new Thread(new LoopRunnable("CleanWorkerData", KJobScheduleService.SCHEDULE_RATE, kJobScheduleService::cleanData), "Thread-CleanWorkerData"));
-        // 状态检查
-//        coreThreadContainer.add(new Thread(new LoopRunnable("CheckRunningInstance", InstanceStatusCheckService.CHECK_INTERVAL, instanceStatusCheckService::checkRunningInstance), "Thread-CheckRunningInstance"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("CheckWaitingDispatchInstance", InstanceStatusCheckService.CHECK_INTERVAL, instanceStatusCheckService::checkWaitingDispatchInstance), "Thread-CheckWaitingDispatchInstance"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("CheckWaitingWorkerReceiveInstance", InstanceStatusCheckService.CHECK_INTERVAL, instanceStatusCheckService::checkWaitingWorkerReceiveInstance), "Thread-CheckWaitingWorkerReceiveInstance"));
-//        coreThreadContainer.add(new Thread(new LoopRunnable("CheckWorkflowInstance", InstanceStatusCheckService.CHECK_INTERVAL, instanceStatusCheckService::checkWorkflowInstance), "Thread-CheckWorkflowInstance"));
-
+        coreThreadContainer.add(new Thread(new LoopRunnable("ScheduleDailyTimeIntervalJob", KJobScheduleService.SCHEDULE_RATE, () -> kJobScheduleService.scheduleNormalJob(TimeExpressionType.DAILY_TIME_INTERVAL)), "Thread-ScheduleDailyTimeIntervalJob"));
         coreThreadContainer.forEach(Thread::start);
 
     }

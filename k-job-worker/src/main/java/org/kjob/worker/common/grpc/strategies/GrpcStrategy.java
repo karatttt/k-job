@@ -7,11 +7,10 @@ import org.kjob.worker.common.constant.TransportTypeEnum;
 public interface GrpcStrategy<T> {
 
     /**
-     * called  by StrategyCaller
-     * @param params
-     * @return
+     * for different type of stub
      */
     void init();
+
     Object execute(Object params);
 
     TransportTypeEnum getTypeEnumFromStrategyClass();

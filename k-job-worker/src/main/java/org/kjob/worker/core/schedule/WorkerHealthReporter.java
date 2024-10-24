@@ -48,8 +48,6 @@ public class WorkerHealthReporter extends SafeRunnable {
         heartbeat.setAppId(serverDiscoverService.getCurrentAppId());
         heartbeat.setHeartbeatTime(System.currentTimeMillis());
         heartbeat.setWorkerAddress(MyNetUtil.address);
-//        heartbeat.setVersion(PowerJobWorkerVersion.getVersion());
-//        heartbeat.setProtocol(config.getWorkerConfig().getProtocol().name());
         heartbeat.setClient("KingPenguin");
 //        heartbeat.setTag(config.getWorkerConfig().getTag());
 
@@ -66,14 +64,13 @@ public class WorkerHealthReporter extends SafeRunnable {
             return;
         }
         // log
-        log.info("[WorkerHealthReporter] report health status,appId:{},appName:{},isOverload:{},maxLightweightTaskNum:{},currentLightweightTaskNum:{},maxHeavyweightTaskNum:{},currentHeavyweightTaskNum:{}",
+        log.info("[WorkerHealthReporter] report health status,appId:{},appName:{},isOverload:{},maxLightweightTaskNum:{},currentLightweightTaskNum:{},maxHeavyweightTaskNum:{}",
                 heartbeat.getAppId(),
                 heartbeat.getAppName(),
                 heartbeat.isOverload(),
                 config.getMaxLightweightTaskNum(),
                 heartbeat.getLightTaskTrackerNum(),
-                config.getMaxHeavyweightTaskNum(),
-                heartbeat.getHeavyTaskTrackerNum()
+                config.getMaxHeavyweightTaskNum()
         );
 
         ScheduleCausa.SystemMetrics builder0 = ScheduleCausa.SystemMetrics.newBuilder()

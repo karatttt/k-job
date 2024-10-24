@@ -3,10 +3,8 @@ package org.kjob.server.core.schedule;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 
 import org.kjob.common.SystemInstanceResult;
@@ -20,7 +18,6 @@ import org.kjob.server.persistence.domain.JobInfo;
 import org.kjob.server.persistence.mapper.InstanceInfoMapper;
 import org.kjob.server.remote.worker.WorkerClusterQueryService;
 import org.kjob.server.remote.worker.selector.TaskTrackerSelectorService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -78,7 +75,6 @@ public class DispatchService {
     public void dispatch(JobInfo jobInfo, Long instanceId, Optional<InstanceInfo> instanceInfoOptional, Optional<Holder<Boolean>> overloadOptional) {
         // 允许从外部传入实例信息，减少 io 次数
         // 检查当前任务是否被取消
-        System.out.println("ds");
         InstanceInfo instanceInfo = instanceInfoMapper.selectOne(new QueryWrapper<InstanceInfo>()
                 .lambda().eq(InstanceInfo::getInstanceId, instanceId));
         Long jobId = instanceInfo.getJobId();
@@ -127,14 +123,12 @@ public class DispatchService {
                 return;
             }
         }
-
         // 获取当前最合适的 worker 列表
         List<WorkerInfo> suitableWorkers = workerClusterQueryService.geAvailableWorkers(jobInfo);
 
         if (CollectionUtils.isEmpty(suitableWorkers)) {
             log.warn("[Dispatcher-{}|{}] cancel dispatch job due to no worker available", jobId, instanceId);
 //            instanceInfoRepository.update4TriggerFailed(instanceId, FAILED.getV(), current, current, RemoteConstant.EMPTY_ADDRESS, SystemInstanceResult.NO_WORKER_AVAILABLE, now);
-
 //            instanceManager.processFinishedInstance(instanceId, instanceInfo.getWfInstanceId(), FAILED, SystemInstanceResult.NO_WORKER_AVAILABLE);
             return;
         }
@@ -149,23 +143,18 @@ public class DispatchService {
         // todo 这里可能涉及到分片，所以有多个ip，实际只传一个
         List<String> workerIpList = suitableWorkers.stream().map(WorkerInfo::getAddress).collect(Collectors.toList());
         // 构造任务调度请求
-
-
-        // 发送请求（不可靠，需要一个后台线程定期轮询状态）todo 没做
+        // 发送请求（不可靠，需要一个后台线程定期轮询状态,后续可能是instance的线程定时检查）
         WorkerInfo taskTracker = taskTrackerSelectorService.select(jobInfo, instanceInfo, suitableWorkers);
         String taskTrackerAddress = taskTracker.getAddress();
 
-
         sendScheduleInfo(jobInfo, instanceInfo, taskTrackerAddress);
 
-//        URL workerUrl = ServerURLFactory.dispatchJob2Worker(taskTrackerAddress);
-//        transportService.tell(taskTracker.getProtocol(), workerUrl, req);
-        log.info("[Dispatcher-{}|{}] send schedule request to TaskTracker[protocol:{},address:{}] successfully.", jobId, instanceId, taskTracker.getProtocol(), taskTrackerAddress);
+        log.info("[Dispatcher-{}|{}] send schedule request to TaskTracker[address:{}] successfully.", jobId, instanceId, taskTrackerAddress);
 
         // 修改状态
         InstanceInfo build = InstanceInfo.builder().id(instanceId).status(WAITING_WORKER_RECEIVE.getV()).taskTrackerAddress(taskTrackerAddress).build();
         instanceInfoMapper.updateById(build);
-        // 装载缓存 todo 没看
+        //  todo 装载缓存
 //        instanceMetadataService.loadJobInfo(instanceId, jobInfo);
     }
 
@@ -179,6 +168,7 @@ public class DispatchService {
                 .setWorkerAddress(taskTrackerAddress)
                 .setTimeExpression(jobInfo.getTimeExpression())
                 .setTimeExpressionType(TimeExpressionType.of(jobInfo.getTimeExpressionType()).name())
+                .setTaskRetryNum(jobInfo.getTaskRetryNum())
                 .build();
 
         serverScheduleJobRpcClient.call(build);
@@ -196,41 +186,4 @@ public class DispatchService {
         }
         return res;
     }
-
-    /**
-     * 构造任务调度请求
-     */
-//    private ServerScheduleJobReq constructServerScheduleJobReq(JobInfo jobInfo, InstanceInfo instanceInfo, List<String> finalWorkersIpList) {
-//        // 构造请求
-//        ServerScheduleJobReq req = new ServerScheduleJobReq();
-//        BeanUtils.copyProperties(jobInfo, req);
-//        // 传入 JobId
-//        req.setJobId(jobInfo.getId());
-//        // 传入 InstanceParams
-//        if (StringUtils.isEmpty(instanceInfo.getInstanceParams())) {
-//            req.setInstanceParams(null);
-//        } else {
-//            req.setInstanceParams(instanceInfo.getInstanceParams());
-//        }
-//        // 覆盖静态参数
-//        if (!StringUtils.isEmpty(instanceInfo.getJobParams())) {
-//            req.setJobParams(instanceInfo.getJobParams());
-//        }
-//        req.setInstanceId(instanceInfo.getInstanceId());
-//        req.setAllWorkerAddress(finalWorkersIpList);
-//        req.setMaxWorkerCount(jobInfo.getMaxWorkerCount());
-//
-//        // 设置工作流ID
-//        req.setWfInstanceId(instanceInfo.getWfInstanceId());
-//
-//        req.setExecuteType(ExecuteType.of(jobInfo.getExecuteType()).name());
-//        req.setProcessorType(ProcessorType.of(jobInfo.getProcessorType()).name());
-//
-//        req.setTimeExpressionType(TimeExpressionType.of(jobInfo.getTimeExpressionType()).name());
-//        if (jobInfo.getInstanceTimeLimit() != null) {
-//            req.setInstanceTimeoutMS(jobInfo.getInstanceTimeLimit());
-//        }
-//        req.setThreadConcurrency(jobInfo.getConcurrency());
-//        return req;
-//    }
 }

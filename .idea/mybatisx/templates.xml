@@ -18,38 +18,7 @@
             <option name="moduleName" value="k-job-server" />
             <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
             <option name="moduleUIInfoList">
-              <list>
-                <ModuleInfoGo>
-                  <option name="basePath" value="${domain.basePath}" />
-                  <option name="configFileName" value="mapperInterface.ftl" />
-                  <option name="configName" value="mapperInterface" />
-                  <option name="encoding" value="${domain.encoding}" />
-                  <option name="fileName" value="${domain.fileName}Mapper" />
-                  <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
-                  <option name="packageName" value="${domain.basePackage}.mapper" />
-                </ModuleInfoGo>
-                <ModuleInfoGo>
-                  <option name="basePath" value="${domain.basePath}" />
-                  <option name="configFileName" value="serviceImpl.ftl" />
-                  <option name="configName" value="serviceImpl" />
-                  <option name="encoding" value="${domain.encoding}" />
-                  <option name="fileName" value="${domain.fileName}ServiceImpl" />
-                  <option name="fileNameWithSuffix" value="${domain.fileName}ServiceImpl.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
-                  <option name="packageName" value="${domain.basePackage}.service.impl" />
-                </ModuleInfoGo>
-                <ModuleInfoGo>
-                  <option name="basePath" value="${domain.basePath}" />
-                  <option name="configFileName" value="serviceInterface.ftl" />
-                  <option name="configName" value="serviceInterface" />
-                  <option name="encoding" value="${domain.encoding}" />
-                  <option name="fileName" value="${domain.fileName}Service" />
-                  <option name="fileNameWithSuffix" value="${domain.fileName}Service.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$/k-job-server" />
-                  <option name="packageName" value="${domain.basePackage}.service" />
-                </ModuleInfoGo>
-              </list>
+              <list />
             </option>
             <option name="needToStringHashcodeEquals" value="true" />
             <option name="needsComment" value="true" />
@@ -59,8 +28,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="InstanceInfo" />
-                  <option name="tableName" value="instance_info" />
+                  <option name="className" value="JobInfo" />
+                  <option name="tableName" value="job_info" />
                 </TableUIInfo>
               </list>
             </option>

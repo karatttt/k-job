@@ -27,61 +27,19 @@ public class KJobAutoConfiguration {
 
         KJobProperties.Worker worker = properties.getWorker();
 
-        /*
-         * Address of PowerJob-server node(s). Do not mistake for ActorSystem port. Do not add
-         * any prefix, i.e. http://.
-         */
-//        CommonUtils.requireNonNull(worker.getServerAddress(), "serverAddress can't be empty! " +
-//                "if you don't want to enable powerjob, please config program arguments: powerjob.worker.enabled=false");
         List<String> serverAddress = Arrays.asList(worker.getServerAddress().split(","));
 
-        /*
-         * Create OhMyConfig object for setting properties.
-         */
         KJobWorkerConfig config = new KJobWorkerConfig();
-        /*
-         * Configuration of worker port. Random port is enabled when port is set with non-positive number.
-         */
+
         if (worker.getPort() != null) {
             config.setPort(worker.getPort());
         }
-//        } else {
-//            int port = worker.getPort();
-//            if (port <= 0) {
-////                port = NetUtils.getRandomPort();
-//            }
-//            config.setPort(port);
-//        }
-        /*
-         * appName, name of the application. Applications should be registered in advance to prevent
-         * error. This property should be the same with what you entered for appName when getting
-         * registered.
-         */
+
         config.setAppName(worker.getAppName());
         config.setServerAddress(serverAddress);
-
-        /*
-         * For non-Map/MapReduce tasks, {@code memory} is recommended for speeding up calculation.
-         * Map/MapReduce tasks may produce batches of subtasks, which could lead to OutOfMemory
-         * KJobException or error, {@code disk} should be applied.
-         */
-
-
-
-
-//        config.setTag(worker.getTag());
-
         config.setMaxHeavyweightTaskNum(worker.getMaxHeavyweightTaskNum());
-
         config.setMaxLightweightTaskNum(worker.getMaxLightweightTaskNum());
-
         config.setHealthReportInterval(worker.getHealthReportInterval());
-        /*
-         * Create PowerJobSpringWorker object and set properties.
-         */
         return new KJobSpringWorker(config);
     }
-
-//
-
 }

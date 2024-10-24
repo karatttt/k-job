@@ -12,6 +12,8 @@ public class ExecutorManager
     @Getter
     private static  ScheduledExecutorService heartbeatExecutor = null;
     @Getter
+    private static  ScheduledExecutorService healthReportExecutor = null;
+    @Getter
     private static  ScheduledExecutorService lightweightTaskStatusCheckExecutor = null;
     @Getter
     private static  ExecutorService lightweightTaskExecutorService = null;
@@ -19,17 +21,16 @@ public class ExecutorManager
 
         final int availableProcessors = Runtime.getRuntime().availableProcessors();
 
-        ThreadFactory coreThreadFactory = new ThreadFactoryBuilder().setNameFormat("kjob-worker-core-%d").build();
-        heartbeatExecutor =  new ScheduledThreadPoolExecutor(3, coreThreadFactory);
+        ThreadFactory heartbeatThreadFactory = new ThreadFactoryBuilder().setNameFormat("kjob-worker-heartbeat-%d").build();
+        heartbeatExecutor =  new ScheduledThreadPoolExecutor(3, heartbeatThreadFactory);
 
-
+        ThreadFactory healthReportThreadFactory = new ThreadFactoryBuilder().setNameFormat("kjob-worker-healthReport-%d").build();
+        healthReportExecutor =  new ScheduledThreadPoolExecutor(3, healthReportThreadFactory);
 
         ThreadFactory lightTaskReportFactory = new ThreadFactoryBuilder().setNameFormat("powerjob-worker-light-task-status-check-%d").build();
-        // 都是 io 密集型任务
         lightweightTaskStatusCheckExecutor =  new ScheduledThreadPoolExecutor(availableProcessors * 10, lightTaskReportFactory);
 
         ThreadFactory lightTaskExecuteFactory = new ThreadFactoryBuilder().setNameFormat("powerjob-worker-light-task-execute-%d").build();
-        // 大部分任务都是 io 密集型
         lightweightTaskExecutorService = new ThreadPoolExecutor(availableProcessors * 10,availableProcessors * 10, 120L, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>((1024 * 2),true), lightTaskExecuteFactory, new ThreadPoolExecutor.AbortPolicy());
 
