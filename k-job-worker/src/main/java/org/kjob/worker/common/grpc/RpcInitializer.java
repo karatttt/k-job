@@ -25,14 +25,15 @@ public class RpcInitializer {
     private final int serverPort;
     private final int workerPort;
     private List<String> serverList;
-
-
+    @Getter
+    private static String nameServerAddress;
     @Getter
     private static final HashMap<String, ManagedChannel> ip2ChannelsMap = new HashMap<>();
-    public RpcInitializer(int serverPort,int workerPort, List<String> serverList){
+    public RpcInitializer(int serverPort,int workerPort, List<String> serverList,String nameServerAddress){
         this.serverPort = serverPort;
         this.workerPort = workerPort;
         this.serverList = new ArrayList<>(serverList);
+        RpcInitializer.nameServerAddress = nameServerAddress;
     }
 
     @SuppressWarnings("rawtypes")

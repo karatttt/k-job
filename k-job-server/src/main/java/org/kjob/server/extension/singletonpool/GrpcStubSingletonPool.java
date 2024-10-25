@@ -3,12 +3,21 @@ package org.kjob.server.extension.singletonpool;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.kjob.common.constant.RemoteConstant;
+import org.kjob.server.common.config.KJobServerConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * server的stub是动态创建，需要单例池
+ */
+@Component
 public class GrpcStubSingletonPool {
+    @Autowired
+    static KJobServerConfig config;
 
     // 通过 ConcurrentHashMap（线程安全） 实现单例注册表
     private static final Map<String, Object> stubSingletons = new ConcurrentHashMap<String, Object>(64);
@@ -42,11 +51,24 @@ public class GrpcStubSingletonPool {
     }
 
     private static ManagedChannel getChannelSingleton(String serverAddress, String type) {
-        int port = type.equals(RemoteConstant.SERVER) ? RemoteConstant.DEFAULT_SERVER_GRPC_PORT : RemoteConstant.DEFAULT_WORKER_GRPC_PORT;
+        // 避免出现不同的服务拿到同样的channel，故区分端口
+        int port = 0;
+        switch (type){
+            case RemoteConstant.SERVER:
+                port = KJobServerConfig.staticServerPort;
+                break;
+            case RemoteConstant.WORKER:
+                port = KJobServerConfig.staticWorkerPort;
+                break;
+            case RemoteConstant.NAMESERVER:
+                port = Integer.parseInt(KJobServerConfig.staticNameServerAddress.split(":")[1]);
+        }
+//        int port = type.equals(RemoteConstant.SERVER) ? RemoteConstant.DEFAULT_SERVER_GRPC_PORT : RemoteConstant.DEFAULT_WORKER_GRPC_PORT;
         // 通过 computeIfAbsent 来确保线程安全地创建和存储单例对象
+        int finalPort = port;
         return channelSingletons.computeIfAbsent(serverAddress + type, key -> {
             try {
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress, port)
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress, finalPort)
                         .usePlaintext()
                         .build();
                 // 通过反射创建指定的 Stub 实例

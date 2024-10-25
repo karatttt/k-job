@@ -26,13 +26,17 @@ public final class CausaGrpcClientGen {
       "\n\021causa/cgrpc.proto\032!causa/server_discov" +
       "er_causa.proto\032\032causa/schedule_causa.pro" +
       "to\032\030causa/common_causa.proto\032\033google/pro" +
-      "tobuf/empty.proto2\206\001\n\016ServerDiscover\022\"\n\t" +
-      "assertApp\022\010.AppName\032\t.Response\"\000\022.\n\016hear" +
-      "tbeatCheck\022\017.HeartbeatCheck\032\t.Response\"\000" +
-      "\022 \n\npingServer\022\005.Ping\032\t.Response\"\0002{\n\010Sc" +
-      "hedule\0226\n\025reportWorkerHeartbeat\022\020.Worker" +
-      "Heartbeat\032\t.Response\"\000\0227\n\021serverSchedule" +
-      "Job\022\025.ServerScheduleJobReq\032\t.Response\"\000B",
+      "tobuf/empty.proto\032\032causa/register_causa." +
+      "proto2\206\001\n\016ServerDiscover\022\"\n\tassertApp\022\010." +
+      "AppName\032\t.Response\"\000\022.\n\016heartbeatCheck\022\017" +
+      ".HeartbeatCheck\032\t.Response\"\000\022 \n\npingServ" +
+      "er\022\005.Ping\032\t.Response\"\0002{\n\010Schedule\0226\n\025re" +
+      "portWorkerHeartbeat\022\020.WorkerHeartbeat\032\t." +
+      "Response\"\000\0227\n\021serverScheduleJob\022\025.Server",
+      "ScheduleJobReq\032\t.Response\"\0002\201\001\n\024Register" +
+      "ToNameServer\0226\n\016serverRegister\022\027.ServerR" +
+      "egisterReporter\032\t.Response\"\000\0221\n\017workerSu" +
+      "bscribe\022\023.WorkerSubscribeReq\032\t.ResponseB" +
       ")\n\023org.kjob.remote.apiB\022CausaGrpcClientG" +
       "enb\006proto3"
     };
@@ -51,11 +55,13 @@ public final class CausaGrpcClientGen {
           org.kjob.remote.protos.ScheduleCausa.getDescriptor(),
           org.kjob.remote.protos.CommonCausa.getDescriptor(),
           com.google.protobuf.EmptyProto.getDescriptor(),
+          org.kjob.remote.protos.RegisterCausa.getDescriptor(),
         }, assigner);
     org.kjob.remote.protos.ServerDiscoverCausa.getDescriptor();
     org.kjob.remote.protos.ScheduleCausa.getDescriptor();
     org.kjob.remote.protos.CommonCausa.getDescriptor();
     com.google.protobuf.EmptyProto.getDescriptor();
+    org.kjob.remote.protos.RegisterCausa.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

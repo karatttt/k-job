@@ -26,6 +26,8 @@ public class KJobWorkerConfig {
     private int port = RemoteConstant.DEFAULT_WORKER_GRPC_PORT;
 
     private int serverPort = RemoteConstant.DEFAULT_SERVER_GRPC_PORT;
+
+    private String nameServerAddress;
     /**
      * Address of powerjob-server node(s)
      * Do not mistake for ActorSystem port. Do not add any prefix, i.e. http://.

@@ -1,0 +1,16 @@
+//使用proto3语法
+syntax = "proto3";
+option java_package = "org.kjob.remote.protos";
+
+message ServerRegisterReporter{
+  string serverIpAddress = 1;
+}
+
+message WorkerSubscribeReq{}
+
+// response
+message WorkerSubscribeResponse{
+
+  repeated string serverAddressIpLists = 1;
+
+}

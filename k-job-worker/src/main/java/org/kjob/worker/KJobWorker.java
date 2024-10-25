@@ -30,7 +30,7 @@ public class KJobWorker {
         log.info("[KJob] starting ...");
 
         // init rpc
-        RpcInitializer rpcInitializer = new RpcInitializer(config.getServerPort(),config.getPort(),config.getServerAddress());
+        RpcInitializer rpcInitializer = new RpcInitializer(config.getServerPort(),config.getPort(),config.getServerAddress(),config.getNameServerAddress());
         rpcInitializer.initRpcStrategies();
         rpcInitializer.initRpcServer(config);
 

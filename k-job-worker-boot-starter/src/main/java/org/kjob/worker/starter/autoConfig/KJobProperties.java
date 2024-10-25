@@ -46,6 +46,25 @@ public class KJobProperties {
         getWorker().setServerAddress(serverAddress);
     }
 
+
+    @Deprecated
+    @DeprecatedConfigurationProperty(replacement = "kjob.worker.name-server-address")
+    public String getNameServerAddress() {
+        return getWorker().nameServerAddress;
+    }
+
+
+    @Deprecated
+    public void setNameServerAddress(String address) {
+        getWorker().setNameServerAddress(address);
+    }
+
+    @Deprecated
+    @DeprecatedConfigurationProperty(replacement = "kjob.worker.server-port")
+    public int getServerPort(){
+        return getWorker().serverPort;
+    }
+
     /**
      * kjob worker configuration properties.
      */
@@ -72,6 +91,12 @@ public class KJobProperties {
          only ip address
          */
         private String serverAddress;
+        /**
+         only server port
+         */
+        private Integer serverPort;
+
+        private String nameServerAddress;
         /**
          * Max numbers of LightTaskTacker
          */

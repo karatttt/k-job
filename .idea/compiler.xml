@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="k-job-server" />
+        <module name="k-job-nameServer" />
         <module name="k-job-worker" />
         <module name="k-job-worker-boot-starter" />
         <module name="k-job-common" />
@@ -18,6 +19,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="k-job" options="" />
       <module name="k-job-common" options="-parameters" />
+      <module name="k-job-nameServer" options="-parameters" />
       <module name="k-job-server" options="-parameters" />
       <module name="k-job-worker" options="-parameters" />
       <module name="k-job-worker-boot-starter" options="-parameters" />

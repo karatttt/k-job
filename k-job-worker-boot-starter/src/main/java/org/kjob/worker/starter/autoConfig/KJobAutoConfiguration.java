@@ -34,9 +34,13 @@ public class KJobAutoConfiguration {
         if (worker.getPort() != null) {
             config.setPort(worker.getPort());
         }
+        if (worker.getServerPort() != null) {
+            config.setServerPort(worker.getServerPort());
+        }
 
         config.setAppName(worker.getAppName());
         config.setServerAddress(serverAddress);
+        config.setNameServerAddress(config.getNameServerAddress());
         config.setMaxHeavyweightTaskNum(worker.getMaxHeavyweightTaskNum());
         config.setMaxLightweightTaskNum(worker.getMaxLightweightTaskNum());
         config.setHealthReportInterval(worker.getHealthReportInterval());
