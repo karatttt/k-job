@@ -34,12 +34,13 @@ public class ServerRegisterStarter implements InitializingBean {
             @Override
             public void run() {
                 try {
-                    RegisterCausa.serverRegisterReporter build = RegisterCausa.serverRegisterReporter.newBuilder().setServerIpAddress(kJobServerConfig.getAddress()).build();
+                    RegisterCausa.ServerRegisterReporter build = RegisterCausa.ServerRegisterReporter.newBuilder().setServerIpAddress(kJobServerConfig.getAddress()).build();
                     CommonCausa.Response response = stubSingleton.serverRegister(build);
+                    log.info("server register to nameServer success");
                 } catch (Exception e){
                     log.error("server register to nameServer error");
                 }
             }
-        }, 0, 30,TimeUnit.SECONDS);
+        }, 0, 10,TimeUnit.SECONDS);
     }
 }

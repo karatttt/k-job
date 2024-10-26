@@ -13,6 +13,7 @@ import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.RpcInitializer;
 import org.kjob.worker.common.grpc.strategies.GrpcStrategy;
 import org.kjob.worker.common.grpc.strategies.StrategyManager;
+import org.kjob.worker.subscribe.WorkerSubscribeManager;
 import org.springframework.beans.BeanUtils;
 
 import java.net.InetAddress;
@@ -35,9 +36,22 @@ public class AssertAppRpcService implements GrpcStrategy<TransportTypeEnum> {
 
     @Override
     public Object execute(Object params) {
+        ServerDiscoverCausa.AppName appNameInfo = (ServerDiscoverCausa.AppName) params;
         for (ServerDiscoverGrpc.ServerDiscoverBlockingStub serverDiscoverStub : serverDiscoverStubs) {
             try {
-                CommonCausa.Response response = CommonUtils.executeWithRetry0(() -> serverDiscoverStub.assertApp((ServerDiscoverCausa.AppName) params));
+                if(WorkerSubscribeManager.isSplit()) {
+                    // 需要分组，依附于新的server，优先选择最小连接的server
+                    appNameInfo = ServerDiscoverCausa.AppName.newBuilder().setAppName(appNameInfo.getAppName())
+                            .setSubAppName(WorkerSubscribeManager.getSubAppName())
+                            .setTargetServer(WorkerSubscribeManager.getServerIpList().get(0))
+                            .build();
+                    log.info("change server to ip:{}", appNameInfo.getTargetServer());
+                }
+                // 重置状态，防止多次分组
+                WorkerSubscribeManager.setSplitStatus(false);
+
+                ServerDiscoverCausa.AppName finalAppNameInfo = appNameInfo;
+                CommonCausa.Response response = CommonUtils.executeWithRetry0(() -> serverDiscoverStub.assertApp(finalAppNameInfo));
                 if(response.getCode() == RemoteConstant.SUCCESS){
                     return response.getWorkInfo();
                 } else {

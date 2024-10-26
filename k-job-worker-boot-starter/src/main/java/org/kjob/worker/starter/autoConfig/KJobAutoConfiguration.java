@@ -40,7 +40,7 @@ public class KJobAutoConfiguration {
 
         config.setAppName(worker.getAppName());
         config.setServerAddress(serverAddress);
-        config.setNameServerAddress(config.getNameServerAddress());
+        config.setNameServerAddress(worker.getNameServerAddress());
         config.setMaxHeavyweightTaskNum(worker.getMaxHeavyweightTaskNum());
         config.setMaxLightweightTaskNum(worker.getMaxLightweightTaskNum());
         config.setHealthReportInterval(worker.getHealthReportInterval());

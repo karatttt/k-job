@@ -1,6 +1,7 @@
 package org.kjob.server.service.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.remote.protos.CommonCausa;
@@ -9,6 +10,7 @@ import org.kjob.server.persistence.domain.AppInfo;
 import org.kjob.server.persistence.mapper.AppInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class AppInfoHandler implements RpcHandler {
@@ -24,10 +26,18 @@ public class AppInfoHandler implements RpcHandler {
                 .eq(AppInfo::getAppName, request.getAppName()));
         CommonCausa.Response response;
         if (appInfo != null) {
+            Long appId = appInfo.getId();
+            if(!request.getSubAppName().isEmpty()) {
+                AppInfo build = AppInfo.builder().appName(request.getAppName())
+                        .currentServer(request.getTargetServer())
+                        .subAppName(request.getSubAppName()).build();
+                appInfoMapper.insert(build);
+                appId = build.getId();
+            }
             response = CommonCausa.Response.newBuilder()
                     .setCode(RemoteConstant.SUCCESS)
                     .setWorkInfo(
-                            ServerDiscoverCausa.WorkInfo.newBuilder().setAppId(appInfo.getId()).build()
+                            ServerDiscoverCausa.WorkInfo.newBuilder().setAppId(appId).build()
                     ).build();
         } else {
             response = CommonCausa.Response.newBuilder()

@@ -613,6 +613,26 @@ public final class ServerDiscoverCausa {
      */
     com.google.protobuf.ByteString
         getAppNameBytes();
+
+    /**
+     * <code>string subAppName = 2;</code>
+     */
+    java.lang.String getSubAppName();
+    /**
+     * <code>string subAppName = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getSubAppNameBytes();
+
+    /**
+     * <code>string targetServer = 3;</code>
+     */
+    java.lang.String getTargetServer();
+    /**
+     * <code>string targetServer = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getTargetServerBytes();
   }
   /**
    * Protobuf type {@code AppName}
@@ -627,6 +647,8 @@ public final class ServerDiscoverCausa {
     }
     private AppName() {
       appName_ = "";
+      subAppName_ = "";
+      targetServer_ = "";
     }
 
     @java.lang.Override
@@ -658,6 +680,18 @@ public final class ServerDiscoverCausa {
               java.lang.String s = input.readStringRequireUtf8();
 
               appName_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              subAppName_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              targetServer_ = s;
               break;
             }
           }
@@ -717,6 +751,74 @@ public final class ServerDiscoverCausa {
       }
     }
 
+    public static final int SUBAPPNAME_FIELD_NUMBER = 2;
+    private volatile java.lang.Object subAppName_;
+    /**
+     * <code>string subAppName = 2;</code>
+     */
+    public java.lang.String getSubAppName() {
+      java.lang.Object ref = subAppName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        subAppName_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string subAppName = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSubAppNameBytes() {
+      java.lang.Object ref = subAppName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        subAppName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TARGETSERVER_FIELD_NUMBER = 3;
+    private volatile java.lang.Object targetServer_;
+    /**
+     * <code>string targetServer = 3;</code>
+     */
+    public java.lang.String getTargetServer() {
+      java.lang.Object ref = targetServer_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        targetServer_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string targetServer = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTargetServerBytes() {
+      java.lang.Object ref = targetServer_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        targetServer_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -732,6 +834,12 @@ public final class ServerDiscoverCausa {
       if (!getAppNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, appName_);
       }
+      if (!getSubAppNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, subAppName_);
+      }
+      if (!getTargetServerBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, targetServer_);
+      }
     }
 
     public int getSerializedSize() {
@@ -741,6 +849,12 @@ public final class ServerDiscoverCausa {
       size = 0;
       if (!getAppNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, appName_);
+      }
+      if (!getSubAppNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, subAppName_);
+      }
+      if (!getTargetServerBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, targetServer_);
       }
       memoizedSize = size;
       return size;
@@ -760,6 +874,10 @@ public final class ServerDiscoverCausa {
       boolean result = true;
       result = result && getAppName()
           .equals(other.getAppName());
+      result = result && getSubAppName()
+          .equals(other.getSubAppName());
+      result = result && getTargetServer()
+          .equals(other.getTargetServer());
       return result;
     }
 
@@ -772,6 +890,10 @@ public final class ServerDiscoverCausa {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + APPNAME_FIELD_NUMBER;
       hash = (53 * hash) + getAppName().hashCode();
+      hash = (37 * hash) + SUBAPPNAME_FIELD_NUMBER;
+      hash = (53 * hash) + getSubAppName().hashCode();
+      hash = (37 * hash) + TARGETSERVER_FIELD_NUMBER;
+      hash = (53 * hash) + getTargetServer().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -903,6 +1025,10 @@ public final class ServerDiscoverCausa {
         super.clear();
         appName_ = "";
 
+        subAppName_ = "";
+
+        targetServer_ = "";
+
         return this;
       }
 
@@ -926,6 +1052,8 @@ public final class ServerDiscoverCausa {
       public org.kjob.remote.protos.ServerDiscoverCausa.AppName buildPartial() {
         org.kjob.remote.protos.ServerDiscoverCausa.AppName result = new org.kjob.remote.protos.ServerDiscoverCausa.AppName(this);
         result.appName_ = appName_;
+        result.subAppName_ = subAppName_;
+        result.targetServer_ = targetServer_;
         onBuilt();
         return result;
       }
@@ -969,6 +1097,14 @@ public final class ServerDiscoverCausa {
         if (other == org.kjob.remote.protos.ServerDiscoverCausa.AppName.getDefaultInstance()) return this;
         if (!other.getAppName().isEmpty()) {
           appName_ = other.appName_;
+          onChanged();
+        }
+        if (!other.getSubAppName().isEmpty()) {
+          subAppName_ = other.subAppName_;
+          onChanged();
+        }
+        if (!other.getTargetServer().isEmpty()) {
+          targetServer_ = other.targetServer_;
           onChanged();
         }
         onChanged();
@@ -1062,6 +1198,144 @@ public final class ServerDiscoverCausa {
   checkByteStringIsUtf8(value);
         
         appName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object subAppName_ = "";
+      /**
+       * <code>string subAppName = 2;</code>
+       */
+      public java.lang.String getSubAppName() {
+        java.lang.Object ref = subAppName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          subAppName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string subAppName = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSubAppNameBytes() {
+        java.lang.Object ref = subAppName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          subAppName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string subAppName = 2;</code>
+       */
+      public Builder setSubAppName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        subAppName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string subAppName = 2;</code>
+       */
+      public Builder clearSubAppName() {
+        
+        subAppName_ = getDefaultInstance().getSubAppName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string subAppName = 2;</code>
+       */
+      public Builder setSubAppNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        subAppName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object targetServer_ = "";
+      /**
+       * <code>string targetServer = 3;</code>
+       */
+      public java.lang.String getTargetServer() {
+        java.lang.Object ref = targetServer_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          targetServer_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string targetServer = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTargetServerBytes() {
+        java.lang.Object ref = targetServer_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          targetServer_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string targetServer = 3;</code>
+       */
+      public Builder setTargetServer(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        targetServer_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string targetServer = 3;</code>
+       */
+      public Builder clearTargetServer() {
+        
+        targetServer_ = getDefaultInstance().getTargetServer();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string targetServer = 3;</code>
+       */
+      public Builder setTargetServerBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        targetServer_ = value;
         onChanged();
         return this;
       }
@@ -3008,11 +3282,12 @@ public final class ServerDiscoverCausa {
     java.lang.String[] descriptorData = {
       "\n!causa/server_discover_causa.proto\"6\n\016H" +
       "eartbeatCheck\022\r\n\005appId\030\001 \001(\003\022\025\n\rcurrentS" +
-      "erver\030\002 \001(\t\"\032\n\007AppName\022\017\n\007appName\030\001 \001(\t\"" +
-      "\034\n\004Ping\022\024\n\014targetServer\030\001 \001(\t\"\031\n\010WorkInf" +
-      "o\022\r\n\005appId\030\001 \001(\003\"*\n\017AvailableServer\022\027\n\017a" +
-      "vailableServer\030\001 \001(\t\"\006\n\004PongB\030\n\026org.kjob" +
-      ".remote.protosb\006proto3"
+      "erver\030\002 \001(\t\"D\n\007AppName\022\017\n\007appName\030\001 \001(\t\022" +
+      "\022\n\nsubAppName\030\002 \001(\t\022\024\n\014targetServer\030\003 \001(" +
+      "\t\"\034\n\004Ping\022\024\n\014targetServer\030\001 \001(\t\"\031\n\010WorkI" +
+      "nfo\022\r\n\005appId\030\001 \001(\003\"*\n\017AvailableServer\022\027\n" +
+      "\017availableServer\030\001 \001(\t\"\006\n\004PongB\030\n\026org.kj" +
+      "ob.remote.protosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3037,7 +3312,7 @@ public final class ServerDiscoverCausa {
     internal_static_AppName_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AppName_descriptor,
-        new java.lang.String[] { "AppName", });
+        new java.lang.String[] { "AppName", "SubAppName", "TargetServer", });
     internal_static_Ping_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_Ping_fieldAccessorTable = new

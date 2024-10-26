@@ -3,6 +3,8 @@ package org.kjob.server.persistence.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
  * @TableName app_info
  */
 @TableName(value ="app_info")
+@Builder
 public class AppInfo implements Serializable {
     /**
      * 
@@ -27,10 +30,20 @@ public class AppInfo implements Serializable {
      */
     private String appName;
 
+    private String subAppName;
+
     /**
      * 
      */
     private String password;
+
+    public String getSubAppName() {
+        return subAppName;
+    }
+
+    public void setSubAppName(String subAppName) {
+        this.subAppName = subAppName;
+    }
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

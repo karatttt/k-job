@@ -12,6 +12,7 @@ import org.kjob.worker.processor.KJobProcessorLoader;
 import org.kjob.worker.processor.ProcessorLoader;
 import org.kjob.worker.processor.factory.BuiltInDefaultProcessorFactory;
 import org.kjob.worker.processor.factory.ProcessorFactory;
+import org.kjob.worker.subscribe.WorkerSubscribeStarter;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,9 @@ public class KJobWorker {
         KJobServerDiscoverService kJobServerDiscoverService = new KJobServerDiscoverService(config);
 
         try{
+            // subscribe to nameServer
+            WorkerSubscribeStarter.start(config.getAppName());
+
             // get appId
             kJobServerDiscoverService.assertApp();
 

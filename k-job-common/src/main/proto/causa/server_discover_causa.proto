@@ -16,6 +16,8 @@ message HeartbeatCheck {
 }
 message AppName {
   string appName = 1;
+  string subAppName = 2;
+  string targetServer = 3;
 }
 message Ping {
   string targetServer = 1;
