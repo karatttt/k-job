@@ -21,6 +21,9 @@ service ServerDiscover {
   rpc heartbeatCheck(HeartbeatCheck) returns(Response) {};
 
   rpc pingServer(Ping) returns(Response) {};
+
+  rpc serverChange(ServerChangeReq) returns(Response){};
+
 }
 
 service Schedule {
@@ -30,6 +33,6 @@ service Schedule {
 
 service RegisterToNameServer {
   rpc serverRegister(ServerRegisterReporter) returns(Response){};
-  rpc workerSubscribe(WorkerSubscribeReq) returns(Response);
+  rpc workerSubscribe(WorkerSubscribeReq) returns(Response){};
 }
 

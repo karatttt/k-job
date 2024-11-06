@@ -16,6 +16,7 @@ import org.kjob.worker.processor.ProcessorDefinition;
 import org.kjob.worker.processor.task.TaskConstant;
 import org.kjob.worker.processor.task.TaskContext;
 import org.kjob.worker.processor.task.TaskStatus;
+import org.kjob.worker.subscribe.WorkerSubscribeManager;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
@@ -215,8 +216,8 @@ public class LightTaskTracker extends TaskTracker {
 //            timeoutCheckScheduledFuture.cancel(true);
 //        }
         log.info("[TaskTracker-{}] task complete ! create time:{},queue time:{},use time:{},result:{}", instanceId, createTime, taskStartTime - createTime, System.currentTimeMillis() - taskStartTime, result);
-        // 执行完成后立即上报一次
-//        checkAndReportStatus();
+        // 执行完成后记录调度次数
+        WorkerSubscribeManager.addScheduleTimes();
         return result;
     }
 

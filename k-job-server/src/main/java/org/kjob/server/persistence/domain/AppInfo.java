@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.io.Serializable;
 
@@ -11,35 +12,44 @@ import java.io.Serializable;
  * 
  * @TableName app_info
  */
+@Getter
 @TableName(value ="app_info")
 @Builder
 public class AppInfo implements Serializable {
     /**
-     * 
+     *
+     * -- GETTER --
+     *
+
      */
     @TableId
     private Long id;
 
     /**
-     * 
+     *
+     * -- GETTER --
+     *
+
      */
     private String currentServer;
 
     /**
-     * 
+     *
+     * -- GETTER --
+     *
+
      */
     private String appName;
 
     private String subAppName;
 
     /**
-     * 
+     *
+     * -- GETTER --
+     *
+
      */
     private String password;
-
-    public String getSubAppName() {
-        return subAppName;
-    }
 
     public void setSubAppName(String subAppName) {
         this.subAppName = subAppName;
@@ -51,22 +61,8 @@ public class AppInfo implements Serializable {
     /**
      * 
      */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * 
-     */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 
-     */
-    public String getCurrentServer() {
-        return currentServer;
     }
 
     /**
@@ -79,22 +75,8 @@ public class AppInfo implements Serializable {
     /**
      * 
      */
-    public String getAppName() {
-        return appName;
-    }
-
-    /**
-     * 
-     */
     public void setAppName(String appName) {
         this.appName = appName;
-    }
-
-    /**
-     * 
-     */
-    public String getPassword() {
-        return password;
     }
 
     /**

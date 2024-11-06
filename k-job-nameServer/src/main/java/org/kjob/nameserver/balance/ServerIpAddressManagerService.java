@@ -17,17 +17,27 @@ public class ServerIpAddressManagerService {
     @Getter
     private Set<String> serverIpAddressSet = new HashSet<>();
     private Set<String> workerIpAddressSet = new HashSet<>();
+
+    // for split group
     private final Map<String, Integer> appName2WorkerNumMap = Maps.newHashMap();
-    private final Map<String, Integer> serverIp2ConnectNumMap = Maps.newHashMap();
+
+//    private final Map<String, Integer> serverIp2ConnectNumMap = Maps.newHashMap();
+
+    // for dynamic change group
+    private final Map<String, Long> serverIp2ScheduleTimesMap = Maps.newHashMap();
     private  int serverIpCount = 0;
 
 
     public  void add2ServerIpAddressSet(RegisterCausa.ServerRegisterReporter req) {
         serverIpAddressSet.add(req.getServerIpAddress());
-        serverIp2ConnectNumMap.put(req.getServerIpAddress(), 0);
+//        serverIp2ConnectNumMap.put(req.getServerIpAddress(), 0);
         serverIpCount++;
     }
-
+    public void addScheduleTimes(String serverIpAddress, long scheduleTime) {
+        if(!serverIpAddress.isEmpty()) {
+            serverIp2ScheduleTimesMap.put(serverIpAddress, serverIp2ScheduleTimesMap.getOrDefault(serverIpAddress, 0L) + scheduleTime);
+        }
+    }
     public void addAppName2WorkerNumMap(String workerIpAddress, String appName){
         if(!workerIpAddressSet.contains(workerIpAddress)) {
             workerIpAddressSet.add(workerIpAddress);
@@ -35,30 +45,43 @@ public class ServerIpAddressManagerService {
         }
     }
 
-    public ReBalanceInfo getServerIpAddressReBalanceList(String appName) {
+    public ReBalanceInfo getServerIpAddressReBalanceList(String serverAddress, String appName) {
         ReBalanceInfo reBalanceInfo = new ReBalanceInfo();
-        if(!appName2WorkerNumMap.isEmpty() && appName2WorkerNumMap.get(appName) == 1){
-            // return new serverIpList
-            List<String> newServerIpList;
-            newServerIpList = serverIp2ConnectNumMap.keySet().stream().sorted(new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return serverIp2ConnectNumMap.get(o1) - serverIp2ConnectNumMap.get(o2);
-                }
-            }).collect(Collectors.toList());
-            serverIp2ConnectNumMap.put(newServerIpList.get(0), serverIp2ConnectNumMap.get(newServerIpList.get(0) + maxWorkerNum));
-            reBalanceInfo.setSplit(true);
-            reBalanceInfo.setServerIpList(newServerIpList);
-//            reBalanceInfo.setSubAppName(appName + ":" + appName2WorkerNumMap.size() / maxWorkerNum);
-            reBalanceInfo.setSubAppName(appName + ":" + appName2WorkerNumMap.size());
+        // get sorted scheduleTimes serverList
+        List<String> newServerIpList = serverIp2ScheduleTimesMap.keySet().stream().sorted(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return (int) (serverIp2ScheduleTimesMap.get(o1) - serverIp2ScheduleTimesMap.get(o2));
+            }
+        }).collect(Collectors.toList());
 
+        // see if split
+        if(!appName2WorkerNumMap.isEmpty() && appName2WorkerNumMap.get(appName) > maxWorkerNum && appName2WorkerNumMap.get(appName) % maxWorkerNum == 1){
+            // return new serverIpList
+            reBalanceInfo.setSplit(true);
+            reBalanceInfo.setChangeServer(false);
+            reBalanceInfo.setServerIpList(newServerIpList);
+            reBalanceInfo.setSubAppName(appName + ":" + appName2WorkerNumMap.size());
             return reBalanceInfo;
         }
-         // return default list
+        // see if need change server
+        Long lestScheduleTimes = serverIp2ScheduleTimesMap.get(newServerIpList.get(newServerIpList.size() - 1));
+        Long comparedScheduleTimes = lestScheduleTimes == 0 ? 1 : lestScheduleTimes;
+        if(serverIp2ScheduleTimesMap.get(serverAddress) / comparedScheduleTimes == 1){
+            reBalanceInfo.setSplit(false);
+            reBalanceInfo.setChangeServer(true);
+            // first server is target lest scheduleTimes server
+            reBalanceInfo.setServerIpList(newServerIpList);
+            reBalanceInfo.setSubAppName("");
+            return reBalanceInfo;
+        }
+        // return default list
         reBalanceInfo.setSplit(false);
         reBalanceInfo.setServerIpList(new ArrayList<String>(serverIpAddressSet));
         reBalanceInfo.setSubAppName("");
         return reBalanceInfo;
 
     }
+
+
 }

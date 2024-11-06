@@ -66,6 +66,18 @@ public final class ServerDiscoverGrpc {
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
               org.kjob.remote.protos.CommonCausa.Response.getDefaultInstance()))
           .build();
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static final io.grpc.MethodDescriptor<org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq,
+      org.kjob.remote.protos.CommonCausa.Response> METHOD_SERVER_CHANGE =
+      io.grpc.MethodDescriptor.<org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq, org.kjob.remote.protos.CommonCausa.Response>newBuilder()
+          .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName(generateFullMethodName(
+              "ServerDiscover", "serverChange"))
+          .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.getDefaultInstance()))
+          .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              org.kjob.remote.protos.CommonCausa.Response.getDefaultInstance()))
+          .build();
 
   /**
    * Creates a new async stub that supports all call types for the service
@@ -118,6 +130,13 @@ public final class ServerDiscoverGrpc {
       asyncUnimplementedUnaryCall(METHOD_PING_SERVER, responseObserver);
     }
 
+    /**
+     */
+    public void serverChange(org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq request,
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_SERVER_CHANGE, responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -141,6 +160,13 @@ public final class ServerDiscoverGrpc {
                 org.kjob.remote.protos.ServerDiscoverCausa.Ping,
                 org.kjob.remote.protos.CommonCausa.Response>(
                   this, METHODID_PING_SERVER)))
+          .addMethod(
+            METHOD_SERVER_CHANGE,
+            asyncUnaryCall(
+              new MethodHandlers<
+                org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq,
+                org.kjob.remote.protos.CommonCausa.Response>(
+                  this, METHODID_SERVER_CHANGE)))
           .build();
     }
   }
@@ -189,6 +215,14 @@ public final class ServerDiscoverGrpc {
       asyncUnaryCall(
           getChannel().newCall(METHOD_PING_SERVER, getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void serverChange(org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq request,
+        io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_SERVER_CHANGE, getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -231,6 +265,13 @@ public final class ServerDiscoverGrpc {
     public org.kjob.remote.protos.CommonCausa.Response pingServer(org.kjob.remote.protos.ServerDiscoverCausa.Ping request) {
       return blockingUnaryCall(
           getChannel(), METHOD_PING_SERVER, getCallOptions(), request);
+    }
+
+    /**
+     */
+    public org.kjob.remote.protos.CommonCausa.Response serverChange(org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_SERVER_CHANGE, getCallOptions(), request);
     }
   }
 
@@ -278,11 +319,20 @@ public final class ServerDiscoverGrpc {
       return futureUnaryCall(
           getChannel().newCall(METHOD_PING_SERVER, getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<org.kjob.remote.protos.CommonCausa.Response> serverChange(
+        org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_SERVER_CHANGE, getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_ASSERT_APP = 0;
   private static final int METHODID_HEARTBEAT_CHECK = 1;
   private static final int METHODID_PING_SERVER = 2;
+  private static final int METHODID_SERVER_CHANGE = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -311,6 +361,10 @@ public final class ServerDiscoverGrpc {
           break;
         case METHODID_PING_SERVER:
           serviceImpl.pingServer((org.kjob.remote.protos.ServerDiscoverCausa.Ping) request,
+              (io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response>) responseObserver);
+          break;
+        case METHODID_SERVER_CHANGE:
+          serviceImpl.serverChange((org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq) request,
               (io.grpc.stub.StreamObserver<org.kjob.remote.protos.CommonCausa.Response>) responseObserver);
           break;
         default:
@@ -349,6 +403,7 @@ public final class ServerDiscoverGrpc {
               .addMethod(METHOD_ASSERT_APP)
               .addMethod(METHOD_HEARTBEAT_CHECK)
               .addMethod(METHOD_PING_SERVER)
+              .addMethod(METHOD_SERVER_CHANGE)
               .build();
         }
       }

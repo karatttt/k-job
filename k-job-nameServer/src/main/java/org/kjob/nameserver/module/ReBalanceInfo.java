@@ -11,6 +11,7 @@ public class ReBalanceInfo {
 
     List<String> ServerIpList;
     boolean isSplit;
+    boolean isChangeServer;
     String subAppName;
 
 }

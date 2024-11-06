@@ -29,11 +29,13 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
     @Override
     public void workerSubscribe(RegisterCausa.WorkerSubscribeReq request, StreamObserver<CommonCausa.Response> responseObserver) {
         service.addAppName2WorkerNumMap(request.getWorkerIpAddress(),request.getAppName());
-        ReBalanceInfo info = service.getServerIpAddressReBalanceList(request.getAppName());
+        service.addScheduleTimes(request.getServerIpAddress(),request.getScheduleTime());
+        ReBalanceInfo info = service.getServerIpAddressReBalanceList(request.getServerIpAddress(), request.getAppName());
 
         RegisterCausa.WorkerSubscribeResponse build = RegisterCausa.WorkerSubscribeResponse.newBuilder()
                 .addAllServerAddressIpLists(info.getServerIpList())
                 .setIsSplit(info.isSplit())
+                .setIsChangeServer(info.isChangeServer())
                 .setSubAppName(info.getSubAppName()).build();
         CommonCausa.Response build1 = CommonCausa.Response.newBuilder()
                 .setWorkerSubscribeResponse(build)

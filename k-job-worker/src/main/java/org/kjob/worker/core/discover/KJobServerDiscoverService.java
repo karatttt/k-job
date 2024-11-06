@@ -9,6 +9,7 @@ import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.worker.common.KJobWorkerConfig;
 import org.kjob.worker.common.constant.TransportTypeEnum;
 import org.kjob.worker.common.grpc.strategies.StrategyCaller;
+import org.kjob.worker.subscribe.WorkerSubscribeManager;
 import org.springframework.beans.BeanUtils;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,20 +62,25 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
     @Override
     public void heartbeatCheck(ScheduledExecutorService heartbeatCheckExecutor) {
         // each discovery connect no more than MAX_FAILED_COUNT
-        this.currentIpAddress = discovery();
+        setCurrentIpAddress(discovery());
         if (StringUtils.isEmpty(this.currentIpAddress)) {
             throw new KJobException("can't find any available server, this worker has been quarantined.");
         }
         // check server and update currentIpAddress, asserting already success , so scheduleAtFixedRate here
         heartbeatCheckExecutor.scheduleAtFixedRate(() -> {
                     try {
-                        this.currentIpAddress = discovery();
+                        setCurrentIpAddress(discovery());
                         log.info("[KJObServerDiscovery] jump ip :{}", currentIpAddress);
                     } catch (Exception e) {
                         log.error("[KJObServerDiscovery] fail to discovery server!", e);
                     }
                 }
                 , 5, 5, TimeUnit.SECONDS);
+    }
+
+    private void setCurrentIpAddress(String serverIpAddress) {
+        this.currentIpAddress = serverIpAddress;
+        WorkerSubscribeManager.setCurrentServerIp(currentIpAddress);
     }
 
     private String discovery() {
@@ -110,7 +116,8 @@ public class KJobServerDiscoverService implements ServerDiscoverService{
 
     private String acquire(String currentIpAddress) {
 
-        ServerDiscoverCausa.HeartbeatCheck build = ServerDiscoverCausa.HeartbeatCheck.newBuilder().setCurrentServer(currentIpAddress)
+        ServerDiscoverCausa.HeartbeatCheck build = ServerDiscoverCausa.HeartbeatCheck.newBuilder()
+                .setCurrentServer(currentIpAddress)
                 .setAppId(appId).build();
         ServerDiscoverCausa.AvailableServer availableServer = (ServerDiscoverCausa.AvailableServer) StrategyCaller.call(TransportTypeEnum.HEARTBEAT_CHECK, build);
         if(availableServer == null){

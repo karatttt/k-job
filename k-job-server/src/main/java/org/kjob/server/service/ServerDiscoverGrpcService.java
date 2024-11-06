@@ -18,6 +18,7 @@ import org.kjob.server.persistence.mapper.AppInfoMapper;
 import org.kjob.server.service.handler.AppInfoHandler;
 import org.kjob.server.service.handler.HeartbeatHandler;
 import org.kjob.server.service.handler.PongHandler;
+import org.kjob.server.service.handler.ServerChangeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetAddress;
@@ -35,6 +36,8 @@ public class ServerDiscoverGrpcService extends ServerDiscoverGrpc.ServerDiscover
     AppInfoHandler appInfoHandler;
     @Autowired
     PongHandler pongHandler;
+    @Autowired
+    ServerChangeHandler serverChangeHandler;
 
     public void heartbeatCheck(ServerDiscoverCausa.HeartbeatCheck request, StreamObserver<CommonCausa.Response> responseObserver) {
         heartbeatHandler.handle(request, responseObserver);
@@ -44,5 +47,8 @@ public class ServerDiscoverGrpcService extends ServerDiscoverGrpc.ServerDiscover
     }
     public void pingServer(ServerDiscoverCausa.Ping request, StreamObserver<CommonCausa.Response> responseObserver) {
         pongHandler.handle(request, responseObserver);
+    }
+    public void serverChange(ServerDiscoverCausa.ServerChangeReq request, StreamObserver<CommonCausa.Response> responseObserver) {
+        serverChangeHandler.handle(request, responseObserver);
     }
 }

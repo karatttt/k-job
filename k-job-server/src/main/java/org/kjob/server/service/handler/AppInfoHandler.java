@@ -7,6 +7,7 @@ import org.kjob.common.constant.RemoteConstant;
 import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.ServerDiscoverCausa;
 import org.kjob.server.persistence.domain.AppInfo;
+
 import org.kjob.server.persistence.mapper.AppInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,13 +28,16 @@ public class AppInfoHandler implements RpcHandler {
         CommonCausa.Response response;
         if (appInfo != null) {
             Long appId = appInfo.getId();
+            // split to other subgroup
             if(!request.getSubAppName().isEmpty()) {
-                AppInfo build = AppInfo.builder().appName(request.getAppName())
+                AppInfo build = AppInfo.builder()
+                        .appName(request.getAppName())
                         .currentServer(request.getTargetServer())
                         .subAppName(request.getSubAppName()).build();
                 appInfoMapper.insert(build);
                 appId = build.getId();
             }
+
             response = CommonCausa.Response.newBuilder()
                     .setCode(RemoteConstant.SUCCESS)
                     .setWorkInfo(

@@ -1902,6 +1902,657 @@ public final class ServerDiscoverCausa {
 
   }
 
+  public interface ServerChangeReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ServerChangeReq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string appName = 1;</code>
+     */
+    java.lang.String getAppName();
+    /**
+     * <code>string appName = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getAppNameBytes();
+
+    /**
+     * <code>string targetServer = 2;</code>
+     */
+    java.lang.String getTargetServer();
+    /**
+     * <code>string targetServer = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getTargetServerBytes();
+  }
+  /**
+   * Protobuf type {@code ServerChangeReq}
+   */
+  public  static final class ServerChangeReq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:ServerChangeReq)
+      ServerChangeReqOrBuilder {
+    // Use ServerChangeReq.newBuilder() to construct.
+    private ServerChangeReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ServerChangeReq() {
+      appName_ = "";
+      targetServer_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ServerChangeReq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              appName_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              targetServer_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.kjob.remote.protos.ServerDiscoverCausa.internal_static_ServerChangeReq_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.kjob.remote.protos.ServerDiscoverCausa.internal_static_ServerChangeReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.class, org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.Builder.class);
+    }
+
+    public static final int APPNAME_FIELD_NUMBER = 1;
+    private volatile java.lang.Object appName_;
+    /**
+     * <code>string appName = 1;</code>
+     */
+    public java.lang.String getAppName() {
+      java.lang.Object ref = appName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        appName_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string appName = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAppNameBytes() {
+      java.lang.Object ref = appName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        appName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TARGETSERVER_FIELD_NUMBER = 2;
+    private volatile java.lang.Object targetServer_;
+    /**
+     * <code>string targetServer = 2;</code>
+     */
+    public java.lang.String getTargetServer() {
+      java.lang.Object ref = targetServer_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        targetServer_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string targetServer = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTargetServerBytes() {
+      java.lang.Object ref = targetServer_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        targetServer_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getAppNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, appName_);
+      }
+      if (!getTargetServerBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, targetServer_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getAppNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, appName_);
+      }
+      if (!getTargetServerBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, targetServer_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq)) {
+        return super.equals(obj);
+      }
+      org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq other = (org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq) obj;
+
+      boolean result = true;
+      result = result && getAppName()
+          .equals(other.getAppName());
+      result = result && getTargetServer()
+          .equals(other.getTargetServer());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + APPNAME_FIELD_NUMBER;
+      hash = (53 * hash) + getAppName().hashCode();
+      hash = (37 * hash) + TARGETSERVER_FIELD_NUMBER;
+      hash = (53 * hash) + getTargetServer().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code ServerChangeReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:ServerChangeReq)
+        org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.kjob.remote.protos.ServerDiscoverCausa.internal_static_ServerChangeReq_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.kjob.remote.protos.ServerDiscoverCausa.internal_static_ServerChangeReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.class, org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.Builder.class);
+      }
+
+      // Construct using org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        appName_ = "";
+
+        targetServer_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.kjob.remote.protos.ServerDiscoverCausa.internal_static_ServerChangeReq_descriptor;
+      }
+
+      public org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq getDefaultInstanceForType() {
+        return org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.getDefaultInstance();
+      }
+
+      public org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq build() {
+        org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq buildPartial() {
+        org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq result = new org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq(this);
+        result.appName_ = appName_;
+        result.targetServer_ = targetServer_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq) {
+          return mergeFrom((org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq other) {
+        if (other == org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq.getDefaultInstance()) return this;
+        if (!other.getAppName().isEmpty()) {
+          appName_ = other.appName_;
+          onChanged();
+        }
+        if (!other.getTargetServer().isEmpty()) {
+          targetServer_ = other.targetServer_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object appName_ = "";
+      /**
+       * <code>string appName = 1;</code>
+       */
+      public java.lang.String getAppName() {
+        java.lang.Object ref = appName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          appName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string appName = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAppNameBytes() {
+        java.lang.Object ref = appName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          appName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string appName = 1;</code>
+       */
+      public Builder setAppName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        appName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appName = 1;</code>
+       */
+      public Builder clearAppName() {
+        
+        appName_ = getDefaultInstance().getAppName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appName = 1;</code>
+       */
+      public Builder setAppNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        appName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object targetServer_ = "";
+      /**
+       * <code>string targetServer = 2;</code>
+       */
+      public java.lang.String getTargetServer() {
+        java.lang.Object ref = targetServer_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          targetServer_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string targetServer = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTargetServerBytes() {
+        java.lang.Object ref = targetServer_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          targetServer_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string targetServer = 2;</code>
+       */
+      public Builder setTargetServer(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        targetServer_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string targetServer = 2;</code>
+       */
+      public Builder clearTargetServer() {
+        
+        targetServer_ = getDefaultInstance().getTargetServer();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string targetServer = 2;</code>
+       */
+      public Builder setTargetServerBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        targetServer_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:ServerChangeReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:ServerChangeReq)
+    private static final org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq();
+    }
+
+    public static org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ServerChangeReq>
+        PARSER = new com.google.protobuf.AbstractParser<ServerChangeReq>() {
+      public ServerChangeReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ServerChangeReq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ServerChangeReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ServerChangeReq> getParserForType() {
+      return PARSER;
+    }
+
+    public org.kjob.remote.protos.ServerDiscoverCausa.ServerChangeReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface WorkInfoOrBuilder extends
       // @@protoc_insertion_point(interface_extends:WorkInfo)
       com.google.protobuf.MessageOrBuilder {
@@ -3257,6 +3908,11 @@ public final class ServerDiscoverCausa {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Ping_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ServerChangeReq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ServerChangeReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_WorkInfo_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3284,10 +3940,12 @@ public final class ServerDiscoverCausa {
       "eartbeatCheck\022\r\n\005appId\030\001 \001(\003\022\025\n\rcurrentS" +
       "erver\030\002 \001(\t\"D\n\007AppName\022\017\n\007appName\030\001 \001(\t\022" +
       "\022\n\nsubAppName\030\002 \001(\t\022\024\n\014targetServer\030\003 \001(" +
-      "\t\"\034\n\004Ping\022\024\n\014targetServer\030\001 \001(\t\"\031\n\010WorkI" +
-      "nfo\022\r\n\005appId\030\001 \001(\003\"*\n\017AvailableServer\022\027\n" +
-      "\017availableServer\030\001 \001(\t\"\006\n\004PongB\030\n\026org.kj" +
-      "ob.remote.protosb\006proto3"
+      "\t\"\034\n\004Ping\022\024\n\014targetServer\030\001 \001(\t\"8\n\017Serve" +
+      "rChangeReq\022\017\n\007appName\030\001 \001(\t\022\024\n\014targetSer" +
+      "ver\030\002 \001(\t\"\031\n\010WorkInfo\022\r\n\005appId\030\001 \001(\003\"*\n\017" +
+      "AvailableServer\022\027\n\017availableServer\030\001 \001(\t" +
+      "\"\006\n\004PongB\030\n\026org.kjob.remote.protosb\006prot" +
+      "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3319,20 +3977,26 @@ public final class ServerDiscoverCausa {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Ping_descriptor,
         new java.lang.String[] { "TargetServer", });
-    internal_static_WorkInfo_descriptor =
+    internal_static_ServerChangeReq_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_ServerChangeReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ServerChangeReq_descriptor,
+        new java.lang.String[] { "AppName", "TargetServer", });
+    internal_static_WorkInfo_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_WorkInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_WorkInfo_descriptor,
         new java.lang.String[] { "AppId", });
     internal_static_AvailableServer_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_AvailableServer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AvailableServer_descriptor,
         new java.lang.String[] { "AvailableServer", });
     internal_static_Pong_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_Pong_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Pong_descriptor,

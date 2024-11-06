@@ -47,6 +47,7 @@ public class AssertAppRpcService implements GrpcStrategy<TransportTypeEnum> {
                             .build();
                     log.info("change server to ip:{}", appNameInfo.getTargetServer());
                 }
+
                 // 重置状态，防止多次分组
                 WorkerSubscribeManager.setSplitStatus(false);
 

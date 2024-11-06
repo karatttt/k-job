@@ -27,18 +27,19 @@ public final class CausaGrpcClientGen {
       "er_causa.proto\032\032causa/schedule_causa.pro" +
       "to\032\030causa/common_causa.proto\032\033google/pro" +
       "tobuf/empty.proto\032\032causa/register_causa." +
-      "proto2\206\001\n\016ServerDiscover\022\"\n\tassertApp\022\010." +
+      "proto2\265\001\n\016ServerDiscover\022\"\n\tassertApp\022\010." +
       "AppName\032\t.Response\"\000\022.\n\016heartbeatCheck\022\017" +
       ".HeartbeatCheck\032\t.Response\"\000\022 \n\npingServ" +
-      "er\022\005.Ping\032\t.Response\"\0002{\n\010Schedule\0226\n\025re" +
-      "portWorkerHeartbeat\022\020.WorkerHeartbeat\032\t." +
-      "Response\"\000\0227\n\021serverScheduleJob\022\025.Server",
-      "ScheduleJobReq\032\t.Response\"\0002\201\001\n\024Register" +
-      "ToNameServer\0226\n\016serverRegister\022\027.ServerR" +
-      "egisterReporter\032\t.Response\"\000\0221\n\017workerSu" +
-      "bscribe\022\023.WorkerSubscribeReq\032\t.ResponseB" +
-      ")\n\023org.kjob.remote.apiB\022CausaGrpcClientG" +
-      "enb\006proto3"
+      "er\022\005.Ping\032\t.Response\"\000\022-\n\014serverChange\022\020" +
+      ".ServerChangeReq\032\t.Response\"\0002{\n\010Schedul" +
+      "e\0226\n\025reportWorkerHeartbeat\022\020.WorkerHeart",
+      "beat\032\t.Response\"\000\0227\n\021serverScheduleJob\022\025" +
+      ".ServerScheduleJobReq\032\t.Response\"\0002\203\001\n\024R" +
+      "egisterToNameServer\0226\n\016serverRegister\022\027." +
+      "ServerRegisterReporter\032\t.Response\"\000\0223\n\017w" +
+      "orkerSubscribe\022\023.WorkerSubscribeReq\032\t.Re" +
+      "sponse\"\000B)\n\023org.kjob.remote.apiB\022CausaGr" +
+      "pcClientGenb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

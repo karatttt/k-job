@@ -22,6 +22,11 @@ message AppName {
 message Ping {
   string targetServer = 1;
 }
+message ServerChangeReq{
+  string appName = 1;
+  string targetServer = 2;
+}
+
 
 
 
