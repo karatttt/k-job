@@ -3,6 +3,7 @@ syntax = "proto3";
 import "causa/schedule_causa.proto";
 import "causa/register_causa.proto";
 import "causa/server_discover_causa.proto";
+import "causa/mq_causa.proto";
 
 //生成多个java文件
 //option java_multiple_files = true;
@@ -22,5 +23,7 @@ message Response {
     AvailableServer availableServer = 4;
     Pong pong= 5;
     WorkerSubscribeResponse workerSubscribeResponse = 6;
+    ServerAddressList serverAddressList = 7;
+    CreateJobRes createJobRes= 8;
   }
 }

@@ -3,7 +3,6 @@ package org.kjob.worker.starter.autoConfig;
 //import org.kjob.common.utils.NetUtils;
 import org.kjob.worker.KJobSpringWorker;
 import org.kjob.worker.common.KJobWorkerConfig;
-import org.kjob.worker.common.grpc.RpcInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,7 +22,7 @@ public class KJobAutoConfiguration {
     KJobProperties properties;
     @Bean
     @ConditionalOnMissingBean
-    public KJobSpringWorker initKJob() {
+    public KJobSpringWorker initKJobWorker() {
 
         KJobProperties.Worker worker = properties.getWorker();
 
@@ -46,4 +45,6 @@ public class KJobAutoConfiguration {
         config.setHealthReportInterval(worker.getHealthReportInterval());
         return new KJobSpringWorker(config);
     }
+
+
 }

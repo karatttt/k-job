@@ -13,6 +13,9 @@ message WorkerSubscribeReq{
   int64 scheduleTime = 3;
   string serverIpAddress = 4;
 }
+message FetchServerAddressListReq{
+
+}
 
 // response
 message WorkerSubscribeResponse{
@@ -22,4 +25,7 @@ message WorkerSubscribeResponse{
   string subAppName = 3;
   bool isChangeServer = 4;
 
+}
+message ServerAddressList{
+  repeated string serverAddressList = 1;
 }

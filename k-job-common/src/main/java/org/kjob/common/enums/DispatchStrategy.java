@@ -20,12 +20,8 @@ public enum DispatchStrategy {
     /**
      * 随机
      */
-    RANDOM(2),
-    /**
-     * 指定执行
-     */
-    SPECIFY(11)
-    ;
+    RANDOM(2);
+
 
     private final int v;
 

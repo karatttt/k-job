@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/k-job-worker-boot-starter/pom.xml" />
         <option value="$PROJECT_DIR$/k-job-common/pom.xml" />
         <option value="$PROJECT_DIR$/k-job-nameServer/pom.xml" />
+        <option value="$PROJECT_DIR$/k-job-producer/pom.xml" />
       </list>
     </option>
   </component>

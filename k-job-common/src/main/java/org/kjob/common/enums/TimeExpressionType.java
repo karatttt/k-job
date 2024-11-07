@@ -4,8 +4,10 @@ import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.kjob.remote.protos.MqCausa;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,11 +21,11 @@ import java.util.List;
 @ToString
 public enum TimeExpressionType {
 
-    CRON(2),
-    FIXED_RATE(3),
-    FIXED_DELAY(4),
+    CRON(0),
+    FIXED_RATE(1),
+    FIXED_DELAY(2),
 
-    DAILY_TIME_INTERVAL(11);
+    DAILY_TIME_INTERVAL(3);
 
     private final int v;
 
@@ -33,6 +35,13 @@ public enum TimeExpressionType {
      */
     public static final List<Integer> INSPECT_TYPES =  Collections.unmodifiableList(Lists.newArrayList(CRON.v, DAILY_TIME_INTERVAL.v));
 
+    public static  HashMap<TimeExpressionType, MqCausa.TimeExpressionType> map = new HashMap<>();
+    static {
+        map.put(CRON, MqCausa.TimeExpressionType.CRON);
+    }
+    public static MqCausa.TimeExpressionType getProtoBufTimeExpressionType(TimeExpressionType type){
+        return map.get(type);
+    }
     public static TimeExpressionType of(int v) {
         for (TimeExpressionType type : values()) {
             if (type.v == v) {

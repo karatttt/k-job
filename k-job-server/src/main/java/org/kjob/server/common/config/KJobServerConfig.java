@@ -41,5 +41,8 @@ public class KJobServerConfig {
     public void setWorkerPort(int workerPort) {
         this.workerPort = workerPort;
     }
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
+    }
 
 }

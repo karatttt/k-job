@@ -41,10 +41,10 @@ public class WorkerClusterQueryService {
         // 过滤不符合要求的机器
         workers.removeIf(workerInfo -> filterWorker(workerInfo, jobInfo));
 
-        // 限定集群大小（0代表不限制）
-        if (!workers.isEmpty() && jobInfo.getMaxWorkerCount() > 0 && workers.size() > jobInfo.getMaxWorkerCount()) {
-            workers = workers.subList(0, jobInfo.getMaxWorkerCount());
-        }
+//        // 限定集群大小（0代表不限制）
+//        if (!workers.isEmpty() && jobInfo.getMaxWorkerCount() > 0 && workers.size() > jobInfo.getMaxWorkerCount()) {
+//            workers = workers.subList(0, jobInfo.getMaxWorkerCount());
+//        }
         return workers;
     }
 

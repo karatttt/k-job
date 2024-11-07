@@ -168,7 +168,6 @@ public class DispatchService {
                 .setWorkerAddress(taskTrackerAddress)
                 .setTimeExpression(jobInfo.getTimeExpression())
                 .setTimeExpressionType(TimeExpressionType.of(jobInfo.getTimeExpressionType()).name())
-                .setTaskRetryNum(jobInfo.getTaskRetryNum())
                 .build();
 
         serverScheduleJobRpcClient.call(build);

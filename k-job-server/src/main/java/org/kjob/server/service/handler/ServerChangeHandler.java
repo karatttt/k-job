@@ -1,7 +1,6 @@
 package org.kjob.server.service.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Appinfo;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.remote.protos.CommonCausa;

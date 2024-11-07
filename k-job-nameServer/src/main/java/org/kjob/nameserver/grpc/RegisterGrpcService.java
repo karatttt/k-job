@@ -18,8 +18,8 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
     ServerIpAddressManagerService service;
     @Override
     public void serverRegister(RegisterCausa.ServerRegisterReporter request, StreamObserver<CommonCausa.Response> responseObserver) {
-        if(!service.getServerIpAddressSet().contains(request.getServerIpAddress())){
-            service.add2ServerIpAddressSet(request);
+        if(!service.getServerAddressSet().contains(request.getServerIpAddress())){
+            service.add2ServerAddressSet(request);
         }
         CommonCausa.Response build = CommonCausa.Response.newBuilder().build();
         responseObserver.onNext(build);
@@ -30,7 +30,7 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
     public void workerSubscribe(RegisterCausa.WorkerSubscribeReq request, StreamObserver<CommonCausa.Response> responseObserver) {
         service.addAppName2WorkerNumMap(request.getWorkerIpAddress(),request.getAppName());
         service.addScheduleTimes(request.getServerIpAddress(),request.getScheduleTime());
-        ReBalanceInfo info = service.getServerIpAddressReBalanceList(request.getServerIpAddress(), request.getAppName());
+        ReBalanceInfo info = service.getServerAddressReBalanceList(request.getServerIpAddress(), request.getAppName());
 
         RegisterCausa.WorkerSubscribeResponse build = RegisterCausa.WorkerSubscribeResponse.newBuilder()
                 .addAllServerAddressIpLists(info.getServerIpList())
@@ -39,6 +39,17 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
                 .setSubAppName(info.getSubAppName()).build();
         CommonCausa.Response build1 = CommonCausa.Response.newBuilder()
                 .setWorkerSubscribeResponse(build)
+                .build();
+        responseObserver.onNext(build1);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void fetchServerList(RegisterCausa.FetchServerAddressListReq request, StreamObserver<CommonCausa.Response> responseObserver) {
+        ArrayList<String> serverAddressList = new ArrayList<>(service.getServerAddressSet());
+        RegisterCausa.ServerAddressList builder = RegisterCausa.ServerAddressList.newBuilder().addAllServerAddressList(serverAddressList).build();
+        CommonCausa.Response build1 = CommonCausa.Response.newBuilder()
+                .setServerAddressList(builder)
                 .build();
         responseObserver.onNext(build1);
         responseObserver.onCompleted();
