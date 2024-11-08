@@ -6,6 +6,7 @@ import org.kjob.common.enums.TimeExpressionType;
 import org.kjob.common.module.LifeCycle;
 import org.kjob.common.utils.JsonUtils;
 import org.kjob.producer.entity.JobCreateReq;
+import org.kjob.producer.uid.IdGenerateService;
 import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.MqCausa;
 import org.springframework.beans.BeanUtils;
@@ -13,22 +14,27 @@ import org.springframework.beans.BeanUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class KJobTemplate {
-    ProducerManager producerManager;
-
+    MessageSendClient messageSendClient;
+    IdGenerateService idGenerateService;
     /**
      *
      * @param nameServerAddress 127.0.0.1:9083,127.0.0.2:9083...
      */
     public KJobTemplate(String nameServerAddress) {
-        ArrayList<String> nameServerAddressList = Lists.newArrayList(nameServerAddress);
-        producerManager = new ProducerManager(nameServerAddressList);
+        messageSendClient = new MessageSendClient(nameServerAddress);
+        idGenerateService = new IdGenerateService();
     }
     public Long createJob(JobCreateReq jobCreateReq){
+        // 生成jobId
+        long jobId = idGenerateService.allocate();
 
         MqCausa.CreateJobReq build = MqCausa.CreateJobReq.newBuilder()
+                .setJobId(jobId)
                 .setAppName(jobCreateReq.getAppName())
+                .setJobName(jobCreateReq.getJobName())
                 .setJobParams(jobCreateReq.getJobParams())
                 .setJobDescription(jobCreateReq.getJobDescription())
                 .setProcessorInfo(jobCreateReq.getProcessorInfo())
@@ -36,14 +42,12 @@ public class KJobTemplate {
                 .setTimeExpression(jobCreateReq.getTimeExpression())
                 .setLifeCycle(JsonUtils.toJSONString(jobCreateReq.getLifeCycle()))
                 .setMaxInstanceNum(jobCreateReq.getMaxInstanceNum()).build();
+        MqCausa.Message build1 = MqCausa.Message.newBuilder().setCreateJobReq(build)
+                .setMessageType(MqCausa.MessageType.JOB_CREATE)
+                .build();
+        messageSendClient.sendMessageAsync(new AtomicInteger(0), build1);
 
-        ListenableFuture<CommonCausa.Response> future = producerManager.getStub().createJob(build);
-        try {
-            CommonCausa.Response response = future.get();
-            return response.getCreateJobRes().getJobId();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return jobId;
     }
 
     public static void main(String[] args) {

@@ -40,9 +40,10 @@ public final class CausaGrpcClientGen {
       "rter\032\t.Response\"\000\0223\n\017workerSubscribe\022\023.W" +
       "orkerSubscribeReq\032\t.Response\"\000\022:\n\017fetchS" +
       "erverList\022\032.FetchServerAddressListReq\032\t." +
-      "Response\"\0002-\n\002Mq\022\'\n\tcreateJob\022\r.CreateJo" +
-      "bReq\032\t.Response\"\000B)\n\023org.kjob.remote.api" +
-      "B\022CausaGrpcClientGenb\006proto3"
+      "Response\"\0002L\n\002Mq\022\035\n\004send\022\010.Message\032\t.Res" +
+      "ponse\"\000\022\'\n\tcreateJob\022\r.CreateJobReq\032\t.Re" +
+      "sponse\"\000B)\n\023org.kjob.remote.apiB\022CausaGr",
+      "pcClientGenb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

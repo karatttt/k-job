@@ -39,6 +39,7 @@ service RegisterToNameServer {
 }
 
 service Mq {
+  rpc send(Message) returns(Response){};
   rpc createJob(CreateJobReq) returns(Response){};
 }
 

@@ -1,6 +1,13 @@
 syntax = "proto3";
 option java_package = "org.kjob.remote.protos";
 // req
+  message Message{
+    MessageType messageType = 1;
+    oneof body{
+      CreateJobReq createJobReq= 2;
+
+    }
+  }
 message CreateJobReq{
   string appName = 1;
   string jobName = 2;
@@ -11,6 +18,7 @@ message CreateJobReq{
   string lifeCycle = 7;
   string processorInfo = 8;
   int32 maxInstanceNum = 9;
+  int64 jobId = 10;
 }
 
 // 定义 TimeExpressionType 枚举
@@ -21,7 +29,11 @@ enum TimeExpressionType {
     DAILY_TIME_INTERVAL = 3;
   // 根据具体需求添加其他类型
 }
-
+enum MessageType {
+    JOB_CREATE = 0;
+    JOB_UPDATE = 1;
+    JOB_DELETE = 2;
+}
 
 // response
 message CreateJobRes{
