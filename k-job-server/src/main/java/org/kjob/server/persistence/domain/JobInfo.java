@@ -29,7 +29,7 @@ public class JobInfo implements Serializable {
     /**
      * 
      */
-    private Long appId;
+    private String appName;
     /**
      * 
      */
@@ -50,6 +50,11 @@ public class JobInfo implements Serializable {
     /**
      * 
      */
+
+    private Long jobId;
+
+
+
     private String jobDescription;
 
     /**
@@ -110,6 +115,14 @@ public class JobInfo implements Serializable {
         this.id = id;
     }
 
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
     public Integer getMaxInstanceNum() {
         return maxInstanceNum;
     }
@@ -121,15 +134,15 @@ public class JobInfo implements Serializable {
     /**
      * 
      */
-    public Long getAppId() {
-        return appId;
+    public String getAppName() {
+        return appName;
     }
 
     /**
      * 
      */
-    public void setAppId(Long appId) {
-        this.appId = appId;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     /**
@@ -180,7 +193,7 @@ public class JobInfo implements Serializable {
     public String toString() {
         return "JobInfo{" +
                 "id=" + id +
-                ", appId=" + appId +
+                ", appId=" + appName +
                 ", dispatchStrategy=" + dispatchStrategy +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
@@ -201,12 +214,12 @@ public class JobInfo implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JobInfo jobInfo = (JobInfo) o;
-        return Objects.equals(id, jobInfo.id) && Objects.equals(appId, jobInfo.appId) && Objects.equals(dispatchStrategy, jobInfo.dispatchStrategy)  && Objects.equals(gmtCreate, jobInfo.gmtCreate) && Objects.equals(gmtModified, jobInfo.gmtModified) && Objects.equals(jobDescription, jobInfo.jobDescription) && Objects.equals(jobName, jobInfo.jobName) && Objects.equals(jobParams, jobInfo.jobParams) && Objects.equals(lifecycle, jobInfo.lifecycle) && Objects.equals(nextTriggerTime, jobInfo.nextTriggerTime) && Objects.equals(processorInfo, jobInfo.processorInfo) && Objects.equals(status, jobInfo.status) && Objects.equals(timeExpression, jobInfo.timeExpression) && Objects.equals(timeExpressionType, jobInfo.timeExpressionType);
+        return Objects.equals(id, jobInfo.id) && Objects.equals(appName, jobInfo.appName) && Objects.equals(dispatchStrategy, jobInfo.dispatchStrategy)  && Objects.equals(gmtCreate, jobInfo.gmtCreate) && Objects.equals(gmtModified, jobInfo.gmtModified) && Objects.equals(jobDescription, jobInfo.jobDescription) && Objects.equals(jobName, jobInfo.jobName) && Objects.equals(jobParams, jobInfo.jobParams) && Objects.equals(lifecycle, jobInfo.lifecycle) && Objects.equals(nextTriggerTime, jobInfo.nextTriggerTime) && Objects.equals(processorInfo, jobInfo.processorInfo) && Objects.equals(status, jobInfo.status) && Objects.equals(timeExpression, jobInfo.timeExpression) && Objects.equals(timeExpressionType, jobInfo.timeExpressionType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, appId, dispatchStrategy, gmtCreate, gmtModified, jobDescription, jobName, jobParams, lifecycle, nextTriggerTime, processorInfo, status, timeExpression, timeExpressionType);
+        return Objects.hash(id, appName, dispatchStrategy, gmtCreate, gmtModified, jobDescription, jobName, jobParams, lifecycle, nextTriggerTime, processorInfo, status, timeExpression, timeExpressionType);
     }
 
     public String getJobDescription() {

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.xml.ws.Response;
+
 @Component
 @Slf4j
 public class ServerChangeHandler implements RpcHandler{
@@ -24,6 +26,8 @@ public class ServerChangeHandler implements RpcHandler{
         appInfoMapper.update(appInfo, new QueryWrapper<AppInfo>().lambda()
                 .eq(AppInfo::getAppName, serverChangeReq.getAppName()));
         log.info("[KJobServerChange] app :{} change to new server :{}", serverChangeReq.getAppName(), serverChangeReq.getTargetServer());
+        CommonCausa.Response build = CommonCausa.Response.newBuilder().setCode(200).build();
+        responseObserver.onNext(build);
         responseObserver.onCompleted();
     }
 }

@@ -10,6 +10,7 @@ import org.kjob.server.common.config.KJobServerConfig;
 import org.kjob.server.common.constant.SwitchableStatus;
 import org.kjob.server.core.instance.InstanceService;
 import org.kjob.server.core.timewheel.holder.InstanceTimeWheelService;
+import org.kjob.server.extension.lock.LockService;
 import org.kjob.server.persistence.domain.AppInfo;
 import org.kjob.server.persistence.domain.JobInfo;
 import org.kjob.server.persistence.mapper.AppInfoMapper;
@@ -19,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,18 +40,20 @@ public class KJobScheduleService {
     DispatchService dispatchService;
     @Autowired
     TimingStrategyService timingStrategyService;
+    @Autowired
+    LockService lockService;
     public void scheduleNormalJob(TimeExpressionType timeExpressionType) {
         long start = System.currentTimeMillis();
         // 调度 CRON 表达式 JOB
         try {
-            List<Long> allAppIds = appInfoMapper.selectList(new QueryWrapper<AppInfo>().lambda()
+            Map<Long, String> allAppInfos = appInfoMapper.selectList(new QueryWrapper<AppInfo>().lambda()
                     .eq(AppInfo::getCurrentServer, kJobServerConfig.getAddress()))
-                    .stream().map(AppInfo::getId).collect(Collectors.toList());
-            if (CollectionUtils.isEmpty(allAppIds)) {
+                    .stream().collect(Collectors.toMap(AppInfo::getId, AppInfo::getAppName));
+            if (CollectionUtils.isEmpty(allAppInfos)) {
                 log.info("[NormalScheduler] current server has no app's job to schedule.");
                 return;
             }
-            scheduleNormalJob0(timeExpressionType, allAppIds);
+            scheduleNormalJob0(timeExpressionType, allAppInfos);
         } catch (Exception e) {
             log.error("[NormalScheduler] schedule cron job failed.", e);
         }
@@ -63,33 +63,45 @@ public class KJobScheduleService {
             log.warn("[NormalScheduler] The database query is using too much time({}ms), please check if the database load is too high!", cost);
         }
     }
-    private void scheduleNormalJob0(TimeExpressionType timeExpressionType, List<Long> appIds) {
+    private void scheduleNormalJob0(TimeExpressionType timeExpressionType, Map<Long, String> allAppInfos) {
 
         long nowTime = System.currentTimeMillis();
         long timeThreshold = nowTime + 2 * SCHEDULE_RATE;
+        // 可能有些appId处于同一个appName下
+        ArrayList<Long> appIds = new ArrayList<>(allAppInfos.keySet());
         Lists.partition(appIds, MAX_APP_NUM).forEach(partAppIds -> {
 
             try {
-
-                // 查询条件：任务开启 + 使用CRON表达调度时间 + 指定appId + 即将需要调度执行
-//                List<JobInfo> jobInfos1 = jobInfoMapper.selectList(null);
+                // 对appName尝试进行加锁，成功则进行调度，避免重复调度
+                ArrayList<String> targetAppNames = new ArrayList<>();
+                for (String appName : allAppInfos.values()) {
+                    boolean lockStatus = lockService.tryLock(appName, 30000);
+                    if (lockStatus) {
+                        targetAppNames.add(appName);
+                    }
+                }
+                if (CollectionUtils.isEmpty(targetAppNames)) {
+                    return;
+                }
+                // 查询条件：任务开启 + 使用CRON表达调度时间 + 指定appName + 即将需要调度执行
                 List<JobInfo> jobInfos = jobInfoMapper.selectList(new QueryWrapper<JobInfo>()
                         .lambda()
-                        .in(JobInfo::getAppId, appIds)
+                        .in(JobInfo::getAppName, targetAppNames)
                         .eq(JobInfo::getStatus, SwitchableStatus.ENABLE.getV())
                         .eq(JobInfo::getTimeExpressionType, timeExpressionType.getV())
                         .le(JobInfo::getNextTriggerTime, timeThreshold));
                 if (CollectionUtils.isEmpty(jobInfos)) {
                     return;
                 }
-
                 // 1. 批量写日志表
                 Map<Long, Long> jobId2InstanceId = Maps.newHashMap();
+                Map<String, Integer> appName2JobNum = Maps.newHashMap();
                 log.info("[NormalScheduler] These {} jobs will be scheduled: {}.", timeExpressionType.name(), jobInfos);
 
                 jobInfos.forEach(jobInfo -> {
-                    Long instanceId = instanceService.create(jobInfo.getId(), jobInfo.getAppId(), jobInfo.getJobParams(), null, null, jobInfo.getNextTriggerTime()).getInstanceId();
+                    Long instanceId = instanceService.create(jobInfo.getId(), jobInfo.getAppName(), jobInfo.getJobParams(), null, null, jobInfo.getNextTriggerTime()).getInstanceId();
                     jobId2InstanceId.put(jobInfo.getId(), instanceId);
+                    appName2JobNum.put(jobInfo.getAppName(), appName2JobNum.getOrDefault(jobInfo.getAppName(), 0) + 1);
                 });
 
                 // 2. 推入时间轮中等待调度执行
@@ -106,7 +118,7 @@ public class KJobScheduleService {
                         delay = targetTriggerTime - nowTime;
                     }
 
-                    InstanceTimeWheelService.schedule(instanceId, delay, () -> dispatchService.dispatch(JobInfo, instanceId, Optional.empty(), Optional.empty()));
+                    InstanceTimeWheelService.schedule(instanceId, delay, () -> dispatchService.dispatch(JobInfo, instanceId, Optional.empty(), Optional.empty(), appName2JobNum));
                 });
 
                 // 3. 计算下一次调度时间（忽略5S内的重复执行，即CRON模式下最小的连续执行间隔为 SCHEDULE_RATE ms）

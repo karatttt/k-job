@@ -43,6 +43,7 @@ public class KJobTemplate {
                 .setLifeCycle(JsonUtils.toJSONString(jobCreateReq.getLifeCycle()))
                 .setMaxInstanceNum(jobCreateReq.getMaxInstanceNum()).build();
         MqCausa.Message build1 = MqCausa.Message.newBuilder().setCreateJobReq(build)
+                .setRetryTime(2)
                 .setMessageType(MqCausa.MessageType.JOB_CREATE)
                 .build();
         messageSendClient.sendMessageAsync(new AtomicInteger(0), build1);
@@ -53,12 +54,12 @@ public class KJobTemplate {
     public static void main(String[] args) {
         KJobTemplate kJobTemplate = new KJobTemplate("127.0.0.1:9083");
         JobCreateReq build = JobCreateReq.builder()
-                .appName("ds")
-                .jobDescription("ds")
-                .jobName("ds")
+                .appName("root")
+                .jobDescription("hahah")
+                .jobName("hahahaha")
                 .lifeCycle(new LifeCycle())
-                .processorInfo("ds")
-                .timeExpression("ds")
+                .processorInfo("testProcessor")
+                .timeExpression("*/15 * * * * ?")
                 .maxInstanceNum(5)
                 .jobParams("ewew")
                 .timeExpressionType(TimeExpressionType.CRON).build();

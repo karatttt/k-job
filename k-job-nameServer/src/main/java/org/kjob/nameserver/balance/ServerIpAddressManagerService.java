@@ -48,6 +48,14 @@ public class ServerIpAddressManagerService {
     }
 
     public ReBalanceInfo getServerAddressReBalanceList(String serverAddress, String appName) {
+        // first req, serverAddress is empty
+        if(serverAddress.isEmpty()){
+            ReBalanceInfo reBalanceInfo = new ReBalanceInfo();
+            reBalanceInfo.setSplit(false);
+            reBalanceInfo.setServerIpList(new ArrayList<String>(serverAddressSet));
+            reBalanceInfo.setSubAppName("");
+            return reBalanceInfo;
+        }
         ReBalanceInfo reBalanceInfo = new ReBalanceInfo();
         // get sorted scheduleTimes serverList
         List<String> newServerIpList = serverAddress2ScheduleTimesMap.keySet().stream().sorted(new Comparator<String>() {
@@ -69,7 +77,7 @@ public class ServerIpAddressManagerService {
         // see if need change server
         Long lestScheduleTimes = serverAddress2ScheduleTimesMap.get(newServerIpList.get(newServerIpList.size() - 1));
         Long comparedScheduleTimes = lestScheduleTimes == 0 ? 1 : lestScheduleTimes;
-        if(serverAddress2ScheduleTimesMap.get(serverAddress) / comparedScheduleTimes == 1){
+        if(serverAddress2ScheduleTimesMap.get(serverAddress) / comparedScheduleTimes > 2){
             reBalanceInfo.setSplit(false);
             reBalanceInfo.setChangeServer(true);
             // first server is target lest scheduleTimes server

@@ -45,7 +45,6 @@ public class ProducerManager {
                 log.error("nameServer :{} connect error", server);
             }
         }
-        log.error("allNameServer lose");
 
         // 初始化线程池
         final int availableProcessors = Runtime.getRuntime().availableProcessors();

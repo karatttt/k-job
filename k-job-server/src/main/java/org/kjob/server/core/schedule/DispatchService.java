@@ -13,6 +13,7 @@ import org.kjob.remote.protos.ScheduleCausa;
 import org.kjob.server.common.Holder;
 import org.kjob.server.common.grpc.ServerScheduleJobRpcClient;
 import org.kjob.server.common.module.WorkerInfo;
+import org.kjob.server.extension.lock.LockService;
 import org.kjob.server.persistence.domain.InstanceInfo;
 import org.kjob.server.persistence.domain.JobInfo;
 import org.kjob.server.persistence.mapper.InstanceInfoMapper;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.kjob.common.enums.InstanceStatus.*;
@@ -44,15 +42,12 @@ import static org.kjob.common.enums.InstanceStatus.*;
 public class DispatchService {
 
     private final WorkerClusterQueryService workerClusterQueryService;
-
 //    private final InstanceManager instanceManager;
-//
 //    private final InstanceMetadataService instanceMetadataService;
-
     private final InstanceInfoMapper instanceInfoMapper;
-
     private final TaskTrackerSelectorService taskTrackerSelectorService;
     private final ServerScheduleJobRpcClient serverScheduleJobRpcClient;
+    private final LockService lockService;
 
 
     /**
@@ -63,16 +58,16 @@ public class DispatchService {
      * 1、移除参数 当前运行次数、工作流实例ID、实例参数
      * 更改为从当前任务实例中获取获取以上信息
      * 2、移除运行次数相关的（runningTimes）处理逻辑
-
+     * <p>
      * **************************************************
      *
      * @param jobInfo              任务的元信息
      * @param instanceId           任务实例ID
      * @param instanceInfoOptional 任务实例信息，可选
      * @param overloadOptional     超载信息，可选
+     * @param appName2JobNum
      */
-//    @UseCacheLock(type = "processJobInstance", key = "#jobInfo.getMaxInstanceNum() > 0 || T(tech.powerjob.common.enums.TimeExpressionType).FREQUENT_TYPES.contains(#jobInfo.getTimeExpressionType()) ? #jobInfo.getId() : #instanceId", concurrencyLevel = 1024)
-    public void dispatch(JobInfo jobInfo, Long instanceId, Optional<InstanceInfo> instanceInfoOptional, Optional<Holder<Boolean>> overloadOptional) {
+    public void dispatch(JobInfo jobInfo, Long instanceId, Optional<InstanceInfo> instanceInfoOptional, Optional<Holder<Boolean>> overloadOptional, Map<String, Integer> appName2JobNum) {
         // 允许从外部传入实例信息，减少 io 次数
         // 检查当前任务是否被取消
         InstanceInfo instanceInfo = instanceInfoMapper.selectOne(new QueryWrapper<InstanceInfo>()
@@ -83,7 +78,6 @@ public class DispatchService {
             return;
         }
         // 已经被派发过则不再派发
-        // fix 并发场景下重复派发的问题
         if (instanceInfo.getStatus() != WAITING_DISPATCH.getV()) {
             log.info("[Dispatcher-{}|{}] cancel dispatch due to instance has been dispatched", jobId, instanceId);
             return;
@@ -154,15 +148,20 @@ public class DispatchService {
         // 修改状态
         InstanceInfo build = InstanceInfo.builder().id(instanceId).status(WAITING_WORKER_RECEIVE.getV()).taskTrackerAddress(taskTrackerAddress).build();
         instanceInfoMapper.updateById(build);
-        //  todo 装载缓存
-//        instanceMetadataService.loadJobInfo(instanceId, jobInfo);
+
+        // 若是该appName下的最后一个任务，释放appName锁
+        appName2JobNum.put(jobInfo.getAppName(), appName2JobNum.get(jobInfo.getAppName()) - 1);
+        if(appName2JobNum.get(jobInfo.getAppName()) == 0){
+            lockService.unlock(jobInfo.getAppName());
+        }
+
     }
 
     private void sendScheduleInfo(JobInfo jobInfo, InstanceInfo instanceInfo, String taskTrackerAddress) {
 
         ScheduleCausa.ServerScheduleJobReq build = ScheduleCausa.ServerScheduleJobReq.newBuilder()
                 .setInstanceId(instanceInfo.getInstanceId())
-                .setJobId(jobInfo.getId())
+                .setJobId(jobInfo.getJobId())
                 .setJobParams(jobInfo.getJobParams())
                 .setProcessorInfo(jobInfo.getProcessorInfo())
                 .setWorkerAddress(taskTrackerAddress)

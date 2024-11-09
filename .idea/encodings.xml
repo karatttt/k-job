@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true">
     <file url="file://$PROJECT_DIR$/k-job-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/k-job-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/k-job-nameServer/src/main/java" charset="UTF-8" />
@@ -9,6 +9,5 @@
     <file url="file://$PROJECT_DIR$/k-job-worker-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/k-job-worker-boot-starter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/k-job-worker/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
   </component>
 </project>

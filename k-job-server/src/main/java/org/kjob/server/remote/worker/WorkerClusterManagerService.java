@@ -21,16 +21,15 @@ public class WorkerClusterManagerService {
     /**
      * 存储Worker健康信息，appId -> ClusterStatusHolder
      */
-    private static final Map<Long, ClusterStatusHolder> APP_ID_2_CLUSTER_STATUS = Maps.newConcurrentMap();
+    private static final Map<String, ClusterStatusHolder> APP_NAME_2_CLUSTER_STATUS = Maps.newConcurrentMap();
 
     /**
      * 更新状态
      * @param heartbeat Worker的心跳包
      */
     public static void updateStatus(WorkerHeartbeat heartbeat) {
-        Long appId = heartbeat.getAppId();
         String appName = heartbeat.getAppName();
-        ClusterStatusHolder clusterStatusHolder = APP_ID_2_CLUSTER_STATUS.computeIfAbsent(appId, ignore -> new ClusterStatusHolder(appName));
+        ClusterStatusHolder clusterStatusHolder = APP_NAME_2_CLUSTER_STATUS.computeIfAbsent(appName, ignore -> new ClusterStatusHolder(appName));
         clusterStatusHolder.updateStatus(heartbeat);
     }
 
@@ -40,7 +39,7 @@ public class WorkerClusterManagerService {
      */
     public static void clean(List<Long> usingAppIds) {
         Set<Long> keys = Sets.newHashSet(usingAppIds);
-        APP_ID_2_CLUSTER_STATUS.entrySet().removeIf(entry -> !keys.contains(entry.getKey()));
+        APP_NAME_2_CLUSTER_STATUS.entrySet().removeIf(entry -> !keys.contains(entry.getKey()));
     }
 
 
@@ -48,11 +47,11 @@ public class WorkerClusterManagerService {
      * 清理缓存信息，防止 OOM
      */
     public static void cleanUp() {
-        APP_ID_2_CLUSTER_STATUS.values().forEach(ClusterStatusHolder::release);
+        APP_NAME_2_CLUSTER_STATUS.values().forEach(ClusterStatusHolder::release);
     }
 
-    protected static Map<Long, ClusterStatusHolder> getAppId2ClusterStatus() {
-        return APP_ID_2_CLUSTER_STATUS;
+    protected static Map<String, ClusterStatusHolder> getAppName2ClusterStatus() {
+        return APP_NAME_2_CLUSTER_STATUS;
     }
 
 }

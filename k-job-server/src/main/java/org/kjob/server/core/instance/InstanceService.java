@@ -16,13 +16,13 @@ import java.util.Date;
 public class InstanceService {
     private final InstanceInfoMapper instanceInfoMapper;
     private final IdGenerateService idGenerateService;
-    public InstanceInfo create(Long jobId, Long appId, String jobParams, String instanceParams, Long wfInstanceId, Long expectTriggerTime) {
+    public InstanceInfo create(Long jobId, String appName, String jobParams, String instanceParams, Long wfInstanceId, Long expectTriggerTime) {
 
         Long instanceId = idGenerateService.allocate();
         Date now = new Date();
         InstanceInfo newInstanceInfo = new InstanceInfo();
         newInstanceInfo.setJobId(jobId);
-        newInstanceInfo.setAppId(appId);
+        newInstanceInfo.setAppName(appName);
         newInstanceInfo.setInstanceId(instanceId);
         newInstanceInfo.setJobParams(jobParams);
         newInstanceInfo.setInstanceParams(instanceParams);

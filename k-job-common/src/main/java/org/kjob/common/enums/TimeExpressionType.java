@@ -35,12 +35,17 @@ public enum TimeExpressionType {
      */
     public static final List<Integer> INSPECT_TYPES =  Collections.unmodifiableList(Lists.newArrayList(CRON.v, DAILY_TIME_INTERVAL.v));
 
-    public static  HashMap<TimeExpressionType, MqCausa.TimeExpressionType> map = new HashMap<>();
+    public static  HashMap<TimeExpressionType, MqCausa.TimeExpressionType> map1 = new HashMap<>();
+    public static  HashMap<MqCausa.TimeExpressionType, TimeExpressionType> map2 = new HashMap<>();
     static {
-        map.put(CRON, MqCausa.TimeExpressionType.CRON);
+        map1.put(CRON, MqCausa.TimeExpressionType.CRON);
+        map2.put(MqCausa.TimeExpressionType.CRON, CRON);
     }
     public static MqCausa.TimeExpressionType getProtoBufTimeExpressionType(TimeExpressionType type){
-        return map.get(type);
+        return map1.get(type);
+    }
+    public static TimeExpressionType getTimeExpressionTypeByProtoBuf(MqCausa.TimeExpressionType type){
+        return map2.get(type);
     }
     public static TimeExpressionType of(int v) {
         for (TimeExpressionType type : values()) {

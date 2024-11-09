@@ -45,7 +45,7 @@ public class InstanceInfo implements Serializable {
      *
 
      */
-    private Long appId;
+    private String appName;
 
     /**
      *
@@ -187,8 +187,8 @@ public class InstanceInfo implements Serializable {
     /**
      * 
      */
-    public void setAppId(Long appId) {
-        this.appId = appId;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     /**
@@ -310,7 +310,7 @@ public class InstanceInfo implements Serializable {
         InstanceInfo other = (InstanceInfo) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getActualTriggerTime() == null ? other.getActualTriggerTime() == null : this.getActualTriggerTime().equals(other.getActualTriggerTime()))
-            && (this.getAppId() == null ? other.getAppId() == null : this.getAppId().equals(other.getAppId()))
+            && (this.getAppName() == null ? other.getAppName() == null : this.getAppName().equals(other.getAppName()))
             && (this.getExpectedTriggerTime() == null ? other.getExpectedTriggerTime() == null : this.getExpectedTriggerTime().equals(other.getExpectedTriggerTime()))
             && (this.getFinishedTime() == null ? other.getFinishedTime() == null : this.getFinishedTime().equals(other.getFinishedTime()))
             && (this.getGmtCreate() == null ? other.getGmtCreate() == null : this.getGmtCreate().equals(other.getGmtCreate()))
@@ -334,7 +334,7 @@ public class InstanceInfo implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getActualTriggerTime() == null) ? 0 : getActualTriggerTime().hashCode());
-        result = prime * result + ((getAppId() == null) ? 0 : getAppId().hashCode());
+        result = prime * result + ((getAppName() == null) ? 0 : getAppName().hashCode());
         result = prime * result + ((getExpectedTriggerTime() == null) ? 0 : getExpectedTriggerTime().hashCode());
         result = prime * result + ((getFinishedTime() == null) ? 0 : getFinishedTime().hashCode());
         result = prime * result + ((getGmtCreate() == null) ? 0 : getGmtCreate().hashCode());
@@ -361,7 +361,7 @@ public class InstanceInfo implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", actualTriggerTime=").append(actualTriggerTime);
-        sb.append(", appId=").append(appId);
+        sb.append(", appId=").append(appName);
         sb.append(", expectedTriggerTime=").append(expectedTriggerTime);
         sb.append(", finishedTime=").append(finishedTime);
         sb.append(", gmtCreate=").append(gmtCreate);

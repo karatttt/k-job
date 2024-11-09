@@ -36,7 +36,7 @@ public class WorkerClusterQueryService {
      */
     public List<WorkerInfo> geAvailableWorkers(JobInfo jobInfo) {
 
-        List<WorkerInfo> workers = Lists.newLinkedList(getWorkerInfosByAppId(jobInfo.getAppId()).values());
+        List<WorkerInfo> workers = Lists.newLinkedList(getWorkerInfosByAppName(jobInfo.getAppName()).values());
 
         // 过滤不符合要求的机器
         workers.removeIf(workerInfo -> filterWorker(workerInfo, jobInfo));
@@ -55,12 +55,12 @@ public class WorkerClusterQueryService {
 //        return workers;
 //    }
 
-    /**
-     * get all alive workers
-     *
-     * @param appId appId
-     * @return alive workers
-     */
+//    /**
+//     * get all alive workers
+//     *
+//     * @param appId appId
+//     * @return alive workers
+//     */
 //    @DesignateServer
 //    public List<WorkerInfo> getAllAliveWorkers(Long appId) {
 //        List<WorkerInfo> workers = Lists.newLinkedList(getWorkerInfosByAppId(appId).values());
@@ -68,31 +68,32 @@ public class WorkerClusterQueryService {
 //        return workers;
 //    }
 
-    /**
-     * Gets worker info by address.
-     *
-     * @param appId   the app id
-     * @param address the address
-     * @return the worker info by address
-     */
-    public Optional<WorkerInfo> getWorkerInfoByAddress(Long appId, String address) {
-        // this may cause NPE while address value is null .
-        final Map<String, WorkerInfo> workerInfosByAppId = getWorkerInfosByAppId(appId);
-        //add null check for both workerInfos Map and  address
-        if (null != workerInfosByAppId && null != address) {
-            return Optional.ofNullable(workerInfosByAppId.get(address));
-        }
-        return Optional.empty();
+//    /**
+//     * Gets worker info by address.
+//     *
+//     * @param appId   the app id
+//     * @param address the address
+//     * @return the worker info by address
+//     */
+//    public Optional<WorkerInfo> getWorkerInfoByAddress(Long appId, String address) {
+//        // this may cause NPE while address value is null .
+//        final Map<String, WorkerInfo> workerInfosByAppName = getWorkerInfosByAppName(appId);
+//        //add null check for both workerInfos Map and  address
+//        if (null != workerInfosByAppName && null != address) {
+//            return Optional.ofNullable(workerInfosByAppName.get(address));
+//        }
+//        return Optional.empty();
+//    }
+
+
+    public Map<String, ClusterStatusHolder> getAppName2ClusterStatus() {
+        return WorkerClusterManagerService.getAppName2ClusterStatus();
     }
 
-    public Map<Long, ClusterStatusHolder> getAppId2ClusterStatus() {
-        return WorkerClusterManagerService.getAppId2ClusterStatus();
-    }
-
-    private Map<String, WorkerInfo> getWorkerInfosByAppId(Long appId) {
-        ClusterStatusHolder clusterStatusHolder = getAppId2ClusterStatus().get(appId);
+    private Map<String, WorkerInfo> getWorkerInfosByAppName(String appName) {
+        ClusterStatusHolder clusterStatusHolder = getAppName2ClusterStatus().get(appName);
         if (clusterStatusHolder == null) {
-            log.warn("[WorkerManagerService] can't find any worker for app(appId={}) yet.", appId);
+            log.warn("[WorkerManagerService] can't find any worker for app(appId={}) yet.", appName);
             return Collections.emptyMap();
         }
         return clusterStatusHolder.getAllWorkers();
