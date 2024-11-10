@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * 客户端启动类
+ *
+ */
 @Slf4j
 public class KJobWorker {
 

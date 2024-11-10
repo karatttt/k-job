@@ -14,7 +14,12 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * 服务发现
+ *
+ * @author tjq
+ * @since 2023/9/2
+ */
 
 @Slf4j
 public class KJobServerDiscoverService implements ServerDiscoverService{

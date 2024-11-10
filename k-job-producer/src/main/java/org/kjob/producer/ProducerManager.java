@@ -48,10 +48,10 @@ public class ProducerManager {
 
         // 初始化线程池
         final int availableProcessors = Runtime.getRuntime().availableProcessors();
-        ThreadFactory producerExecuteFactory = new ThreadFactoryBuilder().setNameFormat("powerjob-producer-send-%d").build();
+        ThreadFactory producerExecuteFactory = new ThreadFactoryBuilder().setNameFormat("kjob-producer-send-%d").build();
         threadPoolExecutor = new ThreadPoolExecutor(availableProcessors * 10,availableProcessors * 10, 120L, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>((1024 * 2),true), producerExecuteFactory, new ThreadPoolExecutor.AbortPolicy());
-        ThreadFactory invokeCallbackExecuteFactory = new ThreadFactoryBuilder().setNameFormat("powerjob-invokeCallback-%d").build();
+        ThreadFactory invokeCallbackExecuteFactory = new ThreadFactoryBuilder().setNameFormat("kjob-invokeCallback-%d").build();
         invokeCallbackExecute = new ThreadPoolExecutor(availableProcessors * 10,availableProcessors * 10, 120L, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>((1024 * 2),true), invokeCallbackExecuteFactory, new ThreadPoolExecutor.AbortPolicy());
 

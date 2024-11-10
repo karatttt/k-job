@@ -14,7 +14,11 @@ import org.springframework.context.ApplicationContextAware;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Spring 项目中的 Worker 启动器
+ * 能够获取到由 Spring IOC 容器管理的 processor
+ *
+ */
 public class KJobSpringWorker implements InitializingBean, DisposableBean, ApplicationContextAware{
 
     /**
