@@ -49,6 +49,7 @@ public class Consumer {
                     .dispatchStrategy(DispatchStrategy.HEALTH_FIRST.getV())
                     .nextTriggerTime(0L)
                     .status(SwitchableStatus.ENABLE.getV()).build();
+            int i = 1/0;
 
             jobInfoService.save(build2);
             log.info("insert jobName :{} success", build2.getJobName());
@@ -107,11 +108,13 @@ public class Consumer {
         switch (message.getMessageType()){
             case JOB_CREATE :
                 createJob(message);
+                break;
             case JOB_UPDATE:
                 updateJob(message);
+                break;
             case JOB_DELETE:
                 deleteJob(message);
-
+                break;
         }
     }
 
