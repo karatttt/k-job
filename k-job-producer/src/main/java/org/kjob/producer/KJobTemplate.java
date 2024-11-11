@@ -1,19 +1,13 @@
 package org.kjob.producer;
 
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ListenableFuture;
 import org.kjob.common.enums.TimeExpressionType;
 import org.kjob.common.module.LifeCycle;
 import org.kjob.common.utils.JsonUtils;
-import org.kjob.producer.entity.JobCreateReq;
+import org.kjob.producer.entity.JobDeleteReq;
+import org.kjob.producer.entity.JobUpdateReq;
 import org.kjob.producer.uid.IdGenerateService;
-import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.MqCausa;
-import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class KJobTemplate {
@@ -27,21 +21,21 @@ public class KJobTemplate {
         messageSendClient = new MessageSendClient(nameServerAddress);
         idGenerateService = new IdGenerateService();
     }
-    public Long createJob(JobCreateReq jobCreateReq){
+    public Long createJob(JobUpdateReq JobUpdateReq){
         // 生成jobId
         long jobId = idGenerateService.allocate();
 
         MqCausa.CreateJobReq build = MqCausa.CreateJobReq.newBuilder()
                 .setJobId(jobId)
-                .setAppName(jobCreateReq.getAppName())
-                .setJobName(jobCreateReq.getJobName())
-                .setJobParams(jobCreateReq.getJobParams())
-                .setJobDescription(jobCreateReq.getJobDescription())
-                .setProcessorInfo(jobCreateReq.getProcessorInfo())
-                .setTimeExpressionType(TimeExpressionType.getProtoBufTimeExpressionType(jobCreateReq.getTimeExpressionType()))
-                .setTimeExpression(jobCreateReq.getTimeExpression())
-                .setLifeCycle(JsonUtils.toJSONString(jobCreateReq.getLifeCycle()))
-                .setMaxInstanceNum(jobCreateReq.getMaxInstanceNum()).build();
+                .setAppName(JobUpdateReq.getAppName())
+                .setJobName(JobUpdateReq.getJobName())
+                .setJobParams(JobUpdateReq.getJobParams())
+                .setJobDescription(JobUpdateReq.getJobDescription())
+                .setProcessorInfo(JobUpdateReq.getProcessorInfo())
+                .setTimeExpressionType(TimeExpressionType.getProtoBufTimeExpressionType(JobUpdateReq.getTimeExpressionType()))
+                .setTimeExpression(JobUpdateReq.getTimeExpression())
+                .setLifeCycle(JsonUtils.toJSONString(JobUpdateReq.getLifeCycle()))
+                .setMaxInstanceNum(JobUpdateReq.getMaxInstanceNum()).build();
         MqCausa.Message build1 = MqCausa.Message.newBuilder().setCreateJobReq(build)
                 .setRetryTime(2)
                 .setMessageType(MqCausa.MessageType.JOB_CREATE)
@@ -50,10 +44,35 @@ public class KJobTemplate {
 
         return jobId;
     }
+    public void updateJob(JobUpdateReq jobUpdateReq){
+        MqCausa.UpdateJobReq build = MqCausa.UpdateJobReq.newBuilder()
+                .setJobId(jobUpdateReq.getJobId())
+                .setAppName(jobUpdateReq.getAppName())
+                .setJobName(jobUpdateReq.getJobName())
+                .setJobParams(jobUpdateReq.getJobParams())
+                .setJobDescription(jobUpdateReq.getJobDescription())
+                .setProcessorInfo(jobUpdateReq.getProcessorInfo())
+                .setTimeExpressionType(TimeExpressionType.getProtoBufTimeExpressionType(jobUpdateReq.getTimeExpressionType()))
+                .setTimeExpression(jobUpdateReq.getTimeExpression())
+                .setLifeCycle(JsonUtils.toJSONString(jobUpdateReq.getLifeCycle()))
+                .setMaxInstanceNum(jobUpdateReq.getMaxInstanceNum()).build();
+        MqCausa.Message build1 = MqCausa.Message.newBuilder().setUpdateJobReq(build)
+                .setRetryTime(2)
+                .setMessageType(MqCausa.MessageType.JOB_UPDATE)
+                .build();
+        messageSendClient.sendMessageAsync(new AtomicInteger(0), build1);
+    }
+    
+    public void deleteJob(JobDeleteReq jobDeleteReq){
+        MqCausa.DeleteJobReq build = MqCausa.DeleteJobReq.newBuilder().setJobId(jobDeleteReq.getJobId()).build();
+        MqCausa.Message build1 = MqCausa.Message.newBuilder().setRetryTime(2).setMessageType(MqCausa.MessageType.JOB_DELETE).setDeleteJobReq(build).build();
+        messageSendClient.sendMessageAsync(new AtomicInteger(0), build1);
+    }
+
 
     public static void main(String[] args) {
         KJobTemplate kJobTemplate = new KJobTemplate("127.0.0.1:9083");
-        JobCreateReq build = JobCreateReq.builder()
+        JobUpdateReq build = JobUpdateReq.builder()
                 .appName("root")
                 .jobDescription("hahah")
                 .jobName("hahahaha")

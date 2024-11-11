@@ -4,6 +4,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.protobuf.InvalidProtocolBufferException;
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.remote.protos.MqCausa;
+import org.kjob.server.consumer.entity.FlushRequest;
+import org.kjob.server.consumer.entity.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,11 +13,14 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * CONSUMER_QUEUE_FILE在消息队列中的设计是为了避免所有的消费者访问同一个commitLog
  * 同时也为了Topic的隔离
@@ -26,9 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class DefaultMessageStore {
     private static final String COMMIT_LOG_FILE;
-
     private static final String CONSUMER_QUEUE_FILE;
-
     static {
         try {
             String commitLogPath = Objects.requireNonNull(DefaultMessageStore.class.getClassLoader().getResource("message/commitlog.dat")).toURI().getPath();
@@ -40,14 +43,19 @@ public class DefaultMessageStore {
             throw new RuntimeException(e);
         }
     }
-    private static final AtomicLong commitLogCurPosition = new AtomicLong(0);
-    private static final AtomicLong currentConsumerQueuePosition = new AtomicLong(0);
-    private final AtomicLong consumerPosition = new AtomicLong(0); // 记录消费者在consumerQueue中的消费位置
-    private static final long POLL_INTERVAL_MS = 10;
-    private final AtomicLong lastProcessedOffset = new AtomicLong(0);
+    // 和rocketMQ一样，读写都是用mmap，因为内存buffer就是文件的映射，只是有刷盘机制
+
+    private final AtomicLong commitLogBufferPosition = new AtomicLong(0);// consumerLog的buffer的位置，同步刷盘的情况下与consumerLog文件的位置一致
+    private final AtomicLong commitLogCurPosition = new AtomicLong(0);// consumerLog文件的位置，每次刷盘后就等于buffer位置
+    private final AtomicLong lastProcessedOffset = new AtomicLong(0);// consumerQueue的buffer的拉取commitLog的位置，与commitLog相比，重启时就是consumerQueue文件最后一条消息的索引位置
+    private final AtomicLong currentConsumerQueuePosition = new AtomicLong(0); // consumerQueue文件的位置
+    private final AtomicLong consumerPosition = new AtomicLong(0); // 记录消费者在consumerQueue中的消费位置，这个只在目前的系统中有
+    private final long POLL_INTERVAL_MS = 10;
     private MappedByteBuffer commitLogBuffer;  // 映射到内存的commitlog文件
     private MappedByteBuffer consumerQueueBuffer; // 映射到内存的consumerQueue文件
+    private final ReentrantLock writeLock = new ReentrantLock();
     private Consumer consumer;
+    private final SyncFlushService syncFlushService = new SyncFlushService();
     ThreadPoolExecutor consumerthreadPoolExecutor;
 
     // 启动线程监视commitlog并写入consumerQueue
@@ -75,7 +83,12 @@ public class DefaultMessageStore {
         watcherThread.setDaemon(true);
         watcherThread.start();
 
-        // 分派消息给消费者
+        // 启动刷新磁盘线程
+        Thread thread = new Thread(syncFlushService);
+        thread.setDaemon(true);
+        thread.start();
+
+        // 分派消息给消费者，模拟消费者定时pull
         this.consumer = consumer;
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -89,6 +102,8 @@ public class DefaultMessageStore {
         ThreadFactory consumerThreadPoolFactory = new ThreadFactoryBuilder().setNameFormat("kjob-consumer-%d").build();
         consumerthreadPoolExecutor = new ThreadPoolExecutor(availableProcessors * 10, availableProcessors * 10, 120L, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>((1024 * 2), true), consumerThreadPoolFactory, new ThreadPoolExecutor.AbortPolicy());
+
+
 
     }
 
@@ -121,7 +136,8 @@ public class DefaultMessageStore {
             return; // 没有新数据可读
         }
         // 从commitlog中读取消息
-        while (startOffset < commitLogCurPosition.get()) {
+        // 如果是同步刷盘，bufferPosition和文件真实position应该是一致的，重启后仍然正确
+        while (startOffset < commitLogBufferPosition.get()) {
             int messageSize = commitLogBuffer.getInt((int) startOffset);  // 前4个字节是消息大小
             byte[] messageBytes = new byte[messageSize];
             commitLogBuffer.position((int) startOffset + 4); // 跳过消息大小部分
@@ -145,18 +161,23 @@ public class DefaultMessageStore {
     }
 
     // 向commitLog文件写入消息
-    public void writeToCommitLog(MqCausa.Message message) {
+    public void writeToCommitLog(MqCausa.Message message, RemotingResponseCallback responseCallback) {
         byte[] messageBytes = message.toByteArray();
         int messageSize = messageBytes.length;
+        writeLock.lock();
         // 将消息的大小（4字节）和消息内容（messageBytes）写入commitLogBuffer
-        commitLogBuffer.putInt(messageSize);  // 4字节表示消息大小
-        commitLogBuffer.put(messageBytes);    // 消息内容
-        commitLogCurPosition.addAndGet(4 + messageSize);
-        // 刷新到磁盘
-        commitLogBuffer.force();
+        try {
+            commitLogBuffer.putInt(messageSize);  // 4字节表示消息大小
+            commitLogBuffer.put(messageBytes);    // 消息内容
+            commitLogBufferPosition.addAndGet(4 + messageSize);
+        } finally {
+            writeLock.unlock();
+
+        }
+        syncFlushService.addFlushRequest(message).thenAccept(responseCallback::callback);
     }
 
-    // 消费者读取consumerQueue中的消息
+    // 消费者读取consumerQueue中的消息，实际上拿的是consumerBuffer
     public void consumeMessages() {
         long messageNum = 0L;
         long currentConsumerPosition = consumerPosition.get();
@@ -189,6 +210,53 @@ public class DefaultMessageStore {
             }
         }
         consumerPosition.set(currentConsumerPosition);
+    }
+     class SyncFlushService implements Runnable{
+
+        LinkedList<FlushRequest> requestList = new LinkedList<>();
+        ThreadPoolExecutor remoteCallbackExecutor;
+
+         public SyncFlushService() {
+             // 回调线程池
+             final int availableProcessors = Runtime.getRuntime().availableProcessors();
+             ThreadFactory callbackThreadPoolFactory = new ThreadFactoryBuilder().setNameFormat("kjob-callback-%d").build();
+             remoteCallbackExecutor = new ThreadPoolExecutor(availableProcessors * 10, availableProcessors * 10, 120L, TimeUnit.SECONDS,
+                     new ArrayBlockingQueue<>((1024 * 2), true), callbackThreadPoolFactory, new ThreadPoolExecutor.AbortPolicy());
+         }
+
+
+         public synchronized CompletionStage<Response> addFlushRequest(MqCausa.Message message) {
+            FlushRequest flushRequest = new FlushRequest(message, new CompletableFuture<>());
+            requestList.add(flushRequest);
+            return flushRequest.getFuture();
+        }
+
+        @Override
+        public void run() {
+            while (true){
+                try {
+                    Thread.sleep(3000);
+                    doCommit();
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
+
+        private void doCommit() {
+
+            for (FlushRequest flushRequest : requestList) {
+                try {
+                    if(commitLogBufferPosition.get() > commitLogCurPosition.get()){
+                        consumerQueueBuffer.force();
+                        commitLogCurPosition.set(commitLogBufferPosition.get());
+                    }
+                    flushRequest.complete();
+                } catch (Exception e){
+                    flushRequest.flushFail();
+                }
+            }
+            requestList = new LinkedList<>();
+        }
     }
 //    public static void main(String[] args) throws InterruptedException {
 //        DefaultMessageStore watcher = new DefaultMessageStore();
