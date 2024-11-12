@@ -46,7 +46,7 @@
 对于powerjob的调度，通过分组隔离机制（详细可以看官方文档）避免了重复调度，但是同样带来了问题：同一app下的worker集群只能被一台server调度，如果该server的任务太多了呢？如果只有一个业务对应的app，如何用server集群来负载均衡呢？
 
 基于以上问题，增加了一个注册中心nameServer模块来负责负载均衡：
-![img.png](img2.png)
+![img.png](others%2Fimages%2Fimg.png)
 
 **最小调度次数策略：** NameServer记录server集群状态并**维护各个server的分配任务次数**，由于server是否调度某个worker由表中数据决定，worker会在每次pull判断是否发起请求更新server中的调度关系表，并**将目前分组交由最小调度次数的server来调度**，当且仅当以下发生：
 - 同一app分组下的worker数量超过用户设定的阈值
@@ -63,7 +63,7 @@
 其实一开始用powerjob作为项目中的中间件，业务中的任务操作使用其openAPI。过程中感受最大的就是，我的业务只是根据任务id修改了任务参数，并不需要server的响应，为什么要同步阻塞？**可靠性应由server保证**而不是客户端的大量重试及等待。对于业务中频繁创建定时任务和改动，更应是异步操作。
 
 一开始的想法是，使用grpc的futureStub进行异步发送，请求由Reactor线程监听事件，当事件可读时分配给业务线程池进行处理（**Grpc内部已经实现**）。所以需要做的似乎只是做一个Producer服务，并把stub全换成Future类型，对于jobId，我们用雪花算法拿到一个全局id就可以，无需server分配。
-![img.png](img2.png)
+![img2.png](others%2Fimages%2Fimg2.png)
 
 
 但是以上设计有一个致命的问题------**阻塞在BlockingQueue的请求无法ack**！这违背了消息队列的设计（入队--ack--持久化--消费），意味着只有被分配到线程（消费者）消费时，才能被ack，而活跃的线程数并不多。故**需要显式的加入队列，而不能仅仅依赖grpc的内部实现***
