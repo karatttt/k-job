@@ -22,12 +22,12 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="k-job" options="" />
-      <module name="k-job-common" options="-parameters" />
-      <module name="k-job-nameServer" options="-parameters" />
-      <module name="k-job-producer" options="-parameters" />
+      <module name="k-job-common" options="" />
+      <module name="k-job-nameServer" options="" />
+      <module name="k-job-producer" options="" />
       <module name="k-job-server" options="-parameters" />
       <module name="k-job-worker" options="-parameters" />
-      <module name="k-job-worker-boot-starter" options="-parameters" />
+      <module name="k-job-worker-boot-starter" options="" />
       <module name="producer" options="-parameters" />
     </option>
   </component>
