@@ -63,7 +63,7 @@ public class HashedWheelTimer implements Timer {
             // 基本都是 io 密集型任务
             taskProcessPool = new ThreadPoolExecutor(core, 2 * core,
                     60, TimeUnit.SECONDS,
-                    queue, threadFactory, RejectedExecutionHandlerFactory.newCallerRun("PowerJobTimeWheelPool"));
+                    queue, threadFactory, RejectedExecutionHandlerFactory.newCallerRun("KJobTimeWheelPool"));
         }
 
         startTime = System.currentTimeMillis();

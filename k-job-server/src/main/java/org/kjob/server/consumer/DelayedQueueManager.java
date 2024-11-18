@@ -21,7 +21,6 @@ public class DelayedQueueManager {
      * 逆序排序，因为重试次数到0则不再重试
      */
     private static List<Long> delayTimes = Lists.newArrayList(10000L, 5000L);
-
     public static void init(Consumer consumer) {
         delayQueueList.add(new DelayQueue<>());
         delayQueueList.add(new DelayQueue<>());
@@ -62,14 +61,9 @@ public class DelayedQueueManager {
                 System.out.println("Consumer thread interrupted");
             }
         });
-
         consumerThread1.start();
         consumerThread2.start();
-
     }
-
-
-
     public static void reConsume(MqCausa.Message msg) {
         if (msg.getRetryTime() == 0) {
             log.error("msg : {} is dead", msg);

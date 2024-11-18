@@ -44,15 +44,15 @@ public class DefaultMessageStore {
         }
     }
     // 和rocketMQ一样，读写都是用mmap，因为内存buffer就是文件的映射，只是有刷盘机制
-
-    private final AtomicLong commitLogBufferPosition = new AtomicLong(0);// consumerLog的buffer的位置，同步刷盘的情况下与consumerLog文件的位置一致
-    private final AtomicLong commitLogCurPosition = new AtomicLong(0);// consumerLog文件的位置，每次刷盘后就等于buffer位置
-    private final AtomicLong lastProcessedOffset = new AtomicLong(0);// consumerQueue的buffer的拉取commitLog的位置，与commitLog相比，重启时就是consumerQueue文件最后一条消息的索引位置
-    private final AtomicLong currentConsumerQueuePosition = new AtomicLong(0); // consumerQueue文件的位置
-    private final AtomicLong consumerPosition = new AtomicLong(0); // 记录消费者在consumerQueue中的消费位置，这个只在目前的系统中有
-    private final long POLL_INTERVAL_MS = 10;
     private MappedByteBuffer commitLogBuffer;  // 映射到内存的commitlog文件
     private MappedByteBuffer consumerQueueBuffer; // 映射到内存的consumerQueue文件
+    private final AtomicLong commitLogBufferPosition = new AtomicLong(0);// consumerLog的buffer的位置，同步刷盘的情况下与consumerLog文件的位置保持一致
+    private final AtomicLong commitLogCurPosition = new AtomicLong(0);// consumerLog文件的目前位置，每次刷盘后就等于buffer位置
+    private final AtomicLong lastProcessedOffset = new AtomicLong(0);// consumerQueue的buffer拉取commitLog的位置，与commitLog相比，重启时就是consumerQueue文件最后一条消息的索引位置
+    private final AtomicLong currentConsumerQueuePosition = new AtomicLong(0); // consumerQueue文件的目前位置
+    private final AtomicLong consumerPosition = new AtomicLong(0); // 记录消费者在consumerQueue中的消费位置，这个只在目前的系统中有，类似于rocketMQ通过pull远程拉取
+    private final long POLL_INTERVAL_MS = 10;
+
     private final ReentrantLock writeLock = new ReentrantLock();
     private Consumer consumer;
     private final SyncFlushService syncFlushService = new SyncFlushService();

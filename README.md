@@ -62,7 +62,7 @@
 2. **worker动态分配**：对于每一个subApp，当触发pull时，根据最小调度次数策略，可以分配至负载均衡后的server，开发者无需感知subApp
 
 
-以上，**解决PowerJob中同一worker分组只能被一个server调度问题**，且subApp分组可以根据server的负载，实现**动态依附**至不同server，对于可能的重复调度问题，我们只需加上App级别的锁，相对于xxl-job的全局加锁性能更好。
+以上，**解决PowerJob中同一worker分组只能被一个server调度，以及多个分组需要手动配置ip顺序来负载的问题**，且subApp分组可以根据server的负载，实现**动态依附**至不同server，对于可能的重复调度问题，我们只需加上App级别的锁，相对于xxl-job的全局加锁性能更好。
 
 ## 消息队列（解决任务大量创建和频繁变动场景）
 
