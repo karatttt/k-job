@@ -72,6 +72,7 @@
 ![img2.png](others%2Fimages%2Fimg2.png)
 但是以上设计有一个致命的问题------**阻塞在BlockingQueue的请求无法ack，且server宕机存在消息丢失的可能**！这违背了消息队列的设计（入队--ack--持久化--消费），意味着只有被分配到线程（消费者）消费时，才能被ack，而活跃的线程数并不多。故**不能仅仅依赖gRPC的内部实现，需要自己实现消息队列**
 
+或许可以尝试自己定义一个grpc的线程池，在阻塞队列中进行ack并且持久化，但是这样会阻塞netty的IO线程，也是一个不好的做法
 
 ### 可靠消息
 以rocketMQ为例，producer的消息会先到达broker中的队列后返回ack，consumer再轮询从broker中pull重平衡处理后的消息消费。
