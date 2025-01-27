@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * server的stub是动态创建，需要单例池
+ * server的stub是动态创建，需要单例池（因为没有配置worker的信息，worker的信息是注册的时候动态获得的）
+ * 假如都是一开始就知道，
  */
 @Component
 public class GrpcStubSingletonPool {
@@ -50,6 +51,12 @@ public class GrpcStubSingletonPool {
         });
     }
 
+    /**
+     * 每个server对应一个channel
+     * @param serverAddress
+     * @param type
+     * @return
+     */
     private static ManagedChannel getChannelSingleton(String serverAddress, String type) {
         // 避免出现不同的服务拿到同样的channel，故区分端口
         int port = 0;

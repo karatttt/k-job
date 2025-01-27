@@ -1,0 +1,9 @@
+//使用proto3语法
+syntax = "proto3";
+option java_package = "org.kjob.remote.protos";
+
+// req
+message SyncNodeInfoReq{
+  map<string, int64> serverIpMap = 1;
+  string operation = 2;
+}

@@ -7,6 +7,7 @@ import "causa/common_causa.proto";
 import "google/protobuf/empty.proto";
 import "causa/register_causa.proto";
 import "causa/mq_causa.proto";
+import "causa/distro_causa.proto";
 
 //生成多个java文件
 //option java_multiple_files = true;
@@ -41,6 +42,10 @@ service RegisterToNameServer {
 service Mq {
   rpc send(Message) returns(Response){};
   rpc createJob(CreateJobReq) returns(Response){};
+}
+
+service Distro {
+  rpc syncNodeINfo(SyncNodeInfoReq) returns(Response){};
 }
 
 

@@ -27,23 +27,25 @@ public final class CausaGrpcClientGen {
       "er_causa.proto\032\032causa/schedule_causa.pro" +
       "to\032\030causa/common_causa.proto\032\033google/pro" +
       "tobuf/empty.proto\032\032causa/register_causa." +
-      "proto\032\024causa/mq_causa.proto2\265\001\n\016ServerDi" +
-      "scover\022\"\n\tassertApp\022\010.AppName\032\t.Response" +
-      "\"\000\022.\n\016heartbeatCheck\022\017.HeartbeatCheck\032\t." +
-      "Response\"\000\022 \n\npingServer\022\005.Ping\032\t.Respon" +
-      "se\"\000\022-\n\014serverChange\022\020.ServerChangeReq\032\t" +
-      ".Response\"\0002{\n\010Schedule\0226\n\025reportWorkerH",
-      "eartbeat\022\020.WorkerHeartbeat\032\t.Response\"\000\022" +
-      "7\n\021serverScheduleJob\022\025.ServerScheduleJob" +
-      "Req\032\t.Response\"\0002\277\001\n\024RegisterToNameServe" +
-      "r\0226\n\016serverRegister\022\027.ServerRegisterRepo" +
-      "rter\032\t.Response\"\000\0223\n\017workerSubscribe\022\023.W" +
-      "orkerSubscribeReq\032\t.Response\"\000\022:\n\017fetchS" +
-      "erverList\022\032.FetchServerAddressListReq\032\t." +
-      "Response\"\0002L\n\002Mq\022\035\n\004send\022\010.Message\032\t.Res" +
-      "ponse\"\000\022\'\n\tcreateJob\022\r.CreateJobReq\032\t.Re" +
-      "sponse\"\000B)\n\023org.kjob.remote.apiB\022CausaGr",
-      "pcClientGenb\006proto3"
+      "proto\032\024causa/mq_causa.proto\032\030causa/distr" +
+      "o_causa.proto2\265\001\n\016ServerDiscover\022\"\n\tasse" +
+      "rtApp\022\010.AppName\032\t.Response\"\000\022.\n\016heartbea" +
+      "tCheck\022\017.HeartbeatCheck\032\t.Response\"\000\022 \n\n" +
+      "pingServer\022\005.Ping\032\t.Response\"\000\022-\n\014server" +
+      "Change\022\020.ServerChangeReq\032\t.Response\"\0002{\n",
+      "\010Schedule\0226\n\025reportWorkerHeartbeat\022\020.Wor" +
+      "kerHeartbeat\032\t.Response\"\000\0227\n\021serverSched" +
+      "uleJob\022\025.ServerScheduleJobReq\032\t.Response" +
+      "\"\0002\277\001\n\024RegisterToNameServer\0226\n\016serverReg" +
+      "ister\022\027.ServerRegisterReporter\032\t.Respons" +
+      "e\"\000\0223\n\017workerSubscribe\022\023.WorkerSubscribe" +
+      "Req\032\t.Response\"\000\022:\n\017fetchServerList\022\032.Fe" +
+      "tchServerAddressListReq\032\t.Response\"\0002L\n\002" +
+      "Mq\022\035\n\004send\022\010.Message\032\t.Response\"\000\022\'\n\tcre" +
+      "ateJob\022\r.CreateJobReq\032\t.Response\"\00027\n\006Di",
+      "stro\022-\n\014syncNodeINfo\022\020.SyncNodeInfoReq\032\t" +
+      ".Response\"\000B)\n\023org.kjob.remote.apiB\022Caus" +
+      "aGrpcClientGenb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -62,6 +64,7 @@ public final class CausaGrpcClientGen {
           com.google.protobuf.EmptyProto.getDescriptor(),
           org.kjob.remote.protos.RegisterCausa.getDescriptor(),
           org.kjob.remote.protos.MqCausa.getDescriptor(),
+          org.kjob.remote.protos.DistroCausa.getDescriptor(),
         }, assigner);
     org.kjob.remote.protos.ServerDiscoverCausa.getDescriptor();
     org.kjob.remote.protos.ScheduleCausa.getDescriptor();
@@ -69,6 +72,7 @@ public final class CausaGrpcClientGen {
     com.google.protobuf.EmptyProto.getDescriptor();
     org.kjob.remote.protos.RegisterCausa.getDescriptor();
     org.kjob.remote.protos.MqCausa.getDescriptor();
+    org.kjob.remote.protos.DistroCausa.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

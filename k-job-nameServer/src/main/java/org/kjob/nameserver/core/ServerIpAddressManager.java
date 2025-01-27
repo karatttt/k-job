@@ -1,4 +1,4 @@
-package org.kjob.nameserver.balance;
+package org.kjob.nameserver.core;
 
 import com.google.common.collect.Maps;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ServerIpAddressManagerService {
+public class ServerIpAddressManager {
     @Value("${kjob.name-server.max-worker-num}")
     private int maxWorkerNum;
     @Getter
@@ -21,20 +21,18 @@ public class ServerIpAddressManagerService {
      * for split group
      */
     private final Map<String, Integer> appName2WorkerNumMap = Maps.newHashMap();
-
-//    private final Map<String, Integer> serverIp2ConnectNumMap = Maps.newHashMap();
-
     /**
      * for dynamic change group
      */
     private final Map<String, Long> serverAddress2ScheduleTimesMap = Maps.newHashMap();
 
 
-    public  void add2ServerAddressSet(RegisterCausa.ServerRegisterReporter req) {
-        serverAddressSet.add(req.getServerIpAddress());
-//        serverIp2ConnectNumMap.put(req.getServerIpAddress(), 0);
+    public void add2ServerAddressSet(String serverIpAddress) {
+        serverAddressSet.add(serverIpAddress);
     }
-
+    public void removeServerAddress(String serverIpAddress) {
+        serverAddressSet.remove(serverIpAddress);
+    }
     public void addScheduleTimes(String serverIpAddress, long scheduleTime) {
         if(!serverIpAddress.isEmpty()) {
             serverAddress2ScheduleTimesMap.put(serverIpAddress, serverAddress2ScheduleTimesMap.getOrDefault(serverIpAddress, 0L) + scheduleTime);

@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
-
+/** 使用DelayedQueue实际上用一个队列就可以实现多级延迟
+ *  但是为了支持高并发，使用多个delayQueue
+ *  实际上也可以用普通队列，避免优先级排序的复杂度，但是要做线程安全保证
+ */
 @Slf4j
 public class DelayedQueueManager {
     private static final Deque<MqCausa.Message> deadMessageQueue = new ArrayDeque<>();
@@ -45,7 +48,6 @@ public class DelayedQueueManager {
         Thread consumerThread2 = new Thread(() -> {
             try {
                 while (true) {
-
                     // 从延时队列中取出消息（会等待直到消息到期）
                     DelayQueue<DelayedMessage> delayQueue = delayQueueList.get(1);
                     if(!delayQueue.isEmpty()) {

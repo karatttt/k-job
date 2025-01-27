@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * CONSUMER_QUEUE_FILE在消息队列中的设计是为了避免所有的消费者访问同一个commitLog
+ * CONSUMER_QUEUE_FILE在消息队列中的设计是为了避免所有的消费者访问同一个commitLog，并且记录消费者访问到的位置
  * 同时也为了Topic的隔离
  * 本项目借鉴其设计，实际上可以用一个COMMIT_LOG_FILE也可以完成
  * question1：内存加载是一块整块的内存吗？
@@ -225,7 +225,7 @@ public class DefaultMessageStore {
          }
 
 
-         public synchronized CompletionStage<Response> addFlushRequest(MqCausa.Message message) {
+         public synchronized CompletableFuture<Response> addFlushRequest(MqCausa.Message message) {
             FlushRequest flushRequest = new FlushRequest(message, new CompletableFuture<>());
             requestList.add(flushRequest);
             return flushRequest.getFuture();
