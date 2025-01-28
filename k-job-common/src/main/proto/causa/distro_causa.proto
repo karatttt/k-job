@@ -1,9 +1,27 @@
 //使用proto3语法
 syntax = "proto3";
 option java_package = "org.kjob.remote.protos";
-
+import "causa/register_causa.proto";
 // req
 message SyncNodeInfoReq{
-  map<string, int64> serverIpMap = 1;
-  string operation = 2;
+  oneof info{
+    WorkerSubscribeReq workerSubscribeInfo = 1;
+    ServerRegisterReporter scheduleServerRegisterInfo = 2;
+    WorkerRemoveInfo workerRemoveInfo= 3;
+    ServerRemoveInfo scheduleServerRemoveInfo = 4;
+    FullSyncInfo fullSyncInfo = 5;
+  }
+  string operation = 6;
+}
+message WorkerRemoveInfo{
+  string appName = 1;
+}
+message ServerRemoveInfo{
+  string serverAddress = 1;
+}
+message FullSyncInfo{
+  map<string, int64> serverAddress2ScheduleTimesMap = 1;
+  map<string, int32> appName2WorkerNumMap = 2;
+  repeated string serverAddressSet = 3;
+  repeated string workerIpAddressSet = 4;
 }

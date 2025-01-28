@@ -3,7 +3,6 @@ package org.kjob.nameserver.core;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import org.kjob.nameserver.module.ReBalanceInfo;
-import org.kjob.remote.protos.RegisterCausa;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +14,16 @@ public class ServerIpAddressManager {
     @Value("${kjob.name-server.max-worker-num}")
     private int maxWorkerNum;
     @Getter
-    private final Set<String> serverAddressSet = new HashSet<>();
-    private final Set<String> workerIpAddressSet = new HashSet<>();
+    private  Set<String> serverAddressSet = new HashSet<>();
+    private  Set<String> workerIpAddressSet = new HashSet<>();
     /**
      * for split group
      */
-    private final Map<String, Integer> appName2WorkerNumMap = Maps.newHashMap();
+    private  Map<String, Integer> appName2WorkerNumMap = Maps.newHashMap();
     /**
      * for dynamic change group
      */
-    private final Map<String, Long> serverAddress2ScheduleTimesMap = Maps.newHashMap();
-
+    private  Map<String, Long> serverAddress2ScheduleTimesMap = Maps.newHashMap();
 
     public void add2ServerAddressSet(String serverIpAddress) {
         serverAddressSet.add(serverIpAddress);
@@ -44,7 +42,21 @@ public class ServerIpAddressManager {
             appName2WorkerNumMap.put(appName, appName2WorkerNumMap.getOrDefault(appName, 0) + 1);
         }
     }
+    public void cleanAppName2WorkerNumMap(String appName){
+        if(appName2WorkerNumMap.containsKey(appName)){
+            appName2WorkerNumMap.put(appName, appName2WorkerNumMap.get(appName) - 1);
+        }
+    }
 
+    public void resetInfo(Set<String> serverAddressSet,
+                          Set<String> workerIpAddressSet,
+                          Map<String, Integer> appName2WorkerNumMap,
+                          Map<String, Long> serverAddress2ScheduleTimesMap){
+        this.serverAddressSet = serverAddressSet;
+        this.workerIpAddressSet = workerIpAddressSet;
+        this.appName2WorkerNumMap = appName2WorkerNumMap;
+        this.serverAddress2ScheduleTimesMap = serverAddress2ScheduleTimesMap;
+    }
     public ReBalanceInfo getServerAddressReBalanceList(String serverAddress, String appName) {
         // first req, serverAddress is empty
         if(serverAddress.isEmpty()){

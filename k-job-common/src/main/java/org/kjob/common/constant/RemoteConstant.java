@@ -20,9 +20,15 @@ public class RemoteConstant {
     public static final String NAMESERVER = "NAMESERVER";
 
 
+    // when kjobserver register
+    public static final String INCREMENTAL_ADD_SERVER = "INCREMENTAL_ADD_SERVER";
+    // when kjobworker subscribe
+    public static final String INCREMENTAL_ADD_WORKER = "INCREMENTAL_ADD_WORKER";
 
-    public static final String INCREMENTAL_ADD_SYNC = "INCREMENTAL_ADD_SYNC";
-    public static final String INCREMENTAL_REMOVE_SYNC = "INCREMENTAL_REMOVE_SYNC";
+    // when client shutdown or timeout
+    public static final String INCREMENTAL_REMOVE_SERVER = "INCREMENTAL_REMOVE_SERVER";
+    public static final String INCREMENTAL_REMOVE_WORKER = "INCREMENTAL_REMOVE_WORKER";
+    // data check
     public static final String FULL_SYNC = "FULL_SYNC";
 
 }

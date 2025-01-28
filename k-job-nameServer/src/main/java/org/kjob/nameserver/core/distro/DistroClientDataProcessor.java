@@ -7,6 +7,8 @@ import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.utils.net.MyNetUtil;
 import org.kjob.nameserver.config.KJobNameServerConfig;
 import org.kjob.nameserver.core.GrpcClient;
+import org.kjob.nameserver.module.SyncInfo;
+import org.kjob.remote.protos.DistroCausa;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.spi.ServiceRegistry;
@@ -35,25 +37,43 @@ public class DistroClientDataProcessor {
         return clusterNodes.get(index).equals(curServerIp); // 假设 nodeId 是地址的一部分
     }
 
-    // 处理注册请求（外部调用）
-    public void handleRegister(String ip) {
-        if (isResponsibleNode(ip)) {
-            HashMap<String, Long> map = new HashMap<>();
-            map.put(ip, 0L);
-            syncNodeInfo(map, RemoteConstant.INCREMENTAL_ADD_SYNC);
+    /**
+     *
+     * @param syncInfo scheduleServer or worker syncInfo, bind to a nameServer
+     * @param operation
+     */
+    public void handleSync(SyncInfo syncInfo, String operation) {
+        if (isResponsibleNode(syncInfo.getClientIp())) {
+            syncNodeInfoToOthers(syncInfo, operation);
         } else {
-            // 转发到责任节点
-            String targetNode = clusterNodes.get(Math.abs(ip.hashCode()) % clusterNodes.size());
-            //restTemplate.postForObject(targetNode + "/register", Map.of("serviceName", serviceName, "ip", ip), Void.class);
+            // 同步的工作转发到责任节点
+            String targetNode = clusterNodes.get(Math.abs(syncInfo.getClientIp().hashCode()) % clusterNodes.size());
+            grpcClient.redirectSyncInfo(syncInfo, targetNode, operation);
         }
     }
 
-    // 同步增量或者全量的客户端Ip的数据到其他节点
-    private void syncNodeInfo(HashMap<String, Long> map, String operation) {
-        for (String node : clusterNodes) {
-            if (!node.equals(curServerIp)) { // 不发给自身
-                grpcClient.SyncNodeInfo(map, node, operation);
+    /**
+     * send info to other nodes
+     * @param syncInfo
+     * @param operation
+     */
+    private void syncNodeInfoToOthers(SyncInfo syncInfo, String operation) {
+        for (String target : clusterNodes) {
+            if (!target.equals(curServerIp)) { // 不发给自身
+                grpcClient.sendSyncInfo(syncInfo, target, operation);
             }
+        }
+    }
+    public boolean syncNodeInfoToOthers(DistroCausa.SyncNodeInfoReq syncInfo) {
+        try {
+            for (String target : clusterNodes) {
+                if (!target.equals(curServerIp)) { // 不发给自身
+                    grpcClient.sendSyncInfo(syncInfo, target);
+                }
+            }
+            return true;
+        } catch (Exception e){
+            return false;
         }
     }
 
