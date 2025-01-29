@@ -1,7 +1,6 @@
-package org.kjob.nameserver.module;
+package org.kjob.nameserver.module.sync;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

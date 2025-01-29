@@ -1,14 +1,12 @@
 package org.kjob.nameserver.core;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.kjob.common.constant.RemoteConstant;
-import org.kjob.common.exception.KJobException;
 import org.kjob.nameserver.config.KJobNameServerConfig;
-import org.kjob.nameserver.core.distro.DistroClientDataProcessor;
-import org.kjob.nameserver.module.*;
+import org.kjob.nameserver.module.sync.*;
 import org.kjob.remote.api.DistroGrpc;
 import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.DistroCausa;
@@ -17,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 @Component
 @Slf4j
@@ -77,6 +77,25 @@ public class GrpcClient {
         } catch (Exception e){
            log.error("redirect syncInfo error");
         }
+    }
+
+    public void dataCheck(String checkSum, String target, FullSyncInfo info, Executor executor){
+        DistroGrpc.DistroFutureStub distroFutureStub = clusterFutureStubMap.get(target);
+        ListenableFuture<CommonCausa.Response> future = distroFutureStub.clusterDataCheck(DistroCausa.DataCheckReq.newBuilder().setCheckSum(checkSum).build());
+        future.addListener(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(future.get().getCode() == RemoteConstant.NO_MATCH) {
+                        DistroCausa.SyncNodeInfoReq req = buildReq(info, RemoteConstant.FULL_SYNC);
+                        DistroGrpc.DistroBlockingStub distroBlockingStub = clusterBlockingStubMap.get(target);
+                        distroBlockingStub.syncNodeInfo(req);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("dataCheck error");
+                }
+            }
+        }, executor);
     }
 
     private DistroCausa.SyncNodeInfoReq buildReq(SyncInfo syncInfo, String operation) {

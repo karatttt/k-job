@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.kjob.common.constant.RemoteConstant;
+import org.kjob.nameserver.core.GrpcClient;
 import org.kjob.nameserver.core.ServerIpAddressManager;
 import org.kjob.nameserver.core.distro.DistroClientDataProcessor;
+import org.kjob.nameserver.module.sync.FullSyncInfo;
 import org.kjob.remote.api.DistroGrpc;
 import org.kjob.remote.protos.CommonCausa;
 import org.kjob.remote.protos.DistroCausa;
@@ -22,6 +24,20 @@ public class DistroGrpcService extends DistroGrpc.DistroImplBase {
     private final ServerIpAddressManager serverIpAddressManager;
 
     private final DistroClientDataProcessor process;
+
+    private final GrpcClient grpcClient;
+
+    @Override
+    public void clusterDataCheck(DistroCausa.DataCheckReq request, StreamObserver<CommonCausa.Response> responseObserver) {
+        String checkSum = request.getCheckSum();
+        if(!serverIpAddressManager.calculateChecksum().equals(checkSum)){
+            responseObserver.onNext(CommonCausa.Response.newBuilder().setCode(RemoteConstant.NO_MATCH).build());
+        } else {
+            responseObserver.onNext(CommonCausa.Response.newBuilder().setCode(RemoteConstant.MATCH).build());
+        }
+        responseObserver.onCompleted();
+    }
+
     @Override
     public void syncNodeInfo(DistroCausa.SyncNodeInfoReq request, StreamObserver<CommonCausa.Response> responseObserver) {
         syncCurNode(request);

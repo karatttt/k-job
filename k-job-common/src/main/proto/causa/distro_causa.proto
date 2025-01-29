@@ -25,3 +25,8 @@ message FullSyncInfo{
   repeated string serverAddressSet = 3;
   repeated string workerIpAddressSet = 4;
 }
+
+message DataCheckReq{
+  string checkSum = 1;
+}
+

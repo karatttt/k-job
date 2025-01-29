@@ -1,24 +1,18 @@
 package org.kjob.nameserver.core.distro;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.utils.net.MyNetUtil;
 import org.kjob.nameserver.config.KJobNameServerConfig;
 import org.kjob.nameserver.core.GrpcClient;
-import org.kjob.nameserver.module.SyncInfo;
+import org.kjob.nameserver.module.sync.SyncInfo;
 import org.kjob.remote.protos.DistroCausa;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.spi.ServiceRegistry;
-import java.rmi.Remote;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-@Component
 
+/**
+ * sync register/subscribe by responsible node
+ */
+@Component
 public class DistroClientDataProcessor {
     private final String curServerIp;
     private final List<String> clusterNodes;
@@ -77,17 +71,4 @@ public class DistroClientDataProcessor {
         }
     }
 
-    // 接收其他节点的同步请求
-//    @PostMapping("/sync")
-//    public void handleSync(@RequestBody Map<String, String> payload) {
-//        String serviceName = payload.get("serviceName");
-//        String ip = payload.get("ip");
-//        String operation = payload.get("operation");
-//
-//        if ("register".equals(operation)) {
-//            registry.register(serviceName, ip);
-//        } else if ("unregister".equals(operation)) {
-//            registry.unregister(serviceName, ip);
-//        }
-//    }
 }

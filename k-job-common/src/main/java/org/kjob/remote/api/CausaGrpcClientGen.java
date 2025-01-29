@@ -42,11 +42,13 @@ public final class CausaGrpcClientGen {
       "Req\032\t.Response\"\000\022:\n\017fetchServerList\022\032.Fe" +
       "tchServerAddressListReq\032\t.Response\"\0002L\n\002" +
       "Mq\022\035\n\004send\022\010.Message\032\t.Response\"\000\022\'\n\tcre" +
-      "ateJob\022\r.CreateJobReq\032\t.Response\"\0002j\n\006Di",
-      "stro\022-\n\014syncNodeInfo\022\020.SyncNodeInfoReq\032\t" +
-      ".Response\"\000\0221\n\020redirectSyncInfo\022\020.SyncNo" +
-      "deInfoReq\032\t.Response\"\000B)\n\023org.kjob.remot" +
-      "e.apiB\022CausaGrpcClientGenb\006proto3"
+      "ateJob\022\r.CreateJobReq\032\t.Response\"\0002\232\001\n\006D",
+      "istro\022-\n\014syncNodeInfo\022\020.SyncNodeInfoReq\032" +
+      "\t.Response\"\000\0221\n\020redirectSyncInfo\022\020.SyncN" +
+      "odeInfoReq\032\t.Response\"\000\022.\n\020clusterDataCh" +
+      "eck\022\r.DataCheckReq\032\t.Response\"\000B)\n\023org.k" +
+      "job.remote.apiB\022CausaGrpcClientGenb\006prot" +
+      "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

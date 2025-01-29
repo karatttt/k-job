@@ -13,6 +13,9 @@ public class RemoteConstant {
     public static final int SUCCESS = 200;
     public static final int FAULT = 500;
 
+    public static final int MATCH = 10001;
+    public static final int NO_MATCH = 10001;
+
 
 
     public static final String SERVER = "SERVER";

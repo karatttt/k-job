@@ -1,8 +1,7 @@
-package org.kjob.nameserver.module;
+package org.kjob.nameserver.module.sync;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.checkerframework.checker.units.qual.A;
 
 @Getter
 @AllArgsConstructor

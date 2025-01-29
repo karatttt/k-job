@@ -36,6 +36,7 @@ public class ServerRegisterStarter implements InitializingBean {
                 try {
                     RegisterCausa.ServerRegisterReporter build = RegisterCausa.ServerRegisterReporter.newBuilder()
                             .setServerIpAddress(kJobServerConfig.getAddress() + ":" + kJobServerConfig.getServerPort())
+                            .setRegisterTimestamp(System.currentTimeMillis())
                             .build();
                     CommonCausa.Response response = stubSingleton.serverRegister(build);
                     log.info("server register to nameServer success");

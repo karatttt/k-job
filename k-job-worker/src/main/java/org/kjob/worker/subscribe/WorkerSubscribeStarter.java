@@ -22,6 +22,7 @@ public class WorkerSubscribeStarter {
                 .setScheduleTime(0)
                 .setWorkerIpAddress(MyNetUtil.address)
                 .setServerIpAddress(WorkerSubscribeManager.getCurrentServerIp())
+                .setSubscribeTimestamp(System.currentTimeMillis())
                 .build();
         StrategyCaller.call(TransportTypeEnum.REGISTER_TO_NAMESERVER, build);
         scheduledThreadPoolExecutor.scheduleAtFixedRate(new Runnable() {

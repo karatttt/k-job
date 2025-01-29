@@ -47,6 +47,6 @@ service Mq {
 service Distro {
   rpc syncNodeInfo(SyncNodeInfoReq) returns(Response){};
   rpc redirectSyncInfo(SyncNodeInfoReq) returns(Response){};
+  rpc clusterDataCheck(DataCheckReq) returns(Response){};
 }
-
 

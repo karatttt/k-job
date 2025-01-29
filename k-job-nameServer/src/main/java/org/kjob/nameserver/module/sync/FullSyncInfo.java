@@ -1,12 +1,12 @@
-package org.kjob.nameserver.module;
+package org.kjob.nameserver.module.sync;
 
-import com.google.common.collect.Maps;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 @Getter
+@AllArgsConstructor
 public class FullSyncInfo extends SyncInfo{
     private Set<String> serverAddressSet;
     private Set<String> workerIpAddressSet;

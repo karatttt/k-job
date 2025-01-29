@@ -1,4 +1,4 @@
-package org.kjob.nameserver.module;
+package org.kjob.nameserver.module.sync;
 
 import lombok.Data;
 
