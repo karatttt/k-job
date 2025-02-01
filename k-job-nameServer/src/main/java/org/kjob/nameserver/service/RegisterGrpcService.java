@@ -42,7 +42,7 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
 
         // heartbeat
         clientStatusManager.updateStatus(new ClientHeartbeat(request.getServerIpAddress(),
-                RemoteConstant.SERVER, request.getRegisterTimestamp()));
+                RemoteConstant.SERVER, request.getRegisterTimestamp(), null));
         // sync
         processor.handleSync(new ServerRegisterSyncInfo(request.getServerIpAddress()), RemoteConstant.INCREMENTAL_ADD_SERVER);
         CommonCausa.Response build = CommonCausa.Response.newBuilder().build();
@@ -62,7 +62,7 @@ public class RegisterGrpcService extends RegisterToNameServerGrpc.RegisterToName
         service.addScheduleTimes(request.getServerIpAddress(),request.getScheduleTime());
         // heartbeat
         clientStatusManager.updateStatus(new ClientHeartbeat(request.getWorkerIpAddress(),
-                RemoteConstant.WORKER, request.getSubscribeTimestamp()));
+                RemoteConstant.WORKER, request.getSubscribeTimestamp(), request.getAppName()));
         // sync
         processor.handleSync(new WorkerSubscribeSyncInfo(request.getWorkerIpAddress(),
                 request.getAppName(),

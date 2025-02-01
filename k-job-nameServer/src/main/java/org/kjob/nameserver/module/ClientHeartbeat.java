@@ -9,4 +9,5 @@ public class ClientHeartbeat {
     String ip;
     String clientType;
     Long heartbeatTime;
+    String appName;
 }

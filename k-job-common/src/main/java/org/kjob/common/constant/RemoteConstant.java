@@ -14,7 +14,7 @@ public class RemoteConstant {
     public static final int FAULT = 500;
 
     public static final int MATCH = 10001;
-    public static final int NO_MATCH = 10001;
+    public static final int NO_MATCH = 10002;
 
 
 
@@ -33,5 +33,9 @@ public class RemoteConstant {
     public static final String INCREMENTAL_REMOVE_WORKER = "INCREMENTAL_REMOVE_WORKER";
     // data check
     public static final String FULL_SYNC = "FULL_SYNC";
+
+
+    //IP
+    public static final String LOOPBACKIP = "127.0.0.1";
 
 }

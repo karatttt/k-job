@@ -78,7 +78,7 @@ public class ServerIpAddressManager {
         serverAddress2ScheduleTimesMap.forEach((k, v) ->{
             build.append(k);
         });
-        return Integer.toHexString(build.hashCode()); // 使用哈希值作为校验和
+        return Integer.toHexString(build.toString().hashCode()); // 使用哈希值作为校验和
     }
 
     public ReBalanceInfo getServerAddressReBalanceList(String serverAddress, String appName) {

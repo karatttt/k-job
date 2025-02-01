@@ -1,5 +1,7 @@
 package org.kjob.nameserver.core;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -17,19 +19,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
 public class GrpcClient {
     private final Map<String, DistroGrpc.DistroFutureStub> clusterFutureStubMap = new HashMap<>();
     private final Map<String, DistroGrpc.DistroBlockingStub> clusterBlockingStubMap = new HashMap<>();
+    private final Executor syncInfoexecutor = Executors.newFixedThreadPool(5);
 
     private final int RETRY_TIMES = 3;
 
     public GrpcClient(KJobNameServerConfig kJobNameServerConfig){
         for (String ip : kJobNameServerConfig.getServerAddressList()) {
             String[] split = ip.split(":");
-            ManagedChannel channel = ManagedChannelBuilder.forAddress(split[0], Integer.parseInt(split[1])).build();
+            ManagedChannel channel = ManagedChannelBuilder.
+                    forAddress(split[0], Integer.parseInt(split[1])).
+                    usePlaintext().build();
             DistroGrpc.DistroFutureStub distroFutureStub = DistroGrpc.newFutureStub(channel);
             DistroGrpc.DistroBlockingStub distroBlockingStub = DistroGrpc.newBlockingStub(channel);
             clusterFutureStubMap.put(ip, distroFutureStub);
@@ -46,11 +52,12 @@ public class GrpcClient {
     public void sendSyncInfo(SyncInfo syncInfo, String target, String operation) {
         DistroCausa.SyncNodeInfoReq req= buildReq(syncInfo, operation);
         DistroGrpc.DistroFutureStub distroFutureStub = clusterFutureStubMap.get(target);
-        distroFutureStub.syncNodeInfo(req);
+        ListenableFuture<CommonCausa.Response> future = distroFutureStub.syncNodeInfo(req);
     }
+
     public void sendSyncInfo(DistroCausa.SyncNodeInfoReq syncInfo, String target) {
         DistroGrpc.DistroFutureStub distroFutureStub = clusterFutureStubMap.get(target);
-        distroFutureStub.syncNodeInfo(syncInfo);
+        ListenableFuture<CommonCausa.Response> future = distroFutureStub.syncNodeInfo(syncInfo);
     }
 
     /**
@@ -62,8 +69,8 @@ public class GrpcClient {
     public void redirectSyncInfo(SyncInfo syncInfo, String targetNode, String operation) {
         try {
             DistroCausa.SyncNodeInfoReq req = buildReq(syncInfo, operation);
-            DistroGrpc.DistroBlockingStub distroFutureStub = clusterBlockingStubMap.get(targetNode);
-            CommonCausa.Response response = distroFutureStub.syncNodeInfo(req);
+            DistroGrpc.DistroBlockingStub distroBlockingStub = clusterBlockingStubMap.get(targetNode);
+            CommonCausa.Response response = distroBlockingStub.syncNodeInfo(req);
             if (response.getCode() == RemoteConstant.SUCCESS) {
                 return;
             }
@@ -81,6 +88,7 @@ public class GrpcClient {
 
     public void dataCheck(String checkSum, String target, FullSyncInfo info, Executor executor){
         DistroGrpc.DistroFutureStub distroFutureStub = clusterFutureStubMap.get(target);
+
         ListenableFuture<CommonCausa.Response> future = distroFutureStub.clusterDataCheck(DistroCausa.DataCheckReq.newBuilder().setCheckSum(checkSum).build());
         future.addListener(new Runnable() {
             @Override
@@ -89,10 +97,14 @@ public class GrpcClient {
                     if(future.get().getCode() == RemoteConstant.NO_MATCH) {
                         DistroCausa.SyncNodeInfoReq req = buildReq(info, RemoteConstant.FULL_SYNC);
                         DistroGrpc.DistroBlockingStub distroBlockingStub = clusterBlockingStubMap.get(target);
+
+                        log.info("dataCheck no match, send full sync info to :{}", target);
                         distroBlockingStub.syncNodeInfo(req);
+                    } else {
+                        log.info("dataCheck match with:{} ", target);
                     }
                 } catch (InterruptedException | ExecutionException e) {
-                    log.error("dataCheck error");
+                    log.error("dataCheck error,target:{}", target);
                 }
             }
         }, executor);

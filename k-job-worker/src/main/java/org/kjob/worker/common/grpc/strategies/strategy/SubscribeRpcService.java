@@ -47,6 +47,7 @@ public class SubscribeRpcService implements GrpcStrategy<TransportTypeEnum> {
         RegisterCausa.WorkerSubscribeReq workerSubscribeReq = (RegisterCausa.WorkerSubscribeReq) params;
         // add serverIp and scheduleTime to req
         RegisterCausa.WorkerSubscribeReq build = RegisterCausa.WorkerSubscribeReq.newBuilder()
+                .setSubscribeTimestamp(workerSubscribeReq.getSubscribeTimestamp())
                 .setAppName(workerSubscribeReq.getAppName())
                 .setServerIpAddress(WorkerSubscribeManager.getCurrentServerIp())
                 .setScheduleTime(WorkerSubscribeManager.getScheduleTimes().get())

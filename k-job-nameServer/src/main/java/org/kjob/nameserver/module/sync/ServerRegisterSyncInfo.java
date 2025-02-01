@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class ServerRegisterSyncInfo extends SyncInfo{
+    public ServerRegisterSyncInfo(String scheduleServerIp){
+        super(scheduleServerIp);
+        this.scheduleServerIp = scheduleServerIp;
+    }
     public String scheduleServerIp;
 }

@@ -4,6 +4,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.kjob.common.constant.RemoteConstant;
 import org.kjob.nameserver.core.GrpcClient;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @GrpcService
 @AllArgsConstructor
+@Slf4j
 public class DistroGrpcService extends DistroGrpc.DistroImplBase {
     private final ServerIpAddressManager serverIpAddressManager;
 
@@ -31,9 +33,11 @@ public class DistroGrpcService extends DistroGrpc.DistroImplBase {
     public void clusterDataCheck(DistroCausa.DataCheckReq request, StreamObserver<CommonCausa.Response> responseObserver) {
         String checkSum = request.getCheckSum();
         if(!serverIpAddressManager.calculateChecksum().equals(checkSum)){
-            responseObserver.onNext(CommonCausa.Response.newBuilder().setCode(RemoteConstant.NO_MATCH).build());
-        } else {
             responseObserver.onNext(CommonCausa.Response.newBuilder().setCode(RemoteConstant.MATCH).build());
+            log.info("datacheck success");
+        } else {
+            log.info("datacheck no match, need full sync");
+            responseObserver.onNext(CommonCausa.Response.newBuilder().setCode(RemoteConstant.NO_MATCH).build());
         }
         responseObserver.onCompleted();
     }

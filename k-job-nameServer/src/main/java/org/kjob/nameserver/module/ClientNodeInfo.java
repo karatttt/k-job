@@ -9,11 +9,13 @@ import org.kjob.common.domain.WorkerHeartbeat;
 @AllArgsConstructor
 public class ClientNodeInfo {
     private String type;
+    private String appName;
     private long lastActiveTime;
     private static final long CLIENT_TIMEOUT_MS = 60000;
 
     public void refresh(ClientHeartbeat clientHeartbeat) {
         lastActiveTime = clientHeartbeat.getHeartbeatTime();
+        appName = clientHeartbeat.getAppName();
     }
 
     public boolean timeout() {

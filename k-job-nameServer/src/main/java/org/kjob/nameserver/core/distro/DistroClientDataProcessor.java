@@ -1,10 +1,12 @@
 package org.kjob.nameserver.core.distro;
 
+import org.kjob.common.constant.RemoteConstant;
 import org.kjob.common.utils.net.MyNetUtil;
 import org.kjob.nameserver.config.KJobNameServerConfig;
 import org.kjob.nameserver.core.GrpcClient;
 import org.kjob.nameserver.module.sync.SyncInfo;
 import org.kjob.remote.protos.DistroCausa;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +16,12 @@ import java.util.List;
  */
 @Component
 public class DistroClientDataProcessor {
+    @Value("${grpc.server.port}")
+    private String port;
     private final String curServerIp;
     private final List<String> clusterNodes;
     private final GrpcClient grpcClient;
+
 
     public DistroClientDataProcessor(KJobNameServerConfig kJobNameServerConfig, GrpcClient grpcClient) {
         this.curServerIp = MyNetUtil.address;
@@ -28,7 +33,7 @@ public class DistroClientDataProcessor {
     private boolean isResponsibleNode(String serviceName) {
         int hash = Math.abs(serviceName.hashCode());
         int index = hash % clusterNodes.size();
-        return clusterNodes.get(index).equals(curServerIp); // 假设 nodeId 是地址的一部分
+        return clusterNodes.get(index).equals(curServerIp) || clusterNodes.get(index).equals(RemoteConstant.LOOPBACKIP + ":"+ port);
     }
 
     /**
@@ -53,7 +58,7 @@ public class DistroClientDataProcessor {
      */
     private void syncNodeInfoToOthers(SyncInfo syncInfo, String operation) {
         for (String target : clusterNodes) {
-            if (!target.equals(curServerIp)) { // 不发给自身
+            if (!target.contains(curServerIp) && !target.contains(RemoteConstant.LOOPBACKIP + ":"+ port)) { // 不发给自身
                 grpcClient.sendSyncInfo(syncInfo, target, operation);
             }
         }
